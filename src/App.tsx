@@ -8,7 +8,6 @@ import Authentication from './components/authentication';
 import MainLayout from './components/mainlayout';
 import routeReducer from './store/routeReducer';
 
-
 const store = createStore(routeReducer, composeWithDevTools())
 
 function App() {

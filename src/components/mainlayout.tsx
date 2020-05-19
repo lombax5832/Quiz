@@ -119,9 +119,7 @@ export default function MainLayout() {
                     <Typography className={classes.title} variant="h6" noWrap>
                         Quiz
                     </Typography>
-                    <UserButton>
-
-                    </UserButton>
+                    <UserButton />
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -154,9 +152,11 @@ export default function MainLayout() {
                 })}
             >
                 <div className={classes.drawerHeader} />
-                <Typography variant="h1">
-                    Welcome
-                </Typography>
+                <Routes>
+                    <Route path="" element={
+                        <Typography variant="h1">Welcome</Typography>
+                    } />
+                </Routes>
                 <Routes>
                     <Route path="welcome" element={<Welcome />} />
                     <Route path="counter" element={<Counter />} />

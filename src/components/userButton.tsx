@@ -2,6 +2,7 @@ import { Avatar, IconButton } from '@material-ui/core';
 import React from 'react';
 import { connect } from 'react-redux';
 import { IAuth } from './authentication';
+import GoogleLogin from 'react-google-login';
 
 
 const mapStateToProps = (state: { auth: IAuth }) => {
@@ -13,18 +14,29 @@ const mapStateToProps = (state: { auth: IAuth }) => {
 let UserButton = (props: { imgSrc: string }) => {
     const { imgSrc } = props
     if (imgSrc) {
-        return (<IconButton
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            color="inherit"
-        >
-            <Avatar
-                src={imgSrc}
-            />
-        </IconButton>)
+        return (
+            <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                color="inherit"
+                onClick={() => {
+                    window.gapi.auth2.getAuthInstance().signOut();
+                }}
+            >
+                <Avatar src={imgSrc} />
+            </IconButton>
+        )
     } else {
-        return null
+        return (
+            <GoogleLogin
+                clientId="898363856225-9fiul6rmh2ps3a4jhnqrpq1829h84ikl.apps.googleusercontent.com"
+                buttonText="Login"
+                onSuccess={() => { console.log("onSuccess called") }}
+                onFailure={() => { console.log("onFailure called") }}
+                icon
+            />
+        )
     }
 }
 
