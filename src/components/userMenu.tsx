@@ -1,18 +1,24 @@
-import { Avatar, IconButton, Popper, Grow, Paper, ClickAwayListener, MenuList, MenuItem } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Grow from '@material-ui/core/Grow';
+import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from 'react';
-import GoogleLogin from 'react-google-login';
-import { connect } from 'react-redux';
-import { IAuth } from './authentication';
 
-const mapStateToProps = (state: { auth: IAuth }) => {
-    return {
-        imgSrc: state.auth?.profile?.imageURL
-    }
-}
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        paper: {
+            marginRight: theme.spacing(2),
+        },
+    }),
+);
 
-let UserButton = (props: { imgSrc: string }) => {
-
-    const { imgSrc } = props
+let UserMenu = (props: any, handleClick: Function) => {
+    const { children } = props;
+    const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
 
@@ -45,17 +51,18 @@ let UserButton = (props: { imgSrc: string }) => {
         prevOpen.current = open;
     }, [open]);
 
-    if (imgSrc) {
-        return (
+    return (
+        <div>
             <div>
-                <IconButton
+                {children}
+                <Button
                     ref={anchorRef}
                     aria-controls={open ? 'menu-list-grow' : undefined}
                     aria-haspopup="true"
                     onClick={handleToggle}
                 >
-                    <Avatar src={imgSrc} />
-                </IconButton>
+                    Toggle Menu Grow
+        </Button>
                 <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
                     {({ TransitionProps, placement }) => (
                         <Grow
@@ -67,10 +74,7 @@ let UserButton = (props: { imgSrc: string }) => {
                                     <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                                         <MenuItem onClick={handleClose}>Profile</MenuItem>
                                         <MenuItem onClick={handleClose}>My account</MenuItem>
-                                        <MenuItem onClick={(event: React.MouseEvent<EventTarget>) => {
-                                            handleClose(event);
-                                            gapi.auth2.getAuthInstance().signOut();
-                                        }}>Logout</MenuItem>
+                                        <MenuItem onClick={handleClose}>Logout</MenuItem>
                                     </MenuList>
                                 </ClickAwayListener>
                             </Paper>
@@ -78,18 +82,8 @@ let UserButton = (props: { imgSrc: string }) => {
                     )}
                 </Popper>
             </div>
-        )
-    } else {
-        return (
-            <GoogleLogin
-                clientId="898363856225-9fiul6rmh2ps3a4jhnqrpq1829h84ikl.apps.googleusercontent.com"
-                buttonText="Login"
-                onSuccess={() => { console.log("onSuccess called") }}
-                onFailure={() => { console.log("onFailure called") }}
-                icon
-            />
-        )
-    }
+        </div>
+    );
 }
 
-export default connect(mapStateToProps)(UserButton);
+export default UserMenu;
