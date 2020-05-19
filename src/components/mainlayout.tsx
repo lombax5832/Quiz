@@ -18,6 +18,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import Counter from './counter';
 import UserButton from './userButton';
 import Welcome from './welcome';
+import { ClickAwayListener } from '@material-ui/core';
 
 const drawerWidth = 240;
 
@@ -100,52 +101,56 @@ export default function MainLayout() {
     return (
         <div className={classes.root}>
             <CssBaseline />
-            <AppBar
-                position="fixed"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
-                })}
-            >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        className={clsx(classes.menuButton, open && classes.hide)}
+            <ClickAwayListener onClickAway={handleDrawerClose}>
+                <div>
+                    <AppBar
+                        position="fixed"
+                        className={clsx(classes.appBar, {
+                            [classes.appBarShift]: open,
+                        })}
                     >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography className={classes.title} variant="h6" noWrap>
-                        Quiz
+                        <Toolbar>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                className={clsx(classes.menuButton, open && classes.hide)}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography className={classes.title} variant="h6" noWrap>
+                                Quiz
                     </Typography>
-                    <UserButton />
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                className={classes.drawer}
-                variant="persistent"
-                anchor="left"
-                open={open}
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-            >
-                <div className={classes.drawerHeader}>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                    </IconButton>
+                            <UserButton />
+                        </Toolbar>
+                    </AppBar>
+                    <Drawer
+                        className={classes.drawer}
+                        variant="persistent"
+                        anchor="left"
+                        open={open}
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                    >
+                        <div className={classes.drawerHeader}>
+                            <IconButton onClick={handleDrawerClose}>
+                                {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                            </IconButton>
+                        </div>
+                        <Divider />
+                        <List>
+                            <ListItem button onClick={() => navigate('welcome')} key='welcome'>
+                                <ListItemText primary="Welcome" />
+                            </ListItem>
+                            <ListItem button onClick={() => navigate('counter')} key='counter'>
+                                <ListItemText primary="Counter" />
+                            </ListItem>
+                        </List>
+                    </Drawer>
                 </div>
-                <Divider />
-                <List>
-                    <ListItem button onClick={() => navigate('welcome')} key='welcome'>
-                        <ListItemText primary="Welcome" />
-                    </ListItem>
-                    <ListItem button onClick={() => navigate('counter')} key='counter'>
-                        <ListItemText primary="Counter" />
-                    </ListItem>
-                </List>
-            </Drawer>
+            </ClickAwayListener>
             <main
                 className={clsx(classes.content, {
                     [classes.contentShift]: open,
