@@ -149,6 +149,9 @@ export default function MainLayout() {
                 <ListItem button onClick={() => navigate('counter')} key='counter'>
                   <ListItemText primary="Counter"/>
                 </ListItem>
+                <ListItem button onClick={() => navigate('editor')} key='editor'>
+                  <ListItemText primary="Editor"/>
+                </ListItem>
               </List>
             </Drawer>
           </div>
