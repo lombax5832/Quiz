@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-import counterReducer from "./reducers/counter";
-import authReducer from "./reducers/auth"
 import { reducer as formReducer } from 'redux-form';
+import authReducer from "./reducers/auth";
+import counterReducer from "./reducers/counter";
 
 const routeReducer = combineReducers({
     counter: counterReducer,

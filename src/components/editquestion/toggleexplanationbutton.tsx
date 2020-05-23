@@ -1,9 +1,9 @@
-import React from 'react';
-import { Field, FieldArray, reduxForm, change, arraySplice, formValueSelector, arrayPush } from 'redux-form';
-import { connect } from 'react-redux';
-import { Add, Remove } from '@material-ui/icons';
-import { FORM_NAME } from './consts';
 import { Button } from '@material-ui/core';
+import { Add, Remove } from '@material-ui/icons';
+import React from 'react';
+import { connect } from 'react-redux';
+import { arraySplice, formValueSelector } from 'redux-form';
+import { FORM_NAME } from './consts';
 
 const selectFormValue = formValueSelector(FORM_NAME);
 

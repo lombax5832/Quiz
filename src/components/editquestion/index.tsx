@@ -1,18 +1,13 @@
-import React from 'react';
-import { Field, FieldArray, reduxForm, change, arraySplice, formValueSelector, arrayPush } from 'redux-form';
-import { connect } from 'react-redux';
-import EditQuestion from './question';
-import { FORM_NAME } from './consts';
-import Button from '@material-ui/core/Button';
-import { Box, Divider } from '@material-ui/core';
-import renderAnswers from './renderanswers';
-import Grid from '@material-ui/core/Grid';
-import QuestionMeta from './questionmeta';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import EditQuestionType from './questiontype';
-import EditExplanation from './editexplanation';
+import Grid from '@material-ui/core/Grid';
+import React from 'react';
+import { FieldArray, reduxForm } from 'redux-form';
 import AddAnswer from './addanswer';
-import TypeMenu from './typemenu';
+import { FORM_NAME } from './consts';
+import EditExplanation from './editexplanation';
+import EditQuestion from './question';
+import QuestionMeta from './questionmeta';
+import renderAnswers from './renderanswers';
 
 let ContactForm = (props: any) => {
   const { handleSubmit, reset } = props;

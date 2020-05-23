@@ -1,21 +1,13 @@
-import Redux from 'redux';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import { Box, Divider, TextareaAutosize } from '@material-ui/core';
-import { Field, FieldArray, reduxForm, change, arraySplice, formValueSelector, arrayPush } from 'redux-form';
-import { connect } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { Autocomplete } from '@material-ui/lab';
-
+import { connect } from 'react-redux';
+import { Field } from 'redux-form';
 //
-import { renderTextArea, renderTextField } from '../../formrenderers/materialui';
-import EditQuestionType from './questiontype';
-import AddAnswer from './addanswer';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
+import { renderTextArea } from '../../formrenderers/materialui';
+
 
 const useStyles = makeStyles({
   root: {

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Field, change, formValueSelector} from 'redux-form';
 import { connect } from 'react-redux';
-import { FORM_NAME } from './consts';
+import { change, Field, formValueSelector } from 'redux-form';
 import { renderSelectField } from '../../formrenderers/materialui';
+import { FORM_NAME } from './consts';
 
 
 const selectFormValue = formValueSelector(FORM_NAME);

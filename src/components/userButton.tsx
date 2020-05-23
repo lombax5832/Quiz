@@ -1,4 +1,4 @@
-import { Avatar, IconButton, Popper, Grow, Paper, ClickAwayListener, MenuList, MenuItem } from '@material-ui/core';
+import { Avatar, ClickAwayListener, Grow, IconButton, MenuItem, MenuList, Paper, Popper } from '@material-ui/core';
 import React from 'react';
 import GoogleLogin from 'react-google-login';
 import { connect } from 'react-redux';

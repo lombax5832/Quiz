@@ -1,16 +1,8 @@
-import React from 'react';
-import { Box, Card, Paper } from '@material-ui/core';
-import CardContent from '@material-ui/core/CardContent';
-import EditQuestionType from './questiontype';
-import AddAnswer from './addanswer';
+import { Card } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import { AddCircle } from '@material-ui/icons';
 import Grid from '@material-ui/core/Grid';
-import TypeMenu from './typemenu'
-import { Field } from 'redux-form';
-import { renderSelectField } from '../../formrenderers/materialui';
+import React from 'react';
 
 
 const QuestionMeta = (props: {reset: Function}) => {

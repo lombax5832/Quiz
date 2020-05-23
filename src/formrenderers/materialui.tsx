@@ -1,15 +1,14 @@
-import React from 'react';
 import { CheckboxProps, createStyles, TextField, Theme } from '@material-ui/core';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Select from '@material-ui/core/Select';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import NativeSelect from '@material-ui/core/NativeSelect';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import green from '@material-ui/core/colors/green';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import withStyles from '@material-ui/core/styles/withStyles';
+import React from 'react';
 
 const GreenCheckbox = withStyles({
   root: {
@@ -120,3 +119,4 @@ const renderCheckbox = ({ input, label }) => (
 )
 
 export { renderTextField, renderTextArea, renderSelectField, renderCheckbox };
+

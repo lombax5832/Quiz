@@ -1,9 +1,9 @@
+import { Box } from '@material-ui/core';
 import React from 'react';
-import { Field, FieldArray, reduxForm, change, arraySplice, formValueSelector, arrayPush } from 'redux-form';
 import { connect } from 'react-redux';
+import { Field, formValueSelector } from 'redux-form';
 import { renderTextArea } from '../../formrenderers/materialui';
 import { FORM_NAME } from './consts';
-import { Box } from '@material-ui/core';
 const selectFormValue = formValueSelector(FORM_NAME);
 
 const EditAnswerExplanation = (props: { id: number, hasExplanation?: boolean }) => {

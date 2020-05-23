@@ -1,18 +1,15 @@
+import { Box } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 import React from 'react';
 import { Field } from 'redux-form';
 import { renderCheckbox, renderTextArea } from '../../formrenderers/materialui';
-import { AddCircle, DeleteOutlined } from '@material-ui/icons';
-import { Box, Button } from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Grid from '@material-ui/core/Grid';
-import { spacing } from '@material-ui/system';
-import ToggleExplanation from './toggleexplanationbutton';
 import EditAnswerExplanation from './editanswerexplanation';
-import Divider from '@material-ui/core/Divider';
+import ToggleExplanation from './toggleexplanationbutton';
 
 const renderAnswers = (props) => {
   const { fields, meta: { error, submitFailed } } = props;

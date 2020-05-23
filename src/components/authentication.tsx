@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { signIn, signOut, initialized } from '../store/actions/auth';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { initialized, signIn, signOut } from '../store/actions/auth';
 
 interface IProfile {
     id: string
