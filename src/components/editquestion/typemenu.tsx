@@ -19,7 +19,7 @@ const options = [
   'Multiple Correct',
 ];
 
-export default function TypeMenu() {
+const TypeMenu = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
@@ -54,6 +54,7 @@ export default function TypeMenu() {
             id="lock-menu"
             anchorEl={anchorEl}
             keepMounted
+            variant="menu"
             open={Boolean(anchorEl)}
             onClose={handleClose}
         >
@@ -70,3 +71,6 @@ export default function TypeMenu() {
       </div>
   );
 }
+
+
+export default TypeMenu

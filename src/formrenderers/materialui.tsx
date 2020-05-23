@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, TextField, Theme } from '@material-ui/core';
+import { CheckboxProps, createStyles, TextField, Theme } from '@material-ui/core';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -8,6 +8,18 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import green from '@material-ui/core/colors/green';
+import withStyles from '@material-ui/core/styles/withStyles';
+
+const GreenCheckbox = withStyles({
+  root: {
+    color: green[400],
+    '&$checked': {
+      color: green[600],
+    },
+  },
+  checked: {},
+})((props: CheckboxProps) => <Checkbox color="default" {...props} />);
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -97,6 +109,7 @@ const renderCheckbox = ({ input, label }) => (
       <FormControlLabel
           control={
             <Checkbox
+                color="primary"
                 checked={input.value ? true : false}
                 onChange={input.onChange}
             />

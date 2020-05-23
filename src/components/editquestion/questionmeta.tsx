@@ -13,9 +13,8 @@ import { Field } from 'redux-form';
 import { renderSelectField } from '../../formrenderers/materialui';
 
 
-const QuestionMeta = (props) => {
+const QuestionMeta = (props: {reset: Function}) => {
 
-  // @ts-ignore
   return (
       <Card>
         <CardActions>
@@ -28,7 +27,10 @@ const QuestionMeta = (props) => {
           >
 
             <Grid item>
-              <Button variant="outlined" color="default">
+              <Button
+                  variant="outlined"
+                  color="default"
+                  onClick={() => props.reset()}>
                 Reset Values
               </Button>
             </Grid>
