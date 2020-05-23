@@ -28,7 +28,10 @@ const DeleteAnswerButton = (props: { deleteFunc: Function }) => {
                 onClose={handleClose}
             >
                 <MenuItem onClick={handleClose}>Cancel</MenuItem>
-                <MenuItem onClick={() => deleteFunc()}>Remove Answer</MenuItem>
+                <MenuItem onClick={() => {
+                    deleteFunc();
+                    handleClose();
+                }}>Remove Answer</MenuItem>
             </Menu>
         </div>
     );
