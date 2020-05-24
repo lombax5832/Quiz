@@ -21,6 +21,7 @@ import Counter from './counter';
 import EditQuestion from './editquestion/index';
 import UserButton from './userButton';
 import Welcome from './welcome';
+import CategoryForm from './editcategory/categoryform';
 
 const drawerWidth = 240;
 
@@ -172,6 +173,7 @@ export default function MainLayout() {
             <Route path="welcome" element={<Welcome/>}/>
             <Route path="counter" element={<Counter/>}/>
             <Route path="editor" element={<EditQuestion/>}/>
+            <Route path="editcategory" element={<CategoryForm/>}/>
           </Routes>
           </Container>
         </main>

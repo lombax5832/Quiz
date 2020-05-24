@@ -3,7 +3,7 @@ import { Add, Remove } from '@material-ui/icons';
 import React from 'react';
 import { connect } from 'react-redux';
 import { arraySplice, formValueSelector } from 'redux-form';
-import { FORM_NAME } from './consts';
+import { FORM_NAME } from '../consts';
 
 const selectFormValue = formValueSelector(FORM_NAME);
 

@@ -3,13 +3,13 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import { FieldArray, reduxForm } from 'redux-form';
 import AddAnswer from './addanswer';
-import { FORM_NAME } from './consts';
+import { FORM_NAME } from '../consts';
 import EditExplanation from './editexplanation';
 import EditQuestion from './question';
 import QuestionMeta from './questionmeta';
 import renderAnswers from './renderanswers';
 
-let ContactForm = (props: any) => {
+let QuestionForm = (props: any) => {
   const { handleSubmit, reset } = props;
   return (
       <div style={{ flexGrow: 1 }}>
@@ -57,4 +57,4 @@ export default reduxForm({
   onSubmit: (data) => {
     console.log(data);
   },
-})(ContactForm);
+})(QuestionForm);
