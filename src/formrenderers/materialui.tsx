@@ -43,12 +43,14 @@ const renderFromHelper = ({ touched, error }) => {
 const renderTextField = ({
                            label,
                            input,
+                           autocomplete,
                            meta: { touched, invalid, error },
                            ...custom
                          }) => (
     <TextField
         label={label}
         placeholder={label}
+        autoComplete={autocomplete}
         error={touched && invalid}
         helperText={touched && error}
         {...input}
@@ -94,14 +96,14 @@ const renderSelectField = ({
           {...custom}
           inputProps={{
             name: input.name,
-            id: 'color-native-simple'
+            id: 'color-native-simple',
           }}
       >
         {children}
       </Select>
       {renderFromHelper({ touched, error })}
     </FormControl>
-)
+);
 
 const renderCheckbox = ({ input, label }) => (
     <div>
@@ -109,14 +111,14 @@ const renderCheckbox = ({ input, label }) => (
           control={
             <Checkbox
                 color="primary"
-                checked={input.value ? true : false}
+                checked={input.value ? true:false}
                 onChange={input.onChange}
             />
           }
           label={label}
       />
     </div>
-)
+);
 
 export { renderTextField, renderTextArea, renderSelectField, renderCheckbox };
 

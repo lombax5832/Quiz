@@ -19,6 +19,7 @@ const EditTitle = (props: any) => {
                 variant="outlined"
                 required
                 fullWidth={true}
+                autocomplete="off"
                 component={renderTextField}
                 label="Category Title"
                 style={{minWidth: 275}}
