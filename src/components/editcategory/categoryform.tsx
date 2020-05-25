@@ -5,7 +5,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
 import { reduxForm } from 'redux-form';
-import { FORM_EDIT_CATEGORY } from '../consts';
+import { FORM_EDIT_CATEGORY } from '../../consts';
 import EditCategoryDescription from './editdescription';
 import EditSlug from './editslug';
 import EditTitle from './edittitle';

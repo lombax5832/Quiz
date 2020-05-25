@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import IAuth from '../interfaces/IAuth';
 import { initialized, signIn, signOut } from '../store/actions/auth';
+import { setJourney } from '../store/actions/journey';
+import { JOURNEY } from '../consts';
 
 const mapStateToProps = (state: { auth: IAuth }) => {
     return {
@@ -11,7 +13,7 @@ const mapStateToProps = (state: { auth: IAuth }) => {
 
 let Authentication = (props: any) => {
 
-    const { signIn, signOut, children } = props;
+    const { dispatch, children } = props;
     const [initialized, setInitialized] = useState<boolean>(false)
 
     useEffect(() => {
@@ -22,21 +24,21 @@ let Authentication = (props: any) => {
                 const dispatchSignIn = () => {
                     const CURRENT_USER = GAUTH.currentUser.get();
                     const profile = CURRENT_USER.getBasicProfile();
-                    signIn({
+                    dispatch(signIn({
                         id: profile.getId(),
                         name: profile.getName(),
                         givenName: profile.getGivenName(),
                         familyName: profile.getFamilyName(),
                         imageURL: profile.getImageUrl(),
                         email: profile.getEmail()
-                    });
+                    }));
                 }
 
                 GAUTH.isSignedIn.listen((signedIn: boolean) => {
                     if (signedIn) {
                         dispatchSignIn();
                     } else {
-                        signOut();
+                        dispatch(signOut());
                     }
                 })
 
@@ -45,6 +47,7 @@ let Authentication = (props: any) => {
                 }
 
                 setInitialized(true);
+                dispatch(setJourney(JOURNEY));
 
                // console.log(`IS_SIGNED_IN = ${IS_SIGNED_IN}`);
             })
@@ -60,4 +63,4 @@ let Authentication = (props: any) => {
     }
 }
 
-export default connect(mapStateToProps, { signIn, signOut, initialized })(Authentication)
+export default connect(mapStateToProps)(Authentication)

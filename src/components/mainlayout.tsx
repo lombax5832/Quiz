@@ -15,7 +15,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import UserButton from './userButton';
-import { DRAWER_WIDTH } from './consts';
+import { DRAWER_WIDTH } from '../consts';
 import NavMenu from './navmenu';
 
 
