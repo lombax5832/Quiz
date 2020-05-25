@@ -6,6 +6,7 @@ import { IJourney, IRouteParam } from '../interfaces/journeys';
 import { PartialRouteObject } from 'react-router';
 import EnsureLogin from './ensurelogin';
 import { JOURNEY } from '../consts';
+import { connect } from 'react-redux';
 
 const makeRoutesConfig = (routes: Array<IRouteParam>): Array<PartialRouteObject> => {
 
@@ -28,13 +29,19 @@ const makeRoutesConfig = (routes: Array<IRouteParam>): Array<PartialRouteObject>
   });
 };
 
-const DynamicRouter = (props: any) => {
+const mapStateToProps = (state: {journey: IJourney}) => {
+  return {
+    routes: state.journey.rootJourney
+  }
+};
 
-  const routesConfig = makeRoutesConfig(JOURNEY.rootJourney);
+const DynamicRouter = (props: {routes?: Array<IRouteParam>}) => {
+
+  const routesConfig = makeRoutesConfig(props.routes);
 
   let element = useRoutes(routesConfig);
 
   return element;
 };
 
-export default DynamicRouter;
+export default connect(mapStateToProps)(DynamicRouter);
