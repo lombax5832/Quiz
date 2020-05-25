@@ -1,72 +1,63 @@
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Box, Card, CardContent, FormControl, FormHelperText, InputLabel, Select } from '@material-ui/core';
 import React from 'react';
+import { Field } from 'redux-form';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            backgroundColor: theme.palette.background.paper,
-        },
-    }),
-);
+const EditQuizCategory = (props: { options: string[], classes?: any }) => {
+  const { options, classes } = props;
 
-const EditQuizCategory = (props: { options: string[] }) => {
-    const {options} = props;
-    const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const renderFromHelper = ({ touched, error }) => {
+    if (!(touched && error)) {
+      return
+    } else {
+      return <FormHelperText>{touched && error}</FormHelperText>
+    }
+  }
 
-    const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
+  const renderSelectField = ({
+    input,
+    label,
+    meta: { touched, error },
+    children,
+    ...custom
+  }) => (
+      <FormControl variant="outlined" fullWidth error={touched && error}>
+        <InputLabel htmlFor="outlined-category-native-simple">{label}</InputLabel>
+        <Select
+          native
+          label={label}
+          {...input}
+          {...custom}
+          inputProps={{
+            name: 'age',
+            id: 'category-native-simple'
+          }}
+        >
+          {children}
+        </Select>
+        {renderFromHelper({ touched, error })}
+      </FormControl>
+    )
 
-    const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
-        setSelectedIndex(index);
-        setAnchorEl(null);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    return (
-        <div className={classes.root}>
-            <List component="nav" aria-label="Category">
-                <ListItem
-                    button
-                    aria-haspopup="true"
-                    aria-controls="lock-menu"
-                    aria-label="Category"
-                    onClick={handleClickListItem}
-                >
-                    <ListItemText primary={options[selectedIndex]} />
-                </ListItem>
-            </List>
-            <Menu
-                id="lock-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                variant="menu"
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-            >
-                {options.map((option, index) => (
-                    <MenuItem
-                        key={option}
-                        selected={index === selectedIndex}
-                        onClick={(event) => handleMenuItemClick(event, index)}
-                    >
-                        {option}
-                    </MenuItem>
-                ))}
-            </Menu>
-        </div>
-    );
+  return (
+    <Box mb={1}>
+      <Card>
+        <CardContent>
+          <Field
+            classes={classes}
+            name="category"
+            component={renderSelectField}
+            label="Category"
+            required
+          >
+            <option aria-label="None" value="" />
+            {options.map((option, index) => (
+              <option value={option}>{option}</option>
+            ))}
+          </Field>
+        </CardContent>
+      </Card>
+    </Box>
+  )
 }
-
 
 export default EditQuizCategory

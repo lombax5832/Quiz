@@ -25,7 +25,7 @@ let EditQuestionType = (props: { qtype?: string, dispatch?: Function }) => {
           defaultValue="multi"
           onChange={handleChange}
       >
-        <option value="single">Sinfgle Correct</option>
+        <option value="single">Single Correct</option>
         <option value="multi">Multiple Correct</option>
       </Field>
   );

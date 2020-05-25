@@ -97,10 +97,7 @@ const NewQuizForm = (props: any) => {
                   </Typography>
               </Box>
 
-              {
-                //Not working for some reason
-                  <EditQuizCategory options={["test1", "test2"]} />
-              }
+              <EditQuizCategory options={["test1", "test2"]} />
               <EditTitle />
               <EditSlug />
               <EditCategoryDescription />
