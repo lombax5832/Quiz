@@ -22,6 +22,7 @@ import EditCategory from './editcategory/index';
 import EditQuestion from './editquestion/index';
 import UserButton from './userButton';
 import Welcome from './welcome';
+import NewQuiz from './newquiz';
 
 const drawerWidth = 240;
 
@@ -156,6 +157,9 @@ export default function MainLayout() {
                 <ListItem button onClick={() => navigate('editcategory')} key='editcategory'>
                   <ListItemText primary="Edit Category"/>
                 </ListItem>
+                <ListItem button onClick={() => navigate('newquiz')} key='newquiz'>
+                  <ListItemText primary="New Quiz"/>
+                </ListItem>
               </List>
             </Drawer>
           </div>
@@ -177,6 +181,7 @@ export default function MainLayout() {
             <Route path="counter" element={<Counter/>}/>
             <Route path="editor" element={<EditQuestion/>}/>
             <Route path="editcategory" element={<EditCategory/>}/>
+            <Route path="newquiz" element={<NewQuiz/>}/>
           </Routes>
           </Container>
         </main>

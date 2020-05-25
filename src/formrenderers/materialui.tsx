@@ -21,15 +21,15 @@ const GreenCheckbox = withStyles({
 })((props: CheckboxProps) => <Checkbox color="default" {...props} />);
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-      formControl: {
-        margin: theme.spacing(1),
-        minWidth: 120,
-      },
-      selectEmpty: {
-        marginTop: theme.spacing(2),
-      },
-    }),
+  createStyles({
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+  }),
 );
 
 const renderFromHelper = ({ touched, error }) => {
@@ -41,83 +41,83 @@ const renderFromHelper = ({ touched, error }) => {
 };
 
 const renderTextField = ({
-                           label,
-                           input,
-                           autocomplete,
-                           meta: { touched, invalid, error },
-                           ...custom
-                         }) => (
+  label,
+  input,
+  autocomplete,
+  meta: { touched, invalid, error },
+  ...custom
+}) => (
     <TextField
-        label={label}
-        placeholder={label}
-        autoComplete={autocomplete}
-        error={touched && invalid}
-        helperText={touched && error}
-        {...input}
-        {...custom}
+      label={label}
+      placeholder={label}
+      autoComplete={autocomplete}
+      error={touched && invalid}
+      helperText={touched && error}
+      {...input}
+      {...custom}
     />
-);
+  );
 
 
 const renderTextArea = ({
-                          label,
-                          input,
-                          meta: { touched, invalid, error },
-                          ...custom
-                        }) => (
+  label,
+  input,
+  meta: { touched, invalid, error },
+  ...custom
+}) => (
     <TextField
-        {...input}
-        id="filled-textarea"
-        variant="outlined"
-        label={label}
-        multiline
-        fullWidth={true}
-        rowsMax={10}
-        error={touched && invalid}
-        helperText={touched && error}
-        {...custom}
-        placeholder={label}
+      {...input}
+      id="filled-textarea"
+      variant="outlined"
+      label={label}
+      multiline
+      fullWidth={true}
+      rowsMax={10}
+      error={touched && invalid}
+      helperText={touched && error}
+      {...custom}
+      placeholder={label}
 
     />
-);
+  );
 
 const renderSelectField = ({
-                             input,
-                             label,
-                             meta: { touched, error },
-                             children,
-                             ...custom
-                           }) => (
+  input,
+  label,
+  meta: { touched, error },
+  children,
+  ...custom
+}) => (
     <FormControl error={touched && error}>
       <InputLabel htmlFor="color-native-simple">{label}</InputLabel>
       <Select
-          native
-          {...input}
-          {...custom}
-          inputProps={{
-            name: input.name,
-            id: 'color-native-simple',
-          }}
+        native
+        {...input}
+        {...custom}
+        inputProps={{
+          name: input.name,
+          id: 'color-native-simple',
+        }}
       >
         {children}
       </Select>
       {renderFromHelper({ touched, error })}
     </FormControl>
-);
+  );
 
 const renderCheckbox = ({ input, label }) => (
-    <div>
-      <FormControlLabel
-          control={
-            <Checkbox
-                color="primary"
-                checked={input.value ? true:false}
-                onChange={input.onChange}
-            />
-          }
-          label={label}
-      />
-    </div>
+  <div>
+    <FormControlLabel
+      control={
+        <Checkbox
+          color="primary"
+          checked={input.value ? true : false}
+          onChange={input.onChange}
+        />
+      }
+      label={label}
+    />
+  </div>
 );
 
 export { renderTextField, renderTextArea, renderSelectField, renderCheckbox };

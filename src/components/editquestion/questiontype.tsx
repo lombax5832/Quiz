@@ -19,13 +19,13 @@ let EditQuestionType = (props: { qtype?: string, dispatch?: Function }) => {
   return (
       <Field
           component={renderSelectField}
-          label="Question Type"
+          label="Question Type 2"
           name="qtype"
           value={qtype}
           defaultValue="multi"
           onChange={handleChange}
       >
-        <option value="single">Single Correct</option>
+        <option value="single">Sinfgle Correct</option>
         <option value="multi">Multiple Correct</option>
       </Field>
   );
