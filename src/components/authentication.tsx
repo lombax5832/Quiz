@@ -1,20 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import IAuth from '../interfaces/IAuth';
 import { initialized, signIn, signOut } from '../store/actions/auth';
-
-interface IProfile {
-    id: string
-    name: string
-    givenName: string
-    familyName: string
-    imageURL: string
-    email?: string
-}
-
-export interface IAuth {
-    initialized: boolean
-    profile: IProfile
-}
 
 const mapStateToProps = (state: { auth: IAuth }) => {
     return {

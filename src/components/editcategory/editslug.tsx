@@ -1,9 +1,9 @@
 import { Box } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import React from 'react';
 import { Field } from 'redux-form';
 import { renderTextField } from '../../formrenderers/materialui';
-import React from 'react';
 
 const EditSlug = (props: any) => {
 

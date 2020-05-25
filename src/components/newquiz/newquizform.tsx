@@ -5,13 +5,14 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
 import { reduxForm } from 'redux-form';
+import ICategory from '../../interfaces/ICategory';
 import { FORM_NEW_QUIZ } from '../consts';
 import EditCategoryDescription from './editdescription';
+import EditQuizCategory from './editquizcategory';
 import EditSlug from './editslug';
 import EditTitle from './edittitle';
-import EditQuizCategory from './editquizcategory';
 
-let CATEGORIES;
+let CATEGORIES: ICategory[];
 
 const validate = values => {
 
@@ -97,7 +98,7 @@ const NewQuizForm = (props: any) => {
                   </Typography>
               </Box>
 
-              <EditQuizCategory options={["test1", "test2"]} />
+              <EditQuizCategory options={CATEGORIES} />
               <EditTitle />
               <EditSlug />
               <EditCategoryDescription />

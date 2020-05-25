@@ -2,7 +2,7 @@ import { Avatar, ClickAwayListener, Grow, IconButton, MenuItem, MenuList, Paper,
 import React from 'react';
 import GoogleLogin from 'react-google-login';
 import { connect } from 'react-redux';
-import { IAuth } from './authentication';
+import IAuth from '../interfaces/IAuth';
 
 const mapStateToProps = (state: { auth: IAuth }) => {
     return {

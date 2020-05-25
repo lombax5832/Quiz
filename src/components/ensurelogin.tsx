@@ -1,8 +1,8 @@
 import { Grid, Typography } from "@material-ui/core"
 import React, { useEffect } from "react"
 import { connect } from "react-redux"
-import { IAuth } from "./authentication"
 import LockIcon from '@material-ui/icons/Lock';
+import IAuth from "../interfaces/IAuth";
 
 const NotLoggedIn = () => {
     useEffect(() => {

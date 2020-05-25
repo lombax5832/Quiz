@@ -84,26 +84,28 @@ const renderTextArea = ({
 const renderSelectField = ({
   input,
   label,
+  required,
   meta: { touched, error },
   children,
   ...custom
 }) => (
-    <FormControl error={touched && error}>
-      <InputLabel htmlFor="color-native-simple">{label}</InputLabel>
+    <FormControl required={required} variant="outlined" fullWidth error={touched && error}>
+      <InputLabel htmlFor="native-simple">{label}</InputLabel>
       <Select
         native
+        label={label}
         {...input}
         {...custom}
         inputProps={{
           name: input.name,
-          id: 'color-native-simple',
+          id: `native-simple`
         }}
       >
         {children}
       </Select>
       {renderFromHelper({ touched, error })}
     </FormControl>
-  );
+  )
 
 const renderCheckbox = ({ input, label }) => (
   <div>
