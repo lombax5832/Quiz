@@ -13,6 +13,7 @@ import Counter from './components/counter';
 import EditQuestion from './components/editquestion';
 import CategoryForm from './components/editcategory/categoryform';
 import NewQuiz from './components/newquiz';
+import DynamicRouter from './components/dynamicrouter';
 
 const store = createStore(routeReducer, composeWithDevTools());
 
@@ -29,15 +30,7 @@ function App() {
     <Provider store={store}>
       <Authentication>
         <BrowserRouter>
-          <Routes>
-            <Route path="" element={<MainLayout />}>
-              <Route path="/" element={VIEWS.welcome}/>
-              <Route path="counter" element={VIEWS.counter}/>
-              <Route path="editor" element={VIEWS.editquestion}/>
-              <Route path="editcategory" element={VIEWS.editcategory}/>
-              <Route path="newquiz" element={VIEWS.newquiz}/>
-            </Route>
-          </Routes>
+          <DynamicRouter/>
         </BrowserRouter>
       </Authentication>
     </Provider>

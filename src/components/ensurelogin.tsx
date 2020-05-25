@@ -58,7 +58,7 @@ let EnsureLogin = (props: { loggedIn?: boolean, isRequired?: boolean, children: 
     if (!loggedIn && isRequired) {
         return <NotLoggedIn />
     } else {
-        return <div>{children}</div>
+        return <>{children}</>
     }
 }
 

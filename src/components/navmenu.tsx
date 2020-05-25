@@ -15,7 +15,7 @@ const NavMenu = (props: any) => {
         <ListItem button onClick={() => navigate('counter')} key='counter'>
           <ListItemText primary="Counter"/>
         </ListItem>
-        <ListItem button onClick={() => navigate('editor')} key='editor'>
+        <ListItem button onClick={() => navigate('editquestion')} key='editor'>
           <ListItemText primary="Editor"/>
         </ListItem>
         <ListItem button onClick={() => navigate('editcategory')} key='editcategory'>
