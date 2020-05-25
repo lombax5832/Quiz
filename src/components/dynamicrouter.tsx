@@ -1,16 +1,17 @@
 import React, { createElement } from 'react';
-import { VIEWS, VIEW_NODES } from './views';
-import MainLayout from './mainlayout';
+import { VIEW_NODES } from './views';
 import { useRoutes } from 'react-router-dom';
-import { IJourney, IRouteParam } from '../interfaces/journeys';
+import { IJourney, IRouteParam, IRouteParamOrDivider } from '../interfaces/journeys';
 import { PartialRouteObject } from 'react-router';
 import EnsureLogin from './ensurelogin';
-import { JOURNEY } from '../consts';
 import { connect } from 'react-redux';
 
-const makeRoutesConfig = (routes: Array<IRouteParam>): Array<PartialRouteObject> => {
+const makeRoutesConfig = (routes: Array<IRouteParamOrDivider>): Array<PartialRouteObject> => {
 
-  return routes.map(o => {
+  const aRouteParams = routes.filter(item => typeof item==='object');
+  return (aRouteParams as Array<IRouteParam>)
+      .filter(item => VIEW_NODES[item.elementId] !== undefined)
+      .map(o => {
     let ret: PartialRouteObject = {
       path: o.path,
       element: createElement(EnsureLogin,
@@ -21,7 +22,7 @@ const makeRoutesConfig = (routes: Array<IRouteParam>): Array<PartialRouteObject>
       ),
 
     };
-    if (o.children) {
+    if (typeof o==='object' && o.children) {
       ret.children = makeRoutesConfig(o.children);
     }
 
@@ -29,13 +30,13 @@ const makeRoutesConfig = (routes: Array<IRouteParam>): Array<PartialRouteObject>
   });
 };
 
-const mapStateToProps = (state: {journey: IJourney}) => {
+const mapStateToProps = (state: { journey: IJourney }) => {
   return {
-    routes: state.journey.rootJourney
-  }
+    routes: state.journey.rootJourney,
+  };
 };
 
-const DynamicRouter = (props: {routes?: Array<IRouteParam>}) => {
+const DynamicRouter = (props: { routes?: Array<IRouteParam> }) => {
 
   const routesConfig = makeRoutesConfig(props.routes);
 

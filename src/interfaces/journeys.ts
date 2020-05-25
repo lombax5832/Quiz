@@ -1,11 +1,17 @@
+export type IDivider = 'divider'
+
 export interface IRouteParam {
   path: string
   elementId: string
-  label: string
+  label?: string
+  icon?: string
+  divider?: boolean
   requireUser?: boolean
-  children?: Array<IRouteParam>
+  children?: Array<IRouteParamOrDivider>
 }
 
+export type IRouteParamOrDivider = IRouteParam | IDivider
+
 export interface IJourney {
-  rootJourney: Array<IRouteParam>
+  rootJourney: Array<IRouteParamOrDivider>
 }

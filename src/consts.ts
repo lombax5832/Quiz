@@ -11,10 +11,10 @@ export const JOURNEY: IJourney = {
   rootJourney: [
     {
       path: '',
-      label: '',
       elementId: 'main',
       children: [
         { path: '/', elementId: 'welcome', label: 'Home', requireUser: false },
+        'divider',
         { path: 'counter', elementId: 'counter', label: 'Counter', requireUser: false },
         { path: 'editquestion', elementId: 'editquestion', label: 'Edit Question', requireUser: true },
         { path: 'editcategory', elementId: 'editcategory', label: 'Edit Category', requireUser: true },
