@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, formValueSelector } from 'redux-form';
 import { renderTextArea } from '../../formrenderers/materialui';
-import { FORM_NAME } from './consts';
+import { FORM_NAME } from '../consts';
 const selectFormValue = formValueSelector(FORM_NAME);
 
 const EditAnswerExplanation = (props: { id: number, hasExplanation?: boolean }) => {

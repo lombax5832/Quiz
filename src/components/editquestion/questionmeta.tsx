@@ -15,7 +15,7 @@ const QuestionMeta = (props: {reset: Function}) => {
               spacing={2}
               direction="row"
               justify="flex-end"
-              alignItems="center"
+              alignItems="stretch"
           >
 
             <Grid item>

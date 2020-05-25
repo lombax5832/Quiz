@@ -7,7 +7,7 @@ import { AddCircle } from '@material-ui/icons';
 import React from 'react';
 import { connect } from 'react-redux';
 import { arrayPush } from 'redux-form';
-import { FORM_NAME } from './consts';
+import { FORM_NAME } from '../consts';
 import TypeMenu from './typemenu';
 
 const AddAnswer = (props: { arrayPush: Function }) => {
