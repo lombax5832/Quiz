@@ -15,7 +15,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import UserButton from './userButton';
-import { DRAWER_WIDTH } from '../consts';
+import { DRAWER_WIDTH, JOURNEY } from '../consts';
 import NavMenu from './navmenu';
 
 
@@ -136,7 +136,7 @@ export default function MainLayout() {
                 </IconButton>
               </div>
               <Divider/>
-              <NavMenu/>
+              <NavMenu rootJourney={JOURNEY.rootJourney}/>
             </Drawer>
           </div>
         </ClickAwayListener>

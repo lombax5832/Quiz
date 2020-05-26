@@ -13,7 +13,7 @@ export const JOURNEY: IJourney = {
       path: '',
       elementId: 'main',
       children: [
-        { path: '/', elementId: 'welcome', label: 'Home', requireUser: false },
+        { path: '/', elementId: 'welcome', label: 'Home', requireUser: false, icon: 'home' },
         'divider',
         { path: 'counter', elementId: 'counter', label: 'Counter', requireUser: false },
         { path: 'editquestion', elementId: 'editquestion', label: 'Edit Question', requireUser: true },
