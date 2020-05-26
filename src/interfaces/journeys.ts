@@ -5,6 +5,7 @@ export interface IRouteParam {
   elementId: string
   label?: string
   icon?: string
+  params?: { [key: string]: any }
   divider?: boolean
   requireUser?: boolean
   children?: Array<IRouteParamOrDivider>

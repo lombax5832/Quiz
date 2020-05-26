@@ -26,7 +26,7 @@ const NotLoggedIn = () => {
             'longtitle': true,
             'theme': 'dark',
         });
-    })
+    });
 
     return (
         <Grid
@@ -43,23 +43,23 @@ const NotLoggedIn = () => {
             <Grid item xs={12}><div id="my-signin2"></div></Grid>
         </Grid>
     )
-}
+};
 
 const mapStateToProps = (state: { auth: IAuth }, ownProps: { isRequired?: boolean }) => {
     return {
         ...ownProps,
         loggedIn: !!state.auth?.profile
     }
-}
+};
 
 let EnsureLogin = (props: { loggedIn?: boolean, isRequired?: boolean, children: any }) => {
-    const { loggedIn, isRequired, children } = props
+    const { loggedIn, isRequired, children } = props;
 
     if (!loggedIn && isRequired) {
         return <NotLoggedIn />
     } else {
         return <>{children}</>
     }
-}
+};
 
 export default connect(mapStateToProps)(EnsureLogin)
