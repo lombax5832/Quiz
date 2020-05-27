@@ -1,26 +1,27 @@
 import React from 'react';
-import { IJourney, IRouteParamOrDivider } from '../../interfaces/journeys';
+import { IRouteParamOrDivider } from '../../interfaces/journeys';
 import { Divider, ListItemIcon } from '@material-ui/core';
 import ListItem from '@material-ui/core/ListItem';
 import Icon from '@material-ui/core/Icon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { NavigateFunction } from 'react-router';
+import Path from 'path-browserify';
 
 interface INavigationItemProps {
   icon?: string
   path: string
   label: string
   divider: boolean
-  id: string
+  key: string
   navigate: Function
-};
+}
 
 const NavigationItem = (props: INavigationItemProps) => {
 
-  const { icon, path, label, navigate, divider, id } = props;
+  const { icon, path, label, navigate, divider } = props;
 
   return (
-      <ListItem button divider={divider} onClick={() => navigate(path)} key={id}>
+      <ListItem button divider={divider} onClick={() => navigate(path)}>
         {icon && <ListItemIcon><Icon fontSize="small">{icon}</Icon></ListItemIcon>}
         <ListItemText primary={label}/>
       </ListItem>
@@ -29,32 +30,31 @@ const NavigationItem = (props: INavigationItemProps) => {
 
 export default function makeNavItemsFactory(navigate: NavigateFunction) {
 
-  return function makeNavItems(items: Array<IRouteParamOrDivider>, path: string = '', level = 1): React.FunctionComponent[] {
+  return function makeNavItems(items: Array<IRouteParamOrDivider>, basePath: string = '', level = 1): React.FunctionComponent[] {
 
     console.log('entered makeNavItems with count=', items.length);
 
     return items.reduce((acc: Array<any>, next, index) => {
       let ret = [...acc];
 
-
       if (next==='divider') {
-        ret.push(<Divider/>);
+        ret.push(<Divider key={`${level}.${index}`}/>);
       } else {
+        const uri = Path.join(basePath, next.path);
         if (next.label) {
           ret.push(<NavigationItem
               icon={next.icon}
-              path={next.path}
+              path={uri}
               label={next.label}
               navigate={navigate}
-              id={`${level}.${index}`}
+              key={`${level}.${index}`}
               divider={!!next.divider}/>);
         }
 
         if (next.children) {
-          ret = ret.concat(makeNavItems(next.children, next.path, level + 1));
+          ret = ret.concat(makeNavItems(next.children, uri, level + 1));
         }
       }
-
 
       return ret;
     }, []);

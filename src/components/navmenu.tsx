@@ -1,35 +1,28 @@
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import React, { FunctionComponentElement } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IJourney, IRouteParam, IRouteParamOrDivider } from '../interfaces/journeys';
-import { ListItemIcon } from '@material-ui/core';
-import Icon from '@material-ui/core/Icon';
-import { loadCSS } from 'fg-loadcss';
-import Divider from '@material-ui/core/Divider';
+import { IJourney, IRouteParamOrDivider } from '../interfaces/journeys';
 import makeNavItemsFactory from './lib/makenavmenu';
-/*
-
-const makeNavItems = (rootJourney: IJourney): Array<FunctionComponentElement<ListItem>> => {
-
-  function makeLink(item: IRouteParam, links: Array<any>) {
-
-  }
+import { connect } from 'react-redux';
 
 
+const mapStateToProps = (state: { journey: IJourney }) => {
+  return {
+    rootJourney: state.journey?.rootJourney || [],
+  };
 };
-*/
 
-const NavMenu = (props: {rootJourney: Array<IRouteParamOrDivider>}) => {
+const NavMenu = (props: { rootJourney: Array<IRouteParamOrDivider> }) => {
+  console.log('entered NavMenu FC', window.location.href);
+  const { rootJourney } = props;
 
   const navigate = useNavigate();
-  const makeItems = makeNavItemsFactory(navigate);
-
-
-  const navItems: React.FunctionComponent[]  = makeItems(props.rootJourney);
-
-  console.log('navItems created', navItems.length);
+  const [navItems, setNavItems] = useState([]);
+  useEffect(() => {
+    const makeItems = makeNavItemsFactory(navigate);
+    const items = makeItems(rootJourney);
+    setNavItems(items);
+  }, [rootJourney]);
 
   return (
       <List>
@@ -38,4 +31,4 @@ const NavMenu = (props: {rootJourney: Array<IRouteParamOrDivider>}) => {
   );
 };
 
-export default NavMenu;
+export default connect(mapStateToProps)(NavMenu);

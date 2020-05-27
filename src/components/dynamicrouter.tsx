@@ -1,4 +1,4 @@
-import React, { createElement } from 'react';
+import React, { createElement, useEffect, useState } from 'react';
 import { VIEW_NODES } from './views';
 import { useRoutes } from 'react-router-dom';
 import { IJourney, IRouteParam, IRouteParamOrDivider } from '../interfaces/journeys';
@@ -7,40 +7,48 @@ import EnsureLogin from './ensurelogin';
 import { connect } from 'react-redux';
 
 const makeRoutesConfig = (routes: Array<IRouteParamOrDivider>): Array<PartialRouteObject> => {
-
+  /**
+   * First filter out 'divider' string, leaving only objects
+   */
+  console.log('entered makeRoutesConfig');
   const aRouteParams = routes.filter(item => typeof item==='object');
   return (aRouteParams as Array<IRouteParam>)
-      .filter(item => VIEW_NODES[item.elementId] !== undefined)
+      .filter(item => VIEW_NODES[item.elementId]!==undefined)
       .map(o => {
-    let ret: PartialRouteObject = {
-      path: o.path,
-      element: createElement(EnsureLogin,
-          {
-            isRequired: o.requireUser,
-            children: [createElement(VIEW_NODES[o.elementId])],
-          },
-      ),
+        let ret: PartialRouteObject = {
+          path: o.path,
+          element: (
+              <EnsureLogin isRequired={o.requireUser}>
+                {createElement(VIEW_NODES[o.elementId])}
+              </EnsureLogin>
+          ),
 
-    };
-    if (typeof o==='object' && o.children) {
-      ret.children = makeRoutesConfig(o.children);
-    }
+        };
+        if (typeof o==='object' && o.children) {
+          ret.children = makeRoutesConfig(o.children);
+        }
 
-    return ret;
-  });
+        return ret;
+      });
 };
 
 const mapStateToProps = (state: { journey: IJourney }) => {
   return {
-    routes: state.journey.rootJourney,
+    routes: state.journey?.rootJourney,
   };
 };
 
-const DynamicRouter = (props: { routes?: Array<IRouteParam> }) => {
+const DynamicRouter = (props: { routes?: Array<IRouteParamOrDivider> }) => {
+  console.log('entered DynamicRouter FC', window.location.href);
+  const { routes } = props;
 
-  const routesConfig = makeRoutesConfig(props.routes);
+  const [routesConfig, setRouter] = useState([]);
+  useEffect(() => {
+    const rc = makeRoutesConfig(props.routes);
+    setRouter(rc);
+  }, [routes]);
 
-  let element = useRoutes(routesConfig);
+  const element = useRoutes(routesConfig);
 
   return element;
 };

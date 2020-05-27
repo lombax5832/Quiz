@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import IAuth from '../interfaces/IAuth';
 import { initialized, signIn, signOut } from '../store/actions/auth';
@@ -7,6 +7,7 @@ import { JOURNEY } from '../consts';
 import IProfile from '../interfaces/IProfile';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
+const TAG = 'Authentication';
 
 const fromGoogleProfile = (profile: gapi.auth2.BasicProfile): IProfile => {
   return {
@@ -37,13 +38,18 @@ const mapDispatchToProps = (dispatch: Function) => {
       dispatch(signOut());
       dispatch(setJourney(JOURNEY));
     },
+
+    setInitialized: function(){
+      dispatch(initialized());
+    }
   };
 };
 
 let Authentication = (props: any) => {
 
-  const { setSignedIn, setSignedOut, children } = props;
-  const [initialized, setInitialized] = useState<boolean>(false);
+  console.log(TAG, 'Entered Authentication FC with initialized=', props.initialized);
+
+  const { initialized, setSignedIn, setSignedOut, setInitialized, children } = props;
 
   useEffect(() => {
     window.gapi.load('client:auth2', () => {
@@ -54,20 +60,21 @@ let Authentication = (props: any) => {
         const GAUTH = window.gapi.auth2.getAuthInstance();
 
         const onSignOut = () => {
+          console.log(TAG, 'entered onSignOut');
           setSignedOut();
-          setInitialized(true);
         };
 
         const onSignIn = () => {
+          console.log(TAG, 'entered onSignIn');
           const CURRENT_USER = GAUTH.currentUser.get();
           const googleProfile = CURRENT_USER.getBasicProfile();
           const profile = fromGoogleProfile(googleProfile);
 
           setSignedIn(profile);
-          setInitialized(true);
         };
 
         GAUTH.isSignedIn.listen((signedIn: boolean) => {
+          console.log(TAG, 'isSignedIn event with value=', signedIn);
           if (signedIn) {
             onSignIn();
           } else {
@@ -76,9 +83,12 @@ let Authentication = (props: any) => {
         });
 
         if (GAUTH.isSignedIn.get()) {
+          console.log(TAG, 'isSignedIn.get() true');
           onSignIn();
         } else {
+          console.log(TAG, 'isSignedIn.get() false');
           onSignOut();
+          setInitialized();
         }
 
       });
@@ -86,10 +96,12 @@ let Authentication = (props: any) => {
   }, []);
 
   if (initialized) {
+    console.log(TAG, 'Authentication. Rendering content');
     return (
         <>{children}</>
     );
   } else {
+    console.log(TAG, 'Authentication. Rendering loading');
     return (
         <Grid
             container

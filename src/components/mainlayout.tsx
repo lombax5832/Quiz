@@ -81,23 +81,34 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+const TAG = 'MainLayout';
+
 export default function MainLayout() {
+
+  console.log(TAG, 'Entered MainLayout');
+
   const classes = useStyles();
-  const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
+    console.log(TAG, 'entered handleDrawerOpen');
     setOpen(true);
   };
 
   const handleDrawerClose = () => {
+    console.log(TAG, 'entered handleDrawerClosed');
     setOpen(false);
   };
 
   return (
       <div className={classes.root}>
         <CssBaseline/>
-        <ClickAwayListener onClickAway={handleDrawerClose}>
+        <ClickAwayListener onClickAway={
+          () => {
+            console.log(TAG, 'onClickAway event');
+            handleDrawerClose()
+          }
+        }>
           <div>
             <AppBar
                 position="fixed"
@@ -132,11 +143,11 @@ export default function MainLayout() {
             >
               <div className={classes.drawerHeader}>
                 <IconButton onClick={handleDrawerClose}>
-                  {theme.direction==='ltr' ? <ChevronLeftIcon/>:<ChevronRightIcon/>}
+                  <ChevronLeftIcon/>
                 </IconButton>
               </div>
               <Divider/>
-              <NavMenu rootJourney={JOURNEY.rootJourney}/>
+              <NavMenu />
             </Drawer>
           </div>
         </ClickAwayListener>
