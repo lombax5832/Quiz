@@ -6,6 +6,18 @@ import { PartialRouteObject } from 'react-router';
 import EnsureLogin from './ensurelogin';
 import { connect } from 'react-redux';
 
+const makeElement = (o: IRouteParam) => {
+  if (o.requireUser) {
+    return (
+        <EnsureLogin isRequired={true}>
+          {createElement(VIEW_NODES[o.elementId])}
+        </EnsureLogin>
+    );
+  } else {
+    return createElement(VIEW_NODES[o.elementId]);
+  }
+};
+
 const makeRoutesConfig = (routes: Array<IRouteParamOrDivider>): Array<PartialRouteObject> => {
   /**
    * First filter out 'divider' string, leaving only objects
@@ -17,12 +29,7 @@ const makeRoutesConfig = (routes: Array<IRouteParamOrDivider>): Array<PartialRou
       .map(o => {
         let ret: PartialRouteObject = {
           path: o.path,
-          element: (
-              <EnsureLogin isRequired={o.requireUser}>
-                {createElement(VIEW_NODES[o.elementId])}
-              </EnsureLogin>
-          ),
-
+          element: makeElement(o)
         };
         if (typeof o==='object' && o.children) {
           ret.children = makeRoutesConfig(o.children);

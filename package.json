@@ -15,6 +15,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.8",
     "@types/redux-form": "^8.2.5",
+    "@types/redux-thunk": "^2.1.0",
     "fg-loadcss": "^3.1.0",
     "path-browserify": "^1.0.1",
     "react": "^16.13.1",
@@ -26,6 +27,7 @@
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
     "redux-form": "^8.3.5",
+    "redux-thunk": "^2.3.0",
     "typeface-roboto": "0.0.75",
     "typescript": "^3.7.5"
   },

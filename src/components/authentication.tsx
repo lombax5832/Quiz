@@ -7,6 +7,8 @@ import { JOURNEY } from '../consts';
 import IProfile from '../interfaces/IProfile';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import getSession from './services/session';
+import { getSessionObject } from '../store/actions/getsessionobject';
 const TAG = 'Authentication';
 
 const fromGoogleProfile = (profile: gapi.auth2.BasicProfile): IProfile => {
@@ -30,8 +32,7 @@ const mapDispatchToProps = (dispatch: Function) => {
 
   return {
     setSignedIn: function (profile) {
-      dispatch(signIn(profile));
-      dispatch(setJourney(JOURNEY));
+      dispatch(getSessionObject(profile))
     },
 
     setSignedOut: function () {

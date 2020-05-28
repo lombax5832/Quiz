@@ -26,7 +26,7 @@ const NotLoggedIn = () => {
             'longtitle': true,
             'theme': 'dark',
         });
-    });
+    }, []);
 
     return (
         <Grid

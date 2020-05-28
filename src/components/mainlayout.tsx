@@ -157,7 +157,7 @@ export default function MainLayout() {
             })}
         >
           <div className={classes.drawerHeader}/>
-          <Container maxWidth="lg">
+          <Container>
             <Outlet/>
           </Container>
         </main>
