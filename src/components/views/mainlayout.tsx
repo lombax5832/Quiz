@@ -14,9 +14,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import UserButton from './userButton';
-import { DRAWER_WIDTH, JOURNEY } from '../consts';
-import NavMenu from './navmenu';
+import UserButton from '../userButton';
+import { DRAWER_WIDTH, JOURNEY } from '../../consts';
+import NavMenu from '../navmenu';
 
 
 const useStyles = makeStyles((theme: Theme) =>

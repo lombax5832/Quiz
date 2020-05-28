@@ -13,7 +13,6 @@ import EnsureLogin from '../ensurelogin'
 let QuestionForm = (props: any) => {
   const { handleSubmit, reset } = props;
   return (
-    <EnsureLogin isRequired>
       <div style={{ flexGrow: 1 }}>
         <CssBaseline />
         <form onSubmit={handleSubmit}>
@@ -35,7 +34,6 @@ let QuestionForm = (props: any) => {
           </Grid>
         </form>
       </div>
-    </EnsureLogin>
   );
 };
 

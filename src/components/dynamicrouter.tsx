@@ -1,5 +1,5 @@
 import React, { createElement, useEffect, useState } from 'react';
-import { VIEW_NODES } from './views';
+import * as views from './views/index';
 import { useRoutes } from 'react-router-dom';
 import { IJourney, IRouteParam, IRouteParamOrDivider } from '../interfaces/journeys';
 import { PartialRouteObject } from 'react-router';
@@ -10,11 +10,11 @@ const makeElement = (o: IRouteParam) => {
   if (o.requireUser) {
     return (
         <EnsureLogin isRequired={true}>
-          {createElement(VIEW_NODES[o.elementId])}
+          {createElement(views[o.elementId])}
         </EnsureLogin>
     );
   } else {
-    return createElement(VIEW_NODES[o.elementId]);
+    return createElement(views[o.elementId]);
   }
 };
 
@@ -25,7 +25,7 @@ const makeRoutesConfig = (routes: Array<IRouteParamOrDivider>): Array<PartialRou
   console.log('entered makeRoutesConfig');
   const aRouteParams = routes.filter(item => typeof item==='object');
   return (aRouteParams as Array<IRouteParam>)
-      .filter(item => VIEW_NODES[item.elementId]!==undefined)
+      .filter(item => views[item.elementId]!==undefined)
       .map(o => {
         let ret: PartialRouteObject = {
           path: o.path,

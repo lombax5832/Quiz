@@ -6,7 +6,7 @@ import Icon from '@material-ui/core/Icon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { NavigateFunction } from 'react-router';
 import Path from 'path-browserify';
-import { VIEW_NODES } from '../views';
+import * as views from '../views/index'
 
 interface INavigationItemProps {
   icon?: string
@@ -34,6 +34,7 @@ export default function makeNavItemsFactory(navigate: NavigateFunction) {
   return function makeNavItems(items: Array<IRouteParamOrDivider>, basePath: string = '', level = 1): React.FunctionComponent[] {
 
     console.log('entered makeNavItems with count=', items.length);
+    console.log('views exports:', views);
 
     return items.reduce((acc: Array<any>, next, index) => {
       let ret = [...acc];
@@ -42,7 +43,7 @@ export default function makeNavItemsFactory(navigate: NavigateFunction) {
         ret.push(<Divider key={`${level}.${index}`}/>);
       } else {
         const uri = Path.join(basePath, next.path);
-        if (next.label && next.elementId && VIEW_NODES[next.elementId]) {
+        if (next.label && next.elementId && views[next.elementId]) {
           ret.push(<NavigationItem
               icon={next.icon}
               path={uri}
