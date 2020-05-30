@@ -5,5 +5,7 @@ export enum Action{
     //Auth
     SIGNED_IN = 'signed_in',
     SIGNED_OUT = 'signed_out',
-    GAPI_INITIALIZED = 'gapi_initialized'
+    GAPI_INITIALIZED = 'gapi_initialized',
+    // Journey
+    SET_JOURNEY = 'set_journey'
 }

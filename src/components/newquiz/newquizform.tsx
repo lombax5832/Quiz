@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
 import { reduxForm } from 'redux-form';
 import ICategory from '../../interfaces/ICategory';
-import { FORM_NEW_QUIZ } from '../consts';
+import { FORM_NEW_QUIZ } from '../../consts';
 import EditCategoryDescription from './editdescription';
 import EditQuizCategory from './editquizcategory';
 import EditSlug from './editslug';

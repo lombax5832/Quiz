@@ -5,9 +5,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -16,15 +13,11 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
 import React from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import Counter from './counter';
-import EditCategory from './editcategory/index';
-import EditQuestion from './editquestion/index';
-import UserButton from './userButton';
-import Welcome from './welcome';
-import NewQuiz from './newquiz';
+import { Outlet } from 'react-router-dom';
+import UserButton from '../userButton';
+import { DRAWER_WIDTH, JOURNEY } from '../../consts';
+import NavMenu from '../navmenu';
 
-const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,8 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
         }),
       },
       appBarShift: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
+        width: `calc(100% - ${DRAWER_WIDTH}px)`,
+        marginLeft: DRAWER_WIDTH,
         transition: theme.transitions.create(['margin', 'width'], {
           easing: theme.transitions.easing.easeOut,
           duration: theme.transitions.duration.enteringScreen,
@@ -52,11 +45,11 @@ const useStyles = makeStyles((theme: Theme) =>
         display: 'none',
       },
       drawer: {
-        width: drawerWidth,
+        width: DRAWER_WIDTH,
         flexShrink: 0,
       },
       drawerPaper: {
-        width: drawerWidth,
+        width: DRAWER_WIDTH,
       },
       drawerHeader: {
         display: 'flex',
@@ -73,7 +66,7 @@ const useStyles = makeStyles((theme: Theme) =>
           easing: theme.transitions.easing.sharp,
           duration: theme.transitions.duration.leavingScreen,
         }),
-        marginLeft: -drawerWidth,
+        marginLeft: -DRAWER_WIDTH,
       },
       contentShift: {
         transition: theme.transitions.create('margin', {
@@ -88,24 +81,34 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+const TAG = 'MainLayout';
+
 export default function MainLayout() {
+
+  console.log(TAG, 'Entered MainLayout');
+
   const classes = useStyles();
-  const theme = useTheme();
-  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
+    console.log(TAG, 'entered handleDrawerOpen');
     setOpen(true);
   };
 
   const handleDrawerClose = () => {
+    console.log(TAG, 'entered handleDrawerClosed');
     setOpen(false);
   };
 
   return (
       <div className={classes.root}>
         <CssBaseline/>
-        <ClickAwayListener onClickAway={handleDrawerClose}>
+        <ClickAwayListener onClickAway={
+          () => {
+            console.log(TAG, 'onClickAway event');
+            handleDrawerClose()
+          }
+        }>
           <div>
             <AppBar
                 position="fixed"
@@ -140,27 +143,11 @@ export default function MainLayout() {
             >
               <div className={classes.drawerHeader}>
                 <IconButton onClick={handleDrawerClose}>
-                  {theme.direction==='ltr' ? <ChevronLeftIcon/>:<ChevronRightIcon/>}
+                  <ChevronLeftIcon/>
                 </IconButton>
               </div>
               <Divider/>
-              <List>
-                <ListItem button onClick={() => navigate('welcome')} key='welcome'>
-                  <ListItemText primary="Welcome"/>
-                </ListItem>
-                <ListItem button onClick={() => navigate('counter')} key='counter'>
-                  <ListItemText primary="Counter"/>
-                </ListItem>
-                <ListItem button onClick={() => navigate('editor')} key='editor'>
-                  <ListItemText primary="Editor"/>
-                </ListItem>
-                <ListItem button onClick={() => navigate('editcategory')} key='editcategory'>
-                  <ListItemText primary="Edit Category"/>
-                </ListItem>
-                <ListItem button onClick={() => navigate('newquiz')} key='newquiz'>
-                  <ListItemText primary="New Quiz"/>
-                </ListItem>
-              </List>
+              <NavMenu />
             </Drawer>
           </div>
         </ClickAwayListener>
@@ -170,19 +157,8 @@ export default function MainLayout() {
             })}
         >
           <div className={classes.drawerHeader}/>
-          <Container maxWidth="lg">
-          <Routes>
-            <Route path="" element={
-              <Typography variant="h1">Welcome</Typography>
-            }/>
-          </Routes>
-          <Routes>
-            <Route path="welcome" element={<Welcome/>}/>
-            <Route path="counter" element={<Counter/>}/>
-            <Route path="editor" element={<EditQuestion/>}/>
-            <Route path="editcategory" element={<EditCategory/>}/>
-            <Route path="newquiz" element={<NewQuiz/>}/>
-          </Routes>
+          <Container>
+            <Outlet/>
           </Container>
         </main>
       </div>

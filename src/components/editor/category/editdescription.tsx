@@ -4,10 +4,10 @@ import CardContent from '@material-ui/core/CardContent';
 import React from 'react';
 import { Field } from 'redux-form';
 //
-import { renderTextArea } from '../../formrenderers/materialui';
+import { renderTextArea } from '../../../formrenderers/materialui';
 
 
-const EditDescription = () => {
+const EditCategoryDescription = () => {
 
   return (
       <Box mb={1}>
@@ -27,4 +27,4 @@ const EditDescription = () => {
 };
 
 
-export default EditDescription;
+export default EditCategoryDescription;

@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import { FieldArray, reduxForm } from 'redux-form';
 import AddAnswer from './addanswer';
-import { FORM_NAME } from '../consts';
+import { FORM_NAME } from '../../consts';
 import EditExplanation from './editexplanation';
 import EditQuestion from './question';
 import QuestionMeta from './questionmeta';
@@ -13,7 +13,6 @@ import EnsureLogin from '../ensurelogin'
 let QuestionForm = (props: any) => {
   const { handleSubmit, reset } = props;
   return (
-    <EnsureLogin isRequired>
       <div style={{ flexGrow: 1 }}>
         <CssBaseline />
         <form onSubmit={handleSubmit}>
@@ -35,7 +34,6 @@ let QuestionForm = (props: any) => {
           </Grid>
         </form>
       </div>
-    </EnsureLogin>
   );
 };
 
