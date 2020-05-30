@@ -4,11 +4,12 @@ import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
-import { reduxForm } from 'redux-form';
+import { reduxForm, initialize } from 'redux-form';
 import { FORM_EDIT_CATEGORY } from '../../consts';
 import EditCategoryDescription from './editdescription';
 import EditSlug from './editslug';
 import EditTitle from './edittitle';
+import { connect } from 'react-redux';
 
 let CATEGORIES;
 
@@ -25,6 +26,18 @@ const validate = values => {
   }
 };
 
+const fetchCategory = (id: string) => {
+  return new Promise(resolve => {
+    setTimeout(function () {
+      resolve({
+        title: 'Google',
+        slug: 'google',
+        _id: 'abc',
+      });
+    }, 600);
+  });
+};
+
 
 /**
  * @todo pre-load all existing categories from server.
@@ -35,7 +48,7 @@ const validate = values => {
  * @constructor
  */
 const CategoryForm = (props: any) => {
-  const { handleSubmit, reset } = props;
+  const { handleSubmit, pristine, reset, submitting, initialize } = props;
 
   const [loaded, setLoaded] = useState(null);
 
@@ -43,44 +56,24 @@ const CategoryForm = (props: any) => {
    * @todo will fetch existing categories from api.
    */
   useEffect(() => {
-    setTimeout(function () {
-
-      CATEGORIES = [
-        {
-          title: 'Google',
-          slug: 'google',
-          _id: 'abc',
-        },
-        {
-          title: 'IBM',
-          slug: 'ibm',
-          _id: 'abcd',
-        },
-      ];
+    fetchCategory('').then(category => {
+      initialize(FORM_EDIT_CATEGORY, category);
       setLoaded(true);
-    }, 600);
+    });
+
   }, []);
 
 
   if (!loaded) {
     return (
-        <Grid
-            container
-            spacing={0}
-            direction="row"
-            alignItems="center"
-            justify="center"
-        >
-          <Grid item style={{ width: '100%' }}>
-            <LinearProgress variant="query"/>
-          </Grid>
-        </Grid>
+        <LinearProgress/>
     );
   } else {
 
+    const submitHandler = handleSubmit(e => console.log('your form detail here', e));
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={submitHandler}>
           <Container maxWidth="md">
             <Grid
                 container
@@ -110,18 +103,17 @@ const CategoryForm = (props: any) => {
                     <Button
                         variant="outlined"
                         color="default"
-                        onClick={() => props.reset()}>
+                        onClick={() => reset()}>
                       Reset Values
                     </Button>
                   </Grid>
                   <Grid item>
-                    <Button variant="outlined" type="submit" color="primary">
+                    <Button disabled={pristine || submitting} variant="outlined" type="submit" color="primary">
                       Submit
                     </Button>
                   </Grid>
                 </Grid>
               </Grid>
-
 
             </Grid>
           </Container>
@@ -130,14 +122,13 @@ const CategoryForm = (props: any) => {
   }
 };
 
+const ConnectedForm = connect(null, { initialize })(CategoryForm);
+
 
 export default reduxForm({
   form: FORM_EDIT_CATEGORY,
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
-  onSubmit: (data) => {
-    console.log(data);
-  },
-  validate,
-})(CategoryForm);
+  //validate,
+})(ConnectedForm);
 

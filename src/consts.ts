@@ -5,6 +5,12 @@ export const FORM_NEW_QUIZ = 'newQuiz';
 export const FORM_EDIT_CATEGORY = 'editCategory';
 export const DRAWER_WIDTH = 240;
 
+export interface ICategory {
+  _id: string
+  title: string
+  slug: string
+  description?: string
+}
 
 export const JOURNEY: IJourney = {
 
@@ -24,7 +30,26 @@ export const JOURNEY: IJourney = {
   ],
 };
 
-
+export const CATEGORIES: ICategory[] = [
+  {
+    _id: "1abc",
+    title: "Movies",
+    slug: "movie",
+    description: "Movies"
+  },
+  {
+    _id: "2abcd",
+    title: "Games",
+    slug: "games",
+    description: ""
+  },
+  {
+    _id: "f1a",
+    title: "JavaScript",
+    slug: "javascript",
+    description: "Test you JavaScript knowledge"
+  }
+]
 
 
 
