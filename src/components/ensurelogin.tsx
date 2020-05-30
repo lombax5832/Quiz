@@ -19,7 +19,8 @@ const NotLoggedIn = () => {
     const classes = useStyles();
 
     useEffect(() => {
-        window.gapi.signin2.render('my-signin2', {
+
+        window?.gapi?.signin2?.render('my-signin2', {
             'scope': 'profile email',
             'width': 240,
             'height': 50,

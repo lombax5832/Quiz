@@ -7,7 +7,7 @@ import { Field } from 'redux-form';
 import { renderTextArea } from '../../formrenderers/materialui';
 
 
-const EditCategoryDescription = () => {
+const EditDescription = () => {
 
   return (
       <Box mb={1}>
@@ -27,4 +27,4 @@ const EditCategoryDescription = () => {
 };
 
 
-export default EditCategoryDescription;
+export default EditDescription;

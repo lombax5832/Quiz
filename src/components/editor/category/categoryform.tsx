@@ -66,7 +66,7 @@ const CategoryForm = (props: any) => {
 
   if (!loaded) {
     return (
-       <LinearLoader/>
+       <LinearLoader loading={true}/>
     );
   } else {
 

@@ -53,7 +53,13 @@ let Authentication = (props: any) => {
   const { initialized, setSignedIn, setSignedOut, setInitialized, children } = props;
 
   useEffect(() => {
+
+    if(!window || !window.gapi){
+      return setSignedOut();
+    }
+
     window.gapi.load('client:auth2', () => {
+
       window.gapi.client.init({
         clientId: '898363856225-9fiul6rmh2ps3a4jhnqrpq1829h84ikl.apps.googleusercontent.com',
         scope: 'profile email',

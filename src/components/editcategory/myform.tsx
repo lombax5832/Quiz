@@ -4,12 +4,14 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import EditTitle from './edittitle';
 import EditSlug from './editslug';
-import EditCategoryDescription from './editdescription';
 import Button from '@material-ui/core/Button';
+import FormMessageBar from '../formloadingerrorbar';
+import EditDescription from './editdescription';
 
-const MyCategoryForm = ({handleSubmit, pristine, reset, submitting}) => (
+const MyCategoryForm = ({ title, loaded, handleSubmit, pristine, reset, error, submitting }) => (
     <form onSubmit={handleSubmit}>
       <Container maxWidth="md">
+
         <Grid
             container
             spacing={0}
@@ -17,41 +19,48 @@ const MyCategoryForm = ({handleSubmit, pristine, reset, submitting}) => (
             alignItems="stretch"
             justify="center"
         >
-          <Grid item xs={12}>
-            <Box mb={1}>
-              <Typography variant="h2">
-                Edit Category
-              </Typography>
-            </Box>
-            <EditTitle/>
-            <EditSlug/>
-            <EditCategoryDescription/>
-            <Grid
-                container
-                spacing={2}
-                direction="row"
-                justify="flex-end"
-                alignItems="center"
-            >
+          <FormMessageBar loading={!loaded || submitting} error={error}/>
+          {loaded && <Grid item xs={12}>
+              <Box mb={1}>
+                  <Typography variant="h4">
+                    {title}
+                  </Typography>
+              </Box>
+              <EditTitle/>
+              <EditSlug/>
+              <EditDescription/>
+              <Grid
+                  container
+                  spacing={2}
+                  direction="row"
+                  justify="flex-end"
+                  alignItems="center"
+              >
 
-              <Grid item>
-                <Button
-                    variant="outlined"
-                    color="default"
-                    onClick={() => reset()}>
-                  Reset Values
-                </Button>
+                  <Grid item>
+                      <Button
+                          variant="outlined"
+                          color="default"
+                          onClick={reset}>
+                          Reset Values
+                      </Button>
+                  </Grid>
+                  <Grid item>
+                      <Button disabled={pristine || submitting}
+                              variant="outlined"
+                              type="submit"
+                              color="primary">
+                          Submit
+                      </Button>
+                  </Grid>
               </Grid>
-              <Grid item>
-                <Button disabled={pristine || submitting} variant="outlined" type="submit" color="primary">
-                  Submit
-                </Button>
-              </Grid>
-            </Grid>
           </Grid>
+          }
 
 
         </Grid>
       </Container>
     </form>
-)
+);
+
+export default MyCategoryForm;
