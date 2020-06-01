@@ -27,7 +27,7 @@ const MyCategoryForm = ({ title, loaded, handleSubmit, pristine, reset, error, s
                   </Typography>
               </Box>
               <EditTitle/>
-              <EditSlug/>
+              <EditSlug autoComplete={false}/>
               <EditDescription/>
               <Grid
                   container
