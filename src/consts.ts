@@ -23,14 +23,12 @@ export const JOURNEY: IJourney = {
         'divider',
         { path: 'counter', elementId: 'counter', label: 'Counter', requireUser: false },
         { path: 'editquestion', elementId: 'editquestion', label: 'Edit Question', requireUser: true },
-        {
-          path: 'editcategory', elementId: 'editcategoryview', label: 'Edit Category', requireUser: true,
+        { path: 'editcategory', elementId: 'editcategoryview', label: 'Edit Category', requireUser: true,
           children: [
             { path: '/', elementId: 'editcategorylist' },
             { path: 'new', elementId: 'editcategory', requireUser: true },
             { path: 'success', elementId: 'editcategorysuccess' },
             { path: ':id', elementId: 'editcategory' }
-
           ]
         },
         { path: 'newquiz', elementId: 'newquiz', label: 'Edit Quiz', requireUser: true },

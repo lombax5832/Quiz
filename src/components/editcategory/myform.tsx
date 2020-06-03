@@ -11,7 +11,6 @@ import EditDescription from './editdescription';
 const MyCategoryForm = ({ title, loaded, handleSubmit, pristine, reset, error, submitting }) => (
     <form onSubmit={handleSubmit}>
       <Container maxWidth="md">
-
         <Grid
             container
             spacing={0}
