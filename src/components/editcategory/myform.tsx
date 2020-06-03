@@ -1,9 +1,7 @@
 import React from 'react';
-import { Box, Container } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import Edittext from '../formelements/edittext';
-import Button from '@material-ui/core/Button';
 import FormMessageBar from '../formloadingerrorbar';
 import Edittextarea from '../formelements/edittextarea';
 import SubmitReset from '../formelements/submitreset';

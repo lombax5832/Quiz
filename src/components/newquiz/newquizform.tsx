@@ -3,7 +3,6 @@ import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import React, { useEffect, useState } from 'react';
 import { reduxForm } from 'redux-form';
-import ICategory from '../../interfaces/ICategory';
 import { FORM_NEW_QUIZ } from '../../consts';
 import HttpClient from '../../httpclient/client';
 import Edittext from '../formelements/edittext';
@@ -11,21 +10,6 @@ import Edittextarea from '../formelements/edittextarea';
 import EditSelectMenu from '../formelements/editselectmenu';
 import SubmitReset from '../formelements/submitreset';
 import FormHeader from '../formelements/formheader';
-
-let CATEGORIES: ICategory[];
-
-const validate = values => {
-
-  const errors = { slug: undefined };
-
-  const slugExists = Array.isArray(CATEGORIES) && CATEGORIES.find(categ => categ.slug===values.slug);
-
-  if (slugExists) {
-    errors.slug = 'Category with same URI slug already exists';
-
-    return errors;
-  }
-};
 
 
 /**
@@ -83,9 +67,9 @@ const NewQuizForm = (props: any) => {
               <Grid item xs={12}>
                 <FormHeader title="New Quiz"/>
                 <EditSelectMenu options={categories} label="Select category" name="category"/>
-                <Edittext name="title" label="Category Title" required={true} autocomplete="off"/>
-                <Edittext name="slug" label="URI slug" required={true} autocomplete="off"/>
-                <Edittext name="quiz_id" label="Quiz ID" required={false} autocomplete="off"/>
+                <Edittext name="title" label="Category Title" required autocomplete="off"/>
+                <Edittext name="slug" label="URI slug" required autocomplete="off"/>
+                <Edittext name="quiz_id" label="Quiz ID" autocomplete="off"/>
                 <Edittextarea name="description" label="Quiz Description"/>
                 <SubmitReset reset={reset}/>
               </Grid>
@@ -103,7 +87,6 @@ export default reduxForm({
   forceUnregisterOnUnmount: true,
   onSubmit: (data) => {
     console.log(data);
-  },
-  validate,
+  }
 })(NewQuizForm);
 
