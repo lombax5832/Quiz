@@ -4,20 +4,24 @@ import CardContent from '@material-ui/core/CardContent';
 import React from 'react';
 import { Field } from 'redux-form';
 //
-import { renderTextArea } from '../../../formrenderers/materialui';
+import { renderTextArea } from '../../formrenderers/materialui';
 
+export interface IEditTextArea {
+  name: string
+  label: string
+}
 
-const EditCategoryDescription = () => {
+const Edittextarea = (props: IEditTextArea) => {
 
   return (
       <Box mb={1}>
         <Card>
           <CardContent>
             <Field
-                name="description"
+                name={props.name}
                 type="textarea"
                 component={renderTextArea}
-                label="Description"
+                label={props.label}
             />
           </CardContent>
         </Card>
@@ -27,4 +31,4 @@ const EditCategoryDescription = () => {
 };
 
 
-export default EditCategoryDescription;
+export default Edittextarea;

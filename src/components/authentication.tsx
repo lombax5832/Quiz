@@ -7,7 +7,7 @@ import { JOURNEY } from '../consts';
 import IProfile from '../interfaces/IProfile';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import getSession from './services/session';
+import getSession from '../services/session';
 import { getSessionObject } from '../store/actions/getsessionobject';
 const TAG = 'Authentication';
 

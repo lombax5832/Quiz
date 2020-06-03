@@ -1,5 +1,5 @@
 import IProfile from '../../interfaces/IProfile';
-import getSession from '../../components/services/session';
+import getSession from '../../services/session';
 import { setJourney } from './journey';
 import { signIn } from './auth';
 

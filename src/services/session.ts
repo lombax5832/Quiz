@@ -1,6 +1,6 @@
-import IProfile from '../../interfaces/IProfile';
-import { IJourney } from '../../interfaces/journeys';
-import { JOURNEY } from '../../consts';
+import IProfile from '../interfaces/IProfile';
+import { IJourney } from '../interfaces/journeys';
+import { JOURNEY } from '../consts';
 
 export interface ISession {
   profile: IProfile

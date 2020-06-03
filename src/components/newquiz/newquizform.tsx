@@ -1,17 +1,16 @@
-import { Box, Container } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+import { Container } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
 import { reduxForm } from 'redux-form';
 import ICategory from '../../interfaces/ICategory';
 import { FORM_NEW_QUIZ } from '../../consts';
-import EditCategoryDescription from './editdescription';
-import EditQuizCategory from './editquizcategory';
-import EditSlug from './editslug';
-import EditTitle from './edittitle';
 import HttpClient from '../../httpclient/client';
+import Edittext from '../formelements/edittext';
+import Edittextarea from '../formelements/edittextarea';
+import EditSelectMenu from '../formelements/editselectmenu';
+import SubmitReset from '../formelements/submitreset';
+import FormHeader from '../formelements/formheader';
 
 let CATEGORIES: ICategory[];
 
@@ -30,7 +29,7 @@ const validate = values => {
 
 
 /**
- * @todo pre-load all existing categories from server.
+ * pre-load all existing categories from server.
  * Validate title and slug so that it is unique - when adding
  * new category slug and title must not already exist.
  *
@@ -82,38 +81,13 @@ const NewQuizForm = (props: any) => {
                 justify="center"
             >
               <Grid item xs={12}>
-                <Box mb={1}>
-                  <Typography variant="h2">
-                    New Quiz
-                  </Typography>
-                </Box>
-
-                <EditQuizCategory options={categories}/>
-                <EditTitle/>
-                <EditSlug/>
-                <EditCategoryDescription/>
-                <Grid
-                    container
-                    spacing={2}
-                    direction="row"
-                    justify="flex-end"
-                    alignItems="center"
-                >
-
-                  <Grid item>
-                    <Button
-                        variant="outlined"
-                        color="default"
-                        onClick={() => props.reset()}>
-                      Reset Values
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button variant="outlined" type="submit" color="primary">
-                      Submit
-                    </Button>
-                  </Grid>
-                </Grid>
+                <FormHeader title="New Quiz"/>
+                <EditSelectMenu options={categories} label="Select category" name="category"/>
+                <Edittext name="title" label="Category Title" required={true} autocomplete="off"/>
+                <Edittext name="slug" label="URI slug" required={true} autocomplete="off"/>
+                <Edittext name="quiz_id" label="Quiz ID" required={false} autocomplete="off"/>
+                <Edittextarea name="description" label="Quiz Description"/>
+                <SubmitReset reset={reset}/>
               </Grid>
             </Grid>
           </Container>
