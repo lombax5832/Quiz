@@ -41,7 +41,7 @@ export interface IQuizFormState {
   error?: string
 }
 
-export type ActionType = 'SET_CATEGORIES' | 'SET_QUIZ_DATA' | 'FETCH_ERROR'
+export type ActionType = 'SET_CATEGORIES' | 'SET_QUIZ_DATA' | 'FETCH_ERROR' | 'RESET_STATE'
 
 const reducer = (state: IQuizFormState, action: { type: ActionType, payload?: any }) => {
 
@@ -54,13 +54,16 @@ const reducer = (state: IQuizFormState, action: { type: ActionType, payload?: an
 
     case 'FETCH_ERROR':
       return { ...state, error: action.payload };
+
+    case 'RESET_STATE':
+      return {...initialState}
   }
 
 };
 
 export interface IAction {
   type: ActionType,
-  payload: any
+  payload?: any
 }
 
 const CreateCategories = (categories: Array<ICategory>): IAction => {
@@ -85,13 +88,19 @@ const CreateError = (error: string): IAction => {
   };
 };
 
+const ResetState = (): IAction => {
+  return {
+    type: 'RESET_STATE'
+  }
+}
+
 
 const processSubmit = (data) => {
   return new Promise((resolve, reject) => {
     setTimeout(function () {
-      if (data.slug === 'ibm') {
+      if (data.slug==='ibm') {
         reject(new SubmissionError({ slug: 'This slug already exists' }));
-      } else if (data.slug === 'err') {
+      } else if (data.slug==='err') {
         reject(new SubmissionError({ _error: 'Server Error. Submission Failed' }));
       } else {
         resolve(true);
@@ -102,13 +111,27 @@ const processSubmit = (data) => {
 };
 
 
+const loadData = (dispatch: Function, id?: string) => {
+  console.log('entered loadData with id=', id);
+  dispatch(ResetState());
+  Promise.all([fetchCategories(), fetchQuizData(id)])
+      .then(results => {
+        const qData = results[1];
+        dispatch(CreateCategories(results[0]));
+        dispatch(CreateQuizData(qData));
+      })
+      .catch(e => {
+        console.error('QuizForm fetch error', e);
+        dispatch(CreateError('Failed to fetch Data'));
+      });
+};
+
 /**
  * pre-load all existing categories from server.
  * Validate title and slug so that it is unique - when adding
  * new category slug and title must not already exist.
  *
  * @param props
- * @constructor
  */
 const Editquizform = (props: any) => {
   const { handleSubmit, reset, submitting, initialize, error } = props;
@@ -124,19 +147,12 @@ const Editquizform = (props: any) => {
    * fetch existing categories from api.
    */
   useEffect(() => {
-
-    Promise.all([fetchCategories(), fetchQuizData(params.id)])
-        .then(results => {
-          const qData = results[1];
-          dispatch(CreateCategories(results[0]));
-          if(qData){
-            initialize(qData);
-          }
-        }).catch(e => {
-      console.error('QuizForm fetch error', e);
-      dispatch(CreateError('Failed to fetch Data'));
-    });
+    loadData(dispatch, params.id);
   }, []);
+
+  if(state.quizData){
+    initialize(state.quizData)
+  }
 
   const submitHandler = handleSubmit((data, dispatch) => {
     console.log('your form detail here', data);
@@ -182,6 +198,6 @@ const Editquizform = (props: any) => {
 export default reduxForm({
   form: FORM_NEW_QUIZ,
   destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true
+  forceUnregisterOnUnmount: true,
 })(Editquizform);
 
