@@ -31,7 +31,14 @@ export const JOURNEY: IJourney = {
             { path: ':id', elementId: 'editcategory' }
           ]
         },
-        { path: 'newquiz', elementId: 'newquiz', label: 'Edit Quiz', requireUser: true },
+        { path: 'editquiz', elementId: 'editquizoutlet', label: 'Edit Quiz', requireUser: true,
+          children: [
+            { path: '/', elementId: 'editquizlist' },
+            { path: 'new', elementId: 'editquiz', requireUser: true },
+            { path: 'success', elementId: 'editquizsuccess' },
+            { path: ':id', elementId: 'editquiz' }
+          ]
+        }
       ],
     },
   ],
