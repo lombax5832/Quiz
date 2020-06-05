@@ -5,6 +5,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
+import RetryButton from './formelements/retrybutton';
+import Box from '@material-ui/core/Box';
 
 export interface IErrorNavButton {
   label: string
@@ -17,32 +19,27 @@ export interface IBtnRetry {
 }
 
 export interface IErrorTileProps {
-  title?: string
+  errorTitle?: string
   message: string
   btnHome?: IErrorNavButton
   btnBack?: IErrorNavButton
   btnRetry?: IBtnRetry
 }
 
-const ErrorTile = (props: IErrorTileProps) => (
-    <Card>
-      <CardHeader>
-        <Typography variant="h5">
-          {props.title || 'Error'}
-        </Typography>
-      </CardHeader>
-      <CardContent>
-        {props.message}
-      </CardContent>
-      <CardActions>
-        {props.btnRetry && <Button
-            variant="outlined"
-            color="default"
-            onClick={props.btnRetry.onClick}>
-          {props.btnRetry.label}
-        </Button>}
-      </CardActions>
-    </Card>
-);
+const ErrorTile = (props: IErrorTileProps) => {
+  return (
+      <Box mt={1}>
+      <Card title={props.errorTitle}>
+        <CardHeader title={props.errorTitle || 'Error occurred'}/>
+        <CardContent>
+          {props.message}
+        </CardContent>
+        <CardActions>
+          {props.btnRetry && <RetryButton label={props.btnRetry.label} onClick={props.btnRetry.onClick}/>}
+        </CardActions>
+      </Card>
+      </Box>
+  );
+};
 
 export default ErrorTile;

@@ -169,7 +169,7 @@ const Editquizform = (props: any) => {
 
   return (
       <Container maxWidth="md">
-        {state.error && <ErrorTile message={state.error}
+        {state.error && <ErrorTile message={state.error} errorTitle="Error"
                                    btnRetry={{ label: 'Retry', onClick: () => loadData(dispatch, params.id) }}/>}
         {!state.error && <Form
             title={title}
