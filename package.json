@@ -16,6 +16,7 @@
     "@types/react-redux": "^7.1.8",
     "@types/redux-form": "^8.2.5",
     "@types/redux-thunk": "^2.1.0",
+    "axios": "^0.19.2",
     "fg-loadcss": "^3.1.0",
     "path-browserify": "^1.0.1",
     "react": "^16.13.1",
@@ -54,6 +55,7 @@
     ]
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/gapi": "0.0.39",
     "@types/gapi.auth2": "0.0.52",
     "redux-devtools-extension": "^2.13.8"

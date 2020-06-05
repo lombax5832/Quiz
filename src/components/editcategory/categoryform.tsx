@@ -3,6 +3,7 @@ import { reduxForm, SubmissionError } from 'redux-form';
 import { FORM_EDIT_CATEGORY } from '../../consts';
 import MyCategoryForm from './myform';
 import { useParams, useNavigate } from 'react-router';
+import HttpClient from '../../httpclient/client';
 
 let CATEGORIES;
 
@@ -10,7 +11,7 @@ const validate = values => {
 
   const errors = { slug: undefined };
 
-  const slugExists = Array.isArray(CATEGORIES) && CATEGORIES.find(categ => categ.slug === values.slug);
+  const slugExists = Array.isArray(CATEGORIES) && CATEGORIES.find(categ => categ.slug===values.slug);
 
   if (slugExists) {
     errors.slug = 'Category with same URI slug already exists';
@@ -20,33 +21,14 @@ const validate = values => {
 };
 
 const fetchCategory = (id: string | undefined) => {
-  if(!id){
+  if (!id) {
     return Promise.resolve(null);
   }
-  return new Promise(resolve => {
-    setTimeout(function () {
-      resolve({
-        title: 'Google',
-        slug: 'google',
-        _id: 'abc',
-      });
-    }, 100);
-  });
+  return HttpClient.get(`/categories/splunk`)
 };
 
 const processSubmit = (data) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(function () {
-      if (data.slug === 'ibm') {
-        reject(new SubmissionError({ slug: 'This slug already exists' }));
-      } else if (data.slug === 'err') {
-        reject(new SubmissionError({ _error: 'Server Error. Submission Failed' }));
-      } else {
-        resolve(true);
-      }
-
-    }, 1000);
-  });
+  return HttpClient.post('/categories/new', data);
 };
 
 
@@ -57,7 +39,7 @@ let CategoryForm = (props: any) => {
 
   const params = useParams();
 
-  console.log("My Params:", params);
+  console.log('My Params:', params);
 
   const navigate = useNavigate();
 
@@ -67,32 +49,31 @@ let CategoryForm = (props: any) => {
   useEffect(() => {
     fetchCategory(params.id).then(category => {
       if (category) {
-        initialize(category);
+        initialize(category.data);
       }
       setLoaded(true);
     });
 
   }, []);
 
-  
 
   const submitHandler = handleSubmit((data, dispatch) => {
     console.log('your form detail here', data);
-    return processSubmit(data).then(()=>{
+    return processSubmit(data).then(() => {
       navigate('../success');
     });
   });
 
   return (
-    <MyCategoryForm
-      title="New Category"
-      loaded={loaded}
-      error={error}
-      pristine={pristine}
-      submitting={submitting}
-      reset={reset}
-      handleSubmit={submitHandler}
-    />
+      <MyCategoryForm
+          title="New Category"
+          loaded={loaded}
+          error={error}
+          pristine={pristine}
+          submitting={submitting}
+          reset={reset}
+          handleSubmit={submitHandler}
+      />
   );
 
 };

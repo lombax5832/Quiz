@@ -4,22 +4,31 @@ import CardContent from '@material-ui/core/CardContent';
 import React from 'react';
 import { Field } from 'redux-form';
 //
-import { renderTextField } from '../../../formrenderers/materialui';
+import { renderTextField } from '../../formrenderers/materialui';
 
-const EditTitle = (props: any) => {
+export interface IEditTextProps {
+  required?: boolean
+  autocomplete?: string
+  name: string
+  label: string
+}
+
+const Edittext = (props: IEditTextProps) => {
+
+  const {autocomplete, required, name, label} = props
 
   return (
       <Box mb={1}>
         <Card>
           <CardContent>
             <Field
-                name="title"
+                name={name}
                 variant="outlined"
-                required
+                required={!!required}
                 fullWidth={true}
-                autocomplete="off"
+                autocomplete={autocomplete}
                 component={renderTextField}
-                label="Category Title"
+                label={label}
                 style={{minWidth: 275}}
             />
           </CardContent>
@@ -28,5 +37,5 @@ const EditTitle = (props: any) => {
   );
 };
 
-export default EditTitle;
+export default Edittext;
 
