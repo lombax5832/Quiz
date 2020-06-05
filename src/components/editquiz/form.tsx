@@ -1,5 +1,4 @@
 import React from 'react';
-import { Container } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import FormMessageBar from '../formloadingerrorbar';
 import FormHeader from '../formelements/formheader';
@@ -7,10 +6,10 @@ import EditSelectMenu from '../formelements/editselectmenu';
 import Edittext from '../formelements/edittext';
 import Edittextarea from '../formelements/edittextarea';
 import SubmitReset from '../formelements/submitreset';
+import Button from '@material-ui/core/Button';
 
-const Form = ({ categories, title, loaded, handleSubmit, reset, error, submitting }) => (
+const Form = ({ categories, title, loaded, handleSubmit, reset, error, submitting, retry }) => (
     <form onSubmit={handleSubmit}>
-      <Container maxWidth="md">
         <Grid
             container
             spacing={0}
@@ -28,11 +27,18 @@ const Form = ({ categories, title, loaded, handleSubmit, reset, error, submittin
               <Edittext name="quiz_id" label="Quiz ID" autocomplete="off"/>
               <Edittextarea name="description" label="Quiz Description"/>
               <SubmitReset reset={reset}/>
+              <div>
+                  <Button
+                      variant="outlined"
+                      color="default"
+                      onClick={retry}>
+                    Retry
+                  </Button>
+              </div>
           </Grid>
           }
 
         </Grid>
-      </Container>
     </form>
 
 );

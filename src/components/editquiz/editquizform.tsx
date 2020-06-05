@@ -3,9 +3,11 @@ import React, { useEffect, useReducer } from 'react';
 import { reduxForm, SubmissionError } from 'redux-form';
 import { FORM_NEW_QUIZ } from '../../consts';
 import HttpClient from '../../httpclient/client';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import ICategory from '../../interfaces/ICategory';
 import Form from './form';
+import ErrorTile from '../errortile';
+import { Container } from '@material-ui/core';
 
 
 const fetchCategories = (): Promise<Array<ICategory>> => {
@@ -56,7 +58,7 @@ const reducer = (state: IQuizFormState, action: { type: ActionType, payload?: an
       return { ...state, error: action.payload };
 
     case 'RESET_STATE':
-      return {...initialState}
+      return { ...initialState };
   }
 
 };
@@ -90,9 +92,9 @@ const CreateError = (error: string): IAction => {
 
 const ResetState = (): IAction => {
   return {
-    type: 'RESET_STATE'
-  }
-}
+    type: 'RESET_STATE',
+  };
+};
 
 
 const processSubmit = (data) => {
@@ -140,6 +142,9 @@ const Editquizform = (props: any) => {
   console.log('QuizForm params: ', params);
 
   const navigate = useNavigate();
+  const loc = useLocation();
+
+  console.log('loc: ', loc);
 
   const title = (params.id) ? 'Edit Quiz':'Create Quiz';
 
@@ -150,8 +155,8 @@ const Editquizform = (props: any) => {
     loadData(dispatch, params.id);
   }, []);
 
-  if(state.quizData){
-    initialize(state.quizData)
+  if (state.quizData) {
+    initialize(state.quizData);
   }
 
   const submitHandler = handleSubmit((data, dispatch) => {
@@ -162,36 +167,23 @@ const Editquizform = (props: any) => {
   });
 
 
-  if (state.error) {
-    return (
-        <Grid
-            container
-            spacing={0}
-            direction="row"
-            alignItems="center"
-            justify="center"
-        >
-          <Grid item style={{ width: '100%' }}>
-            <h1>ERROR</h1>
-            <h2>{state.error}</h2>
-          </Grid>
-        </Grid>
-    );
-  } else {
-
-
-    return (
-        <Form
+  return (
+      <Container maxWidth="md">
+        {state.error && <ErrorTile message={state.error}
+                                   btnRetry={{ label: 'Retry', onClick: () => loadData(dispatch, params.id) }}/>}
+        {!state.error && <Form
             title={title}
             loaded={!!state.categories}
             categories={state.categories}
             reset={reset}
+            retry={() => loadData(dispatch, params.id)}
             submitting={submitting}
             error={error}
             handleSubmit={submitHandler}
-        />
-    );
-  }
+        />}
+      </Container>
+  );
+
 };
 
 
