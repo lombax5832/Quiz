@@ -3,6 +3,7 @@ import CommentIcon from '@material-ui/icons/Comment';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import HttpClient from '../../../httpclient/client';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
     root: {
@@ -58,7 +59,7 @@ export default function () {
                             <ListItem key={value._id} role={undefined} dense>
                                 <ListItemIcon>
                                 </ListItemIcon>
-                                <ListItemText id={value._id} primary={value.title} />
+                                <Link to={value._id}><Typography>{value.title}</Typography></Link>
                                 <ListItemSecondaryAction>
                                     <IconButton edge="end" aria-label="comments">
                                         <CommentIcon />
