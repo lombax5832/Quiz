@@ -11,7 +11,7 @@ const validate = values => {
 
   const errors = { slug: undefined };
 
-  const slugExists = Array.isArray(CATEGORIES) && CATEGORIES.find(categ => categ.slug===values.slug);
+  const slugExists = Array.isArray(CATEGORIES) && CATEGORIES.find(categ => categ.slug === values.slug);
 
   if (slugExists) {
     errors.slug = 'Category with same URI slug already exists';
@@ -24,11 +24,15 @@ const fetchCategory = (id: string | undefined) => {
   if (!id) {
     return Promise.resolve(null);
   }
-  return HttpClient.get(`/categories/splunk`)
+  return HttpClient.get(`/categories/${id}`)
 };
 
 const processSubmit = (data) => {
-  return HttpClient.post('/categories/new', data);
+  if (data._id) {
+    return HttpClient.put(`/categories/${data._id}`, data)
+  } else {
+    return HttpClient.post('/categories/new', data);
+  }
 };
 
 
@@ -65,15 +69,15 @@ let CategoryForm = (props: any) => {
   });
 
   return (
-      <MyCategoryForm
-          title="New Category"
-          loaded={loaded}
-          error={error}
-          pristine={pristine}
-          submitting={submitting}
-          reset={reset}
-          handleSubmit={submitHandler}
-      />
+    <MyCategoryForm
+      title="New Category"
+      loaded={loaded}
+      error={error}
+      pristine={pristine}
+      submitting={submitting}
+      reset={reset}
+      handleSubmit={submitHandler}
+    />
   );
 
 };

@@ -20,7 +20,7 @@ export default function () {
             alignItems="center"
             spacing={2}
         >
-            <Grid item xs={12}><Typography variant="h5">Successfully added new category</Typography></Grid>
+            <Grid item xs={12}><Typography variant="h5">Category saved</Typography></Grid>
             <Grid item xs={12}><Typography variant="h4"><CheckIcon color="primary"/></Typography></Grid>
         </Grid>
     )

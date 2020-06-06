@@ -21,7 +21,7 @@ const Form = ({ categories, title, loaded, handleSubmit, reset, error, submittin
 
           {loaded && <Grid item xs={12}>
               <FormHeader title={title}/>
-              <EditSelectMenu options={categories} label="Select category" name="category"/>
+              <EditSelectMenu options={categories} label="Select category" name="category_id"/>
               <Edittext name="title" label="Category Title" required autocomplete="off"/>
               <Edittext name="slug" label="URI slug" required autocomplete="off"/>
               <Edittext name="quiz_id" label="Quiz ID" autocomplete="off"/>

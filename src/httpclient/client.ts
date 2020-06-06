@@ -21,6 +21,14 @@ class HttpClient {
     return this.instance.post(url, data, config);
   }
 
+  put(url: string, data: any, config?: AxiosRequestConfig) {
+    return this.instance.put(url, data, config);
+  }
+
+  delete(url: string, config?: AxiosRequestConfig) {
+    return this.instance.delete(url, config);
+  }
+
 }
 
 export default new HttpClient();
