@@ -169,6 +169,7 @@ export default reduxForm({
   initialValues: {
     question: 'Can you answer this question?',
     qtype: 'multi',
+    quiz_id:"5edae0418ead5c106c0357c5",
     answers: [{
       body: 'This is correct',
       explanation: 'Explain 1',

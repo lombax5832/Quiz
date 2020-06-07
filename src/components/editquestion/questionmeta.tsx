@@ -1,25 +1,34 @@
 import { Card, TextField } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import { ICategoryWithQuizzes } from '../../interfaces/ICategory';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import IQuiz from '../../interfaces/IQuiz';
-import categoryform from '../editcategory/categoryform';
 import SubmitReset from '../formelements/submitreset';
+import { FORM_NAME } from '../../consts';
+import { change, formValueSelector } from 'redux-form';
+import { connect } from 'react-redux';
 
+const FORM_FIELD_QUIZ_ID = 'quiz_id';
 
-const QuestionMeta = (props: { reset: Function, quizzes: Array<ICategoryWithQuizzes> }) => {
+const selectFormValue = formValueSelector(FORM_NAME);
 
-  const {reset } = props;
+const mapStateToProps = (state, ownProps) => {
+  let quiz_id = selectFormValue(state, FORM_FIELD_QUIZ_ID);
+
+  return {quiz_id}
+}
+
+const QuestionMeta = (props: { dispatch: Function, reset: Function, quizzes: Array<ICategoryWithQuizzes>, quiz_id?: string }) => {
+
+  const {reset, quiz_id, quizzes, dispatch } = props;
+  let value: IQuizWithCategory;
   interface IQuizWithCategory extends IQuiz {
     categoryName: string
   }
 
-  const [value, setValue] = React.useState<IQuizWithCategory | null>(null);
-
-  const categories = props.quizzes.map((category) => {
+  const categories: Array<IQuizWithCategory> = quizzes.map((category) => {
     const quizzes = category.quizzes.map((quiz) => {
       return {
         ...quiz,
@@ -30,7 +39,12 @@ const QuestionMeta = (props: { reset: Function, quizzes: Array<ICategoryWithQuiz
 
   }).flat();
 
-  console.log("Categories: ", categories)
+  console.log("Categories: ", categories);
+
+  if(quiz_id){
+    const matches = categories.filter(quiz => quiz._id);
+    value = matches && matches[0]
+  }
 
   return (
     <Card>
@@ -45,7 +59,7 @@ const QuestionMeta = (props: { reset: Function, quizzes: Array<ICategoryWithQuiz
           {
             <Grid item>
               <Autocomplete
-                id="grouped-demo"
+                id="quiz_id_selector"
                 options={categories}
                 groupBy={(option) => option.categoryName}
                 getOptionLabel={(option) => option.title}
@@ -55,8 +69,7 @@ const QuestionMeta = (props: { reset: Function, quizzes: Array<ICategoryWithQuiz
                 getOptionSelected={(option, value) => option._id === value._id}
                 value={value}
                 onChange={(event: any, newValue: IQuizWithCategory | null) => {
-                  setValue(newValue)
-                  console.log("Autocomplete", value)
+                  dispatch(change(FORM_NAME, FORM_FIELD_QUIZ_ID, newValue._id))
                 }}
               />
             </Grid>
@@ -72,4 +85,4 @@ const QuestionMeta = (props: { reset: Function, quizzes: Array<ICategoryWithQuiz
 };
 
 
-export default QuestionMeta;
+export default connect(mapStateToProps)(QuestionMeta);
