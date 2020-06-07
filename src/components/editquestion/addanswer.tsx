@@ -10,8 +10,8 @@ import { arrayPush } from 'redux-form';
 import { FORM_NAME } from '../../consts';
 import TypeMenu from './typemenu';
 
-const AddAnswer = (props: { arrayPush: Function }) => {
-  const { arrayPush } = props;
+const AddAnswer = (props: { arrayPush: Function,  qtype: string}) => {
+  const { arrayPush, qtype = '' } = props;
   return (
       <Box mb={1}>
         <Card>
@@ -24,7 +24,7 @@ const AddAnswer = (props: { arrayPush: Function }) => {
                 alignItems="center"
             >
               <Grid item>
-                <TypeMenu/>
+                <TypeMenu />
               </Grid>
               <Grid item>
                 <Button

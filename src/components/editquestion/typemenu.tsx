@@ -1,10 +1,23 @@
+import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React from 'react';
+import { FORM_NAME } from '../../consts';
+import { change, formValueSelector } from 'redux-form';
+import { connect } from 'react-redux';
+
+const selectFormValue = formValueSelector(FORM_NAME);
+const FORM_FIELD_QTYPE = 'qtype'
+
+const mapStateToProps = (state: any) => {
+  const qtype = selectFormValue(state, FORM_FIELD_QTYPE);
+  console.log(`value for qtype=${qtype}`);
+
+  return { qtype };
+};
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -15,22 +28,30 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const options = [
-  'Single Correct',
-  'Multiple Correct',
+  {
+    value: 'single',
+    label: 'Single Correct',
+  },
+  {
+    value: 'multi',
+    label: 'Multiple Correct',
+  },
 ];
 
-const TypeMenu = () => {
+const TypeMenu = (props: { qtype: string, dispatch: Function }) => {
+  const { qtype, dispatch } = props;
+  let selectedIndex = options.findIndex(option => option.value === qtype);
+  if(selectedIndex < 0) selectedIndex = 0;
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
-    setSelectedIndex(index);
     setAnchorEl(null);
+    dispatch(change(FORM_NAME, FORM_FIELD_QTYPE, options[index].value));
   };
 
   const handleClose = () => {
@@ -47,7 +68,7 @@ const TypeMenu = () => {
               aria-label="Question Type"
               onClick={handleClickListItem}
           >
-            <ListItemText primary={options[selectedIndex]} />
+            <ListItemText primary={options[selectedIndex]?.label}/>
           </ListItem>
         </List>
         <Menu
@@ -60,17 +81,17 @@ const TypeMenu = () => {
         >
           {options.map((option, index) => (
               <MenuItem
-                  key={option}
-                  selected={index === selectedIndex}
+                  key={index}
+                  value={option.label}
+                  selected={index===selectedIndex}
                   onClick={(event) => handleMenuItemClick(event, index)}
               >
-                {option}
+                {option.label}
               </MenuItem>
           ))}
         </Menu>
       </div>
   );
-}
+};
 
-
-export default TypeMenu
+export default connect(mapStateToProps)(TypeMenu);

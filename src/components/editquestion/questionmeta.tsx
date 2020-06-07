@@ -7,10 +7,12 @@ import { ICategoryWithQuizzes } from '../../interfaces/ICategory';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import IQuiz from '../../interfaces/IQuiz';
 import categoryform from '../editcategory/categoryform';
+import SubmitReset from '../formelements/submitreset';
 
 
 const QuestionMeta = (props: { reset: Function, quizzes: Array<ICategoryWithQuizzes> }) => {
 
+  const {reset } = props;
   interface IQuizWithCategory extends IQuiz {
     categoryName: string
   }
@@ -60,17 +62,7 @@ const QuestionMeta = (props: { reset: Function, quizzes: Array<ICategoryWithQuiz
             </Grid>
           }
           <Grid item>
-            <Button
-              variant="outlined"
-              color="default"
-              onClick={() => props.reset()}>
-              Reset Values
-              </Button>
-          </Grid>
-          <Grid item>
-            <Button variant="outlined" type="submit" color="primary">
-              Submit
-              </Button>
+            <SubmitReset reset={reset} btnResetLabel="Reset Form"/>
           </Grid>
         </Grid>
       </CardActions>
