@@ -51,7 +51,7 @@ export default function () {
                 <CardContent>
                     <Typography variant="h4" color="textPrimary" gutterBottom>
                         Category List
-                </Typography>
+                    </Typography>
                 </CardContent>
                 <CardActions>
                     <Button variant="outlined" size="small" startIcon={<Add />} onClick={() => {
@@ -78,7 +78,8 @@ export default function () {
                                 );
                             })}
                         </List>
-                    </>}
+                    </>
+                }
             </Card>
         </>
     )

@@ -30,6 +30,7 @@ const EditSelectMenu = (props: ISelectMenuProps) => {
                 label={props.label}
                 required={!!props.required}
             >
+              <option></option>
               {options.map((option, index) => (
                   <option value={option._id} key={index}>{option.title}</option>
               ))}

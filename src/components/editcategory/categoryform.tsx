@@ -47,6 +47,8 @@ let CategoryForm = (props: any) => {
 
   const navigate = useNavigate();
 
+  const title = (params.id) ? 'Edit Category' : 'Create Category';
+
   /**
    * fetch existing categories from api.
    */
@@ -70,7 +72,7 @@ let CategoryForm = (props: any) => {
 
   return (
     <MyCategoryForm
-      title="New Category"
+      title={title}
       loaded={loaded}
       error={error}
       pristine={pristine}
