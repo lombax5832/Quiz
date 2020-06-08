@@ -14,7 +14,7 @@ const FORM_FIELD_QUIZ_ID = 'quiz_id';
 
 const selectFormValue = formValueSelector(FORM_NAME);
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   let quiz_id = selectFormValue(state, FORM_FIELD_QUIZ_ID);
 
   return { quiz_id };
@@ -44,10 +44,10 @@ const QuestionMeta = (props: { dispatch: Function, reset: Function, quizzes: Arr
               container
               spacing={2}
               direction="row"
-              justify="flex-end"
+              justify="space-evenly"
               alignItems="stretch"
           >
-            <Grid item>
+            <Grid item xs={6}>
               <QuizSelectorMenu
                   categories={categories}
                   label="Select Quiz"
@@ -57,9 +57,19 @@ const QuestionMeta = (props: { dispatch: Function, reset: Function, quizzes: Arr
                   }}
               />
             </Grid>
+            <Grid item xs={6}>
+              <Grid
+                  container
+                  spacing={2}
+                  direction="row"
+                  justify="flex-end"
+                  alignItems="stretch"
+              >
 
-            <Grid item>
-              <SubmitReset reset={reset} btnResetLabel="Reset Form"/>
+                <Grid item>
+                  <SubmitReset reset={reset} btnResetLabel="Reset Form"/>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </CardActions>
