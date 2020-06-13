@@ -1,6 +1,7 @@
 import IProfile from '../interfaces/IProfile';
 import { IJourney } from '../interfaces/journeys';
 import { JOURNEY } from '../consts';
+import HttpClient from '../httpclient/client'
 
 export interface ISession {
   profile: IProfile
@@ -9,14 +10,16 @@ export interface ISession {
 
 export default function getSession(profile: IProfile): Promise<ISession> {
 
-  return new Promise(resolve => {
-
-    setTimeout(function () {
-      console.log('getSession resolving session');
-      resolve({
-        profile,
-        journey: { ...JOURNEY },
-      });
-    }, 1000);
-  });
+  return HttpClient.post('/session', {})
+    .then((res) => {
+      return res.data
+    }).catch((e) => {
+      console.error("Error from getSession", e)
+      return {
+        rootJourney: [{
+          path: '',
+          elementId: 'main'
+        }]
+      }
+    })
 }
