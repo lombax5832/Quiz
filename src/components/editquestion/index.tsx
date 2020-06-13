@@ -1,18 +1,23 @@
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
 import React, { useReducer, useEffect } from 'react';
-import { useParams } from 'react-router';
-import { FieldArray, reduxForm } from 'redux-form';
+import { useNavigate, useParams } from 'react-router';
+import { reduxForm } from 'redux-form';
 import { FORM_NAME } from '../../consts';
-import AddAnswer from './addanswer';
-import EditExplanation from './editexplanation';
-import EditQuestion from './question';
-import QuestionMeta from './questionmeta';
-import renderAnswers from './renderanswers';
 import { ICategoryWithQuizzes } from '../../interfaces/ICategory';
 import HttpClient from '../../httpclient/client';
+import ErrorTile from '../errortile';
+import Form from './form';
+import { Container } from '@material-ui/core';
 
 export type ActionType = 'SET_QUIZZES' | 'SET_QUESTION_DATA' | 'FETCH_ERROR' | 'RESET_STATE'
+
+
+const processSubmit = (data) => {
+  if (data._id) {
+    return HttpClient.put(`/questions/${data._id}`, data)
+  } else {
+    return HttpClient.post(`/questions/new`, data)
+  }
+};
 
 export interface IAction {
   type: ActionType,
@@ -116,8 +121,9 @@ const ResetState = (): IAction => {
 };
 
 let QuestionForm = (props: any) => {
-  const { handleSubmit, reset, initialize } = props;
+  const { handleSubmit, reset, submitting, initialize, error } = props;
 
+  const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, { ...initialState });
   const params = useParams();
   console.log('QuizForm params: ', params);
@@ -132,29 +138,29 @@ let QuestionForm = (props: any) => {
       }
     });
   }, []);
-  
-  return (
-      <div style={{ flexGrow: 1 }}>
-        <CssBaseline />
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={1}>
-            <Grid item xs={12}>
-              <QuestionMeta reset={reset} quizzes={state.quizzes} />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <EditQuestion />
-              <EditExplanation />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <AddAnswer />
-              <FieldArray name="answers" component={renderAnswers} />
-            </Grid>
-          </Grid>
-          <Grid item xs={12} sm={6}>
 
-          </Grid>
-        </form>
-      </div>
+  const submitHandler = handleSubmit((data, dispatch) => {
+    console.log('your form detail here', data);
+    return processSubmit(data).then(() => {
+      navigate('../success');
+    });
+  });
+
+  return (
+      <Container maxWidth="lg">
+        {state.error && <ErrorTile message={state.error} errorTitle="Error"
+                                   btnRetry={{ label: 'Retry', onClick: () => loadData(dispatch, params.id) }} />}
+        {!state.error && <Form
+            title="Edit Question"
+            loaded={state.quizzes.length > 0}
+            quizzes={state.quizzes}
+            reset={reset}
+            retry={() => loadData(dispatch, params.id)}
+            submitting={submitting}
+            error={error}
+            handleSubmit={submitHandler}
+        />}
+      </Container>
   );
 };
 
@@ -163,6 +169,7 @@ export default reduxForm({
   initialValues: {
     question: 'Can you answer this question?',
     qtype: 'multi',
+    quiz_id:"5edae0418ead5c106c0357c5",
     answers: [{
       body: 'This is correct',
       explanation: 'Explain 1',
@@ -174,8 +181,5 @@ export default reduxForm({
     }],
   },
   destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true,
-  onSubmit: (data) => {
-    console.log(data);
-  },
+  forceUnregisterOnUnmount: true
 })(QuestionForm);

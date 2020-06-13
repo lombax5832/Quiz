@@ -1,83 +1,82 @@
-import { Card, TextField } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+import { Card } from '@material-ui/core';
 import CardActions from '@material-ui/core/CardActions';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import { ICategoryWithQuizzes } from '../../interfaces/ICategory';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import IQuiz from '../../interfaces/IQuiz';
-import categoryform from '../editcategory/categoryform';
+import { IQuizWithCategory } from '../../interfaces/IQuiz';
+import SubmitReset from '../formelements/submitreset';
+import { FORM_NAME } from '../../consts';
+import { change, formValueSelector } from 'redux-form';
+import { connect } from 'react-redux';
+import QuizSelectorMenu from '../formelements/quizselectormenu';
 
+const FORM_FIELD_QUIZ_ID = 'quiz_id';
 
-const QuestionMeta = (props: { reset: Function, quizzes: Array<ICategoryWithQuizzes> }) => {
+const selectFormValue = formValueSelector(FORM_NAME);
 
-  interface IQuizWithCategory extends IQuiz {
-    categoryName: string
-  }
+const mapStateToProps = (state) => {
+  let quiz_id = selectFormValue(state, FORM_FIELD_QUIZ_ID);
 
-  const [value, setValue] = React.useState<IQuizWithCategory | null>(null);
+  return { quiz_id };
+};
 
-  const categories = props.quizzes.map((category) => {
+const QuestionMeta = (props: { dispatch: Function, reset: Function, quizzes: Array<ICategoryWithQuizzes>, quiz_id?: string }) => {
+
+  const { reset, quiz_id, quizzes, dispatch } = props;
+
+  const categories: Array<IQuizWithCategory> = quizzes.map((category) => {
     const quizzes = category.quizzes.map((quiz) => {
       return {
         ...quiz,
-        categoryName: category.title
-      }
-    })
+        categoryName: category.title,
+      };
+    });
     return quizzes;
 
   }).flat();
 
-  console.log("Categories: ", categories)
+  console.log('Categories: ', categories);
 
   return (
-    <Card>
-      <CardActions>
-        <Grid
-          container
-          spacing={2}
-          direction="row"
-          justify="flex-end"
-          alignItems="stretch"
-        >
-          {
-            <Grid item>
-              <Autocomplete
-                id="grouped-demo"
-                options={categories}
-                groupBy={(option) => option.categoryName}
-                getOptionLabel={(option) => option.title}
-                style={{ width: 300 }}
-                disableClearable
-                renderInput={(params) => <TextField {...params} label="Quiz" variant="outlined" />}
-                getOptionSelected={(option, value) => option._id === value._id}
-                value={value}
-                onChange={(event: any, newValue: IQuizWithCategory | null) => {
-                  setValue(newValue)
-                  console.log("Autocomplete", value)
-                }}
+      <Card>
+        <CardActions>
+          <Grid
+              container
+              spacing={2}
+              direction="row"
+              justify="space-evenly"
+              alignItems="stretch"
+          >
+            <Grid item xs={6}>
+              <QuizSelectorMenu
+                  categories={categories}
+                  label="Select Quiz"
+                  quiz_id={quiz_id}
+                  onChange={(value) => {
+                    dispatch(change(FORM_NAME, FORM_FIELD_QUIZ_ID, value._id));
+                  }}
               />
             </Grid>
-          }
-          <Grid item>
-            <Button
-              variant="outlined"
-              color="default"
-              onClick={() => props.reset()}>
-              Reset Values
-              </Button>
-          </Grid>
-          <Grid item>
-            <Button variant="outlined" type="submit" color="primary">
-              Submit
-              </Button>
-          </Grid>
-        </Grid>
-      </CardActions>
+            <Grid item xs={6}>
+              <Grid
+                  container
+                  spacing={2}
+                  direction="row"
+                  justify="flex-end"
+                  alignItems="stretch"
+              >
 
-    </Card>
+                <Grid item>
+                  <SubmitReset reset={reset} btnResetLabel="Reset Form"/>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </CardActions>
+
+      </Card>
   );
 };
 
 
-export default QuestionMeta;
+export default connect(mapStateToProps)(QuestionMeta);
