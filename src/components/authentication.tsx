@@ -37,7 +37,8 @@ const mapDispatchToProps = (dispatch: Function) => {
 
     setSignedOut: function () {
       dispatch(signOut());
-      dispatch(setJourney(JOURNEY));
+      dispatch(getSessionObject())
+      //dispatch(setJourney(JOURNEY));
     },
 
     setInitialized: function(){

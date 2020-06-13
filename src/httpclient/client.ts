@@ -22,7 +22,9 @@ class HttpClient {
   makeRequest<T = any, R = AxiosResponse<T>>(config: AxiosRequestConfig): Promise<R>{
     return this.getToken().then(token => {
       let reqHeaders = config.headers || [];
-      reqHeaders = {...reqHeaders, authorization: `Bearer ${token}`}
+      if(token){
+        reqHeaders = {...reqHeaders, authorization: `Bearer ${token}`}
+      }
       const reqConfig = {...config, headers: reqHeaders}
 
       return this.instance.request(reqConfig);

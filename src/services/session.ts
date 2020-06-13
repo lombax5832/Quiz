@@ -8,7 +8,7 @@ export interface ISession {
   journey: IJourney
 }
 
-export default function getSession(profile: IProfile): Promise<ISession> {
+export default function getSession(profile?: IProfile): Promise<ISession> {
 
   return HttpClient.post('/session', {})
     .then((res) => {
