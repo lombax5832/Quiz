@@ -5,4 +5,5 @@ export { default as welcome } from './welcome';
 export { default as main } from './mainlayout';
 export { default as editquestion } from '../editquestion';
 export * from './editcategory';
-export * from './editquiz'
+export * from './editquiz';
+export * from './editquestion';
