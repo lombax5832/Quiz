@@ -1,6 +1,5 @@
-import Grid from '@material-ui/core/Grid';
 import React, { useEffect, useReducer } from 'react';
-import { reduxForm, SubmissionError } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import { FORM_NEW_QUIZ } from '../../consts';
 import HttpClient from '../../httpclient/client';
 import { useLocation, useNavigate, useParams } from 'react-router';
@@ -26,7 +25,6 @@ const fetchQuizData = (id?: string): Promise<any | null> => {
   if (!id) {
     return Promise.resolve(null);
   }
-
 
   return HttpClient.get(`/quizzes/${id}`);
 };
@@ -59,6 +57,9 @@ const reducer = (state: IQuizFormState, action: { type: ActionType, payload?: an
 
     case 'RESET_STATE':
       return { ...initialState };
+
+    default:
+      return state;
   }
 
 };
@@ -74,7 +75,7 @@ const CreateCategories = (categories: Array<ICategory>): IAction => {
     payload: categories,
   };
 }
-  ;
+
 
 const CreateQuizData = (quizData: any): IAction => {
   return {

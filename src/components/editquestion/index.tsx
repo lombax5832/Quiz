@@ -8,14 +8,14 @@ import ErrorTile from '../errortile';
 import Form from './form';
 import { Container } from '@material-ui/core';
 
-export type ActionType = 'SET_QUIZZES' | 'SET_QUESTION_DATA' | 'FETCH_ERROR' | 'RESET_STATE'
+export type ActionType = 'SET_QUIZZES' | 'SET_QUESTION_DATA' | 'FETCH_ERROR' | 'RESET_STATE' | 'SUBMIT_SUCCESS'
 
 
 const processSubmit = (data) => {
   if (data._id) {
-    return HttpClient.put(`/questions/${data._id}`, data)
+    return HttpClient.put(`/questions/${data._id}`, data);
   } else {
-    return HttpClient.post(`/questions/new`, data)
+    return HttpClient.post(`/questions/new`, data);
   }
 };
 
@@ -38,14 +38,14 @@ const initialState = {
 
 const fetchQuizzes = (): Promise<Array<ICategoryWithQuizzes>> => {
   return HttpClient.get('/categories/with_quizzes')
-    .then(quizzes => {
-      console.log('setting quizzes', quizzes.data);
-      return quizzes.data;
-    },
-    ).catch(err => {
-      console.log('fetch quizzes error', err);
-      throw err;
-    });
+      .then(quizzes => {
+            console.log('setting quizzes', quizzes.data);
+            return quizzes.data;
+          },
+      ).catch(err => {
+        console.log('fetch quizzes error', err);
+        throw err;
+      });
 };
 
 const fetchQuestionData = (id?: string): Promise<any | null> => {
@@ -53,8 +53,8 @@ const fetchQuestionData = (id?: string): Promise<any | null> => {
     return Promise.resolve(null);
   }
 
-  return Promise.resolve(null);
-  //return HttpClient.get(`/quizzes/${id}`);
+
+  return HttpClient.get(`/questions/${id}`);
 };
 
 const reducer = (state: IQuestionFormState, action: { type: ActionType, payload?: any }) => {
@@ -71,6 +71,12 @@ const reducer = (state: IQuestionFormState, action: { type: ActionType, payload?
 
     case 'RESET_STATE':
       return { ...initialState };
+
+    case 'SUBMIT_SUCCESS':
+      return { ...initialState, quiz_id: action.payload };
+
+    default:
+      return state;
   }
 
 };
@@ -79,26 +85,26 @@ const loadData = (dispatch: Function, id?: string) => {
   console.log('entered loadData with id=', id);
   dispatch(ResetState());
   return Promise.all([fetchQuizzes(), fetchQuestionData(id)])
-    .then(results => {
-      const qData = results[1];
-      dispatch(CreateQuizzes(results[0]));
-      dispatch(CreateQuestionData(qData));
-      return results
-    })
-    .catch(e => {
-      console.error('QuizForm fetch error', e);
-      dispatch(CreateError('Failed to fetch Data'));
-      throw e
-    });
+      .then(results => {
+        const qData = results[1];
+        dispatch(CreateQuizzes(results[0]));
+        dispatch(CreateQuestionData(qData));
+        return results;
+      })
+      .catch(e => {
+        console.error('QuizForm fetch error', e);
+        dispatch(CreateError('Failed to fetch Data'));
+        throw e;
+      });
 };
 
 const CreateQuizzes = (quizzes: Array<ICategoryWithQuizzes>): IAction => {
-  return {
-    type: 'SET_QUIZZES',
-    payload: quizzes,
-  };
-}
-  ;
+      return {
+        type: 'SET_QUIZZES',
+        payload: quizzes,
+      };
+    }
+;
 
 const CreateQuestionData = (question: any): IAction => {
   return {
@@ -120,6 +126,13 @@ const ResetState = (): IAction => {
   };
 };
 
+const CreateSubmitSuccess = (quiz_id: string): IAction => {
+  return {
+    type: 'SUBMIT_SUCCESS',
+    payload: quiz_id
+  }
+}
+
 let QuestionForm = (props: any) => {
   const { handleSubmit, reset, submitting, initialize, error } = props;
 
@@ -134,7 +147,7 @@ let QuestionForm = (props: any) => {
   useEffect(() => {
     loadData(dispatch, params.id).then(results => {
       if (results[1] && results[1].data) {
-        //initialize(results[1].data);
+        initialize(results[1].data);
       }
     });
   }, []);
@@ -142,6 +155,22 @@ let QuestionForm = (props: any) => {
   const submitHandler = handleSubmit((data, dispatch) => {
     console.log('your form detail here', data);
     return processSubmit(data).then(() => {
+      /**
+       * @todo get value of quiz_id and set it into state
+       * then dispatch action like SUCCESS
+       * a new tile will be rendered on same view with button
+       * to
+       * 'Create another question for this quiz',
+       * 'Create another question for different quiz',
+       * 'Edit this question'
+       *
+       * and
+       * a button to navigate to home, later also a button to navigate
+       * to editor. if Create another question for this quiz button is clicked
+       * it must call initialize with object that has only quiz_id so this way
+       * a new form will have Quiz drop-down menu selected on that quiz_id.
+       */
+      dispatch(CreateSubmitSuccess(data.quiz_id))
       navigate('../success');
     });
   });
@@ -149,7 +178,7 @@ let QuestionForm = (props: any) => {
   return (
       <Container maxWidth="lg">
         {state.error && <ErrorTile message={state.error} errorTitle="Error"
-                                   btnRetry={{ label: 'Retry', onClick: () => loadData(dispatch, params.id) }} />}
+                                   btnRetry={{ label: 'Retry', onClick: () => loadData(dispatch, params.id) }}/>}
         {!state.error && <Form
             title="Edit Question"
             loaded={state.quizzes.length > 0}
@@ -169,17 +198,17 @@ export default reduxForm({
   initialValues: {
     question: 'Can you answer this question?',
     qtype: 'multi',
-    quiz_id:"5edae0418ead5c106c0357c5",
+    quiz_id: '5edae0418ead5c106c0357c5',
     answers: [{
       body: 'This is correct',
       explanation: 'Explain 1',
-      isCorrect: true
+      isCorrect: true,
     },
-    {
-      body: 'Answer 2',
-      explanation: 'Explain 2',
-    }],
+      {
+        body: 'Answer 2',
+        explanation: 'Explain 2',
+      }],
   },
   destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true
+  forceUnregisterOnUnmount: true,
 })(QuestionForm);
