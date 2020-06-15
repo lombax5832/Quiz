@@ -7,6 +7,7 @@ import HttpClient from '../../httpclient/client';
 import ErrorTile from '../errortile';
 import Form from './form';
 import { Container } from '@material-ui/core';
+import { change, destroy, formValueSelector } from 'redux-form';
 
 export type ActionType = 'SET_QUIZZES' | 'SET_QUESTION_DATA' | 'FETCH_ERROR' | 'RESET_STATE' | 'SUBMIT_SUCCESS'
 
@@ -134,7 +135,7 @@ const CreateSubmitSuccess = (quiz_id: string): IAction => {
 }
 
 let QuestionForm = (props: any) => {
-  const { handleSubmit, reset, submitting, initialize, error } = props;
+  const { handleSubmit, reset, submitting, initialize, error, destroy } = props;
 
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, { ...initialState });
@@ -171,6 +172,8 @@ let QuestionForm = (props: any) => {
        * a new form will have Quiz drop-down menu selected on that quiz_id.
        */
       dispatch(CreateSubmitSuccess(data.quiz_id))
+      destroy(FORM_NAME);
+      reset(FORM_NAME);
       navigate('../success');
     });
   });
@@ -195,20 +198,4 @@ let QuestionForm = (props: any) => {
 
 export default reduxForm({
   form: FORM_NAME,
-  initialValues: {
-    question: 'Can you answer this question?',
-    qtype: 'multi',
-    quiz_id: '5edae0418ead5c106c0357c5',
-    answers: [{
-      body: 'This is correct',
-      explanation: 'Explain 1',
-      isCorrect: true,
-    },
-      {
-        body: 'Answer 2',
-        explanation: 'Explain 2',
-      }],
-  },
-  destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true,
 })(QuestionForm);
