@@ -20,20 +20,9 @@ const mapStateToProps = (state) => {
   return { quiz_id };
 };
 
-const QuestionMeta = (props: { dispatch: Function, reset: Function, quizzes: Array<ICategoryWithQuizzes>, quiz_id?: string }) => {
+const QuestionMeta = (props: { dispatch: Function, reset: Function, categories: Array<IQuizWithCategory>, quiz_id?: string }) => {
 
-  const { reset, quiz_id, quizzes, dispatch } = props;
-
-  const categories: Array<IQuizWithCategory> = quizzes.map((category) => {
-    const quizzes = category.quizzes.map((quiz) => {
-      return {
-        ...quiz,
-        categoryName: category.title,
-      };
-    });
-    return quizzes;
-
-  }).flat();
+  const { reset, quiz_id, categories, dispatch } = props;
 
   console.log('Categories: ', categories);
 

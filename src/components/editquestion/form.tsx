@@ -8,7 +8,7 @@ import { FieldArray } from 'redux-form';
 import renderAnswers from './renderanswers';
 import Button from '@material-ui/core/Button';
 
-const Form = ({ quizzes, title, loaded, handleSubmit, reset, error, submitting, retry }) => (
+const Form = ({ categories, title, loaded, handleSubmit, reset, error, submitting, retry }) => (
     <form onSubmit={handleSubmit}>
       <Grid
           container
@@ -22,7 +22,7 @@ const Form = ({ quizzes, title, loaded, handleSubmit, reset, error, submitting, 
 
         {loaded &&  <Grid container spacing={1}>
           <Grid item xs={12}>
-            <QuestionMeta reset={reset} quizzes={quizzes} />
+            <QuestionMeta reset={reset} categories={categories} />
           </Grid>
           <Grid item xs={12} sm={6}>
             <Edittextarea name="question" label="Question"/>

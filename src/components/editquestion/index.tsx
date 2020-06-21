@@ -7,8 +7,9 @@ import HttpClient from '../../httpclient/client';
 import ErrorTile from '../errortile';
 import Form from './form';
 import { Container } from '@material-ui/core';
+import { IQuizWithCategory } from '../../interfaces/IQuiz';
 
-export type ActionType = 'SET_QUIZZES' | 'SET_QUESTION_DATA' | 'FETCH_ERROR' | 'RESET_STATE' | 'SUBMIT_SUCCESS'
+export type ActionType = 'SET_CATEGORIES' | 'SET_QUESTION_DATA' | 'FETCH_ERROR' | 'RESET_STATE' | 'SUBMIT_SUCCESS'
 
 
 const processSubmit = (data) => {
@@ -25,19 +26,19 @@ export interface IAction {
 }
 
 export interface IQuestionFormState {
-  quizzes?: Array<ICategoryWithQuizzes>
+  categories?: Array<IQuizWithCategory>
   question: any
   error?: string
 }
 
 const initialState = {
-  quizzes: [],
+  categories: [],
   question: undefined,
   error: undefined,
 };
 
-const fetchQuizzes = (): Promise<Array<ICategoryWithQuizzes>> => {
-  return HttpClient.get('/categories/with_quizzes')
+const fetchCategories = (): Promise<Array<IQuizWithCategory>> => {
+  return HttpClient.get('/quizzes/with_categories')
       .then(quizzes => {
             console.log('setting quizzes', quizzes.data);
             return quizzes.data;
@@ -60,8 +61,8 @@ const fetchQuestionData = (id?: string): Promise<any | null> => {
 const reducer = (state: IQuestionFormState, action: { type: ActionType, payload?: any }) => {
 
   switch (action.type) {
-    case 'SET_QUIZZES':
-      return { ...state, quizzes: action.payload };
+    case 'SET_CATEGORIES':
+      return { ...state, categories: action.payload };
 
     case 'SET_QUESTION_DATA':
       return { ...state, question: action?.payload?.data };
@@ -84,10 +85,10 @@ const reducer = (state: IQuestionFormState, action: { type: ActionType, payload?
 const loadData = (dispatch: Function, id?: string) => {
   console.log('entered loadData with id=', id);
   dispatch(ResetState());
-  return Promise.all([fetchQuizzes(), fetchQuestionData(id)])
+  return Promise.all([fetchCategories(), fetchQuestionData(id)])
       .then(results => {
         const qData = results[1];
-        dispatch(CreateQuizzes(results[0]));
+        dispatch(CreateCategories(results[0]));
         dispatch(CreateQuestionData(qData));
         return results;
       })
@@ -98,10 +99,10 @@ const loadData = (dispatch: Function, id?: string) => {
       });
 };
 
-const CreateQuizzes = (quizzes: Array<ICategoryWithQuizzes>): IAction => {
+const CreateCategories = (categories: Array<IQuizWithCategory>): IAction => {
       return {
-        type: 'SET_QUIZZES',
-        payload: quizzes,
+        type: 'SET_CATEGORIES',
+        payload: categories,
       };
     }
 ;
@@ -181,8 +182,8 @@ let QuestionForm = (props: any) => {
                                    btnRetry={{ label: 'Retry', onClick: () => loadData(dispatch, params.id) }}/>}
         {!state.error && <Form
             title="Edit Question"
-            loaded={state.quizzes.length > 0}
-            quizzes={state.quizzes}
+            loaded={state.categories.length > 0}
+            categories={state.categories}
             reset={reset}
             retry={() => loadData(dispatch, params.id)}
             submitting={submitting}
