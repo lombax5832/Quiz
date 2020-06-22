@@ -53,35 +53,13 @@ const WebComponentContainer = (props: IWebComponentContainerProps) => {
 
     (elementRef.current as any)!.store = store;
 
-
-    //Reflect.apply()
-    //MyElement['setStore'](store)
-    //setElem(MyElement);
   }, [componentSrc]);
 
 
   const MyElement = React.createElement(elementName, {'assets-path': 'http://localhost:3008/static', 'ref': elementRef});
   console.log('Created React Element for customElement', elementName, MyElement);
-  if (elementRef?.current?.hasOwnProperty('setStore')) {
-    console.log('myElement has setStore function');
-  }
-
-
 
   return MyElement;
-
-/*
-  if (Elem) {
-
-    return (
-        <div>Defined {Elem}</div>
-    );
-  } else {
-    return (
-        <div>Not Defined Yet</div>
-    );
-  }
-*/
 
 };
 
