@@ -1,5 +1,9 @@
-import React, { useEffect, useState, DOMElement, ReactElement } from 'react';
+import React, { useEffect, useState, DOMElement, ReactElement, useRef } from 'react';
 import { useStore } from 'react-redux';
+
+export interface IStoreAware extends ReactElement {
+  setStore: (store:any) => void;
+}
 
 export interface IWebComponentContainerProps {
   componentSrc: string
@@ -12,6 +16,8 @@ const WebComponentContainer = (props: IWebComponentContainerProps) => {
 
   const { componentSrc, elementName, componentClass } = props;
   const store = useStore();
+  console.log('in WebComponentContainer store=', store);
+  const elementRef = useRef(null);
 
   const [Elem, setElem] = useState<ReactElement>(null);
 
@@ -44,16 +50,27 @@ const WebComponentContainer = (props: IWebComponentContainerProps) => {
    */
 
   useEffect(() => {
-    const MyElement = React.createElement(elementName, {'assets-path': 'http://localhost:3008/static'});
-    console.log('Created React Element for customElement', elementName, MyElement);
-    if (MyElement.hasOwnProperty('setStore')) {
-      console.log('myElement has setStore function');
-    }
 
-    //MyElement.setStore({})
-    setElem(MyElement);
+    (elementRef.current as any)!.store = store;
+
+
+    //Reflect.apply()
+    //MyElement['setStore'](store)
+    //setElem(MyElement);
   }, [componentSrc]);
 
+
+  const MyElement = React.createElement(elementName, {'assets-path': 'http://localhost:3008/static', 'ref': elementRef});
+  console.log('Created React Element for customElement', elementName, MyElement);
+  if (elementRef?.current?.hasOwnProperty('setStore')) {
+    console.log('myElement has setStore function');
+  }
+
+
+
+  return MyElement;
+
+/*
   if (Elem) {
 
     return (
@@ -64,6 +81,7 @@ const WebComponentContainer = (props: IWebComponentContainerProps) => {
         <div>Not Defined Yet</div>
     );
   }
+*/
 
 };
 
