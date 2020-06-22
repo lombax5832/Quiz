@@ -5,6 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
+import WebComponentContainer from '../webcomponentcontainer';
 
 const useStyles = makeStyles({
   root: {
@@ -27,20 +28,26 @@ let Welcome = () => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
-      <CardContent>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-          Welcome
-        </Typography>
-        <Typography variant="body2" component="p">
-            Welcome to Quiz
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
-    </Card>
+      <>
+        <Card className={classes.root}>
+          <CardContent>
+            <Typography className={classes.title} color="textSecondary" gutterBottom>
+              Welcome
+            </Typography>
+            <Typography variant="body2" component="p">
+              Welcome to Quiz
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small">Learn More</Button>
+          </CardActions>
+        </Card>
+        <WebComponentContainer
+            componentSrc="http://localhost:3008/static/components.mjs"
+            componentClass="CehLearning"
+            elementName="ceh-learning" />
+      </>
   );
-}
+};
 
 export default Welcome;
