@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import ICategory from '../../../interfaces/ICategory';
+import ICategory, { ICategoryWithQuizzes } from '../../../interfaces/ICategory';
 import HttpClient from '../../../httpclient/client';
 import {
   CardContent,
@@ -60,7 +60,7 @@ const initialState = {
 };
 
 export interface IListCategoriesState {
-  categories: Array<ICategory>
+  categories: Array<ICategoryWithQuizzes>
   error?: Error
   fetching: boolean
 }
@@ -122,9 +122,10 @@ const loadData = (dispatch: Function, apiUri: string) => {
       });
 };
 
-const ListCategories = (props: IListCategoriesProps) => {
+const ListQuizzes = (props: IListCategoriesProps) => {
+  console.log(TAG, 'entered ListQuizzes with props', props);
   const classes = useStyles();
-  const { apiUri = '/categories' } = props;
+  const { apiUri } = props;
   const navigate = useNavigate();
 
   const [state, dispatch] = useReducer(reducer, { ...initialState });
@@ -172,5 +173,5 @@ const ListCategories = (props: IListCategoriesProps) => {
 
 };
 
-export default ListCategories;
+export default ListQuizzes;
 

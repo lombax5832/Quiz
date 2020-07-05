@@ -8,4 +8,4 @@ export * from './editcategory';
 export * from './editquiz';
 export * from './editquestion';
 export {default as quizzesoutlet} from './quizzes/outlet';
-export {default as listcategories} from './quizzes/listcategories'
+export {default as listquizzes} from './quizzes/listquizzes'

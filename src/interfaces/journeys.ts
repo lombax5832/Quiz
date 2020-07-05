@@ -7,6 +7,7 @@ export interface IRouteParam {
   icon?: string
   params?: { [key: string]: any }
   divider?: boolean
+  props?: { [key: string]: any }
   requireUser?: boolean
   children?: Array<IRouteParamOrDivider>
 }
