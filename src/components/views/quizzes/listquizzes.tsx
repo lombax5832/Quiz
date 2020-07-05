@@ -2,10 +2,12 @@ import React, { useEffect, useReducer } from 'react';
 import ICategory, { ICategoryWithQuizzes } from '../../../interfaces/ICategory';
 import HttpClient from '../../../httpclient/client';
 import {
+  Button,
+  ButtonGroup,
   CardContent,
   CardHeader,
-  Container, List,
-  ListItem,
+  Container, ExpansionPanelDetails, ExpansionPanelSummary, List,
+  ListItem, ListItemSecondaryAction,
   ListItemText,
   makeStyles,
 } from '@material-ui/core';
@@ -14,6 +16,8 @@ import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import ErrorTile from '../../errortile';
 import { useNavigate } from 'react-router-dom';
+import { Delete, Edit, ExpandMore } from '@material-ui/icons';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 
 
 export type ActionType = 'FETCH_SUCCESS' | 'FETCH_ERROR' | 'START_FETCHING'
@@ -24,19 +28,19 @@ const useStyles = makeStyles({
   root: {
     minWidth: 275,
   },
+  list: {
+    width: '100%',
+  },
   bullet: {
     display: 'inline-block',
     margin: '0 2px',
     transform: 'scale(0.8)',
   },
-  h4: {
-    fontSize: '150%',
+  quizName: {
+    fontSize: '100%',
   },
   pos: {
     marginBottom: 12,
-  },
-  button: {
-    //margin: 3,
   },
   divider: {
     marginTop: 10,
@@ -51,6 +55,7 @@ export interface IAction {
 
 export interface IListCategoriesProps {
   apiUri: string
+  title?: string
 }
 
 const initialState = {
@@ -125,7 +130,7 @@ const loadData = (dispatch: Function, apiUri: string) => {
 const ListQuizzes = (props: IListCategoriesProps) => {
   console.log(TAG, 'entered ListQuizzes with props', props);
   const classes = useStyles();
-  const { apiUri } = props;
+  const { apiUri, title = 'Select a Quiz' } = props;
   const navigate = useNavigate();
 
   const [state, dispatch] = useReducer(reducer, { ...initialState });
@@ -139,26 +144,38 @@ const ListQuizzes = (props: IListCategoriesProps) => {
 
   if (state.error) {
     ret = <ErrorTile message={state.error.message} errorTitle="Error"
-                     btnRetry={{ label: 'Retry', onClick: () => loadData(dispatch, apiUri) }}/>
+                     btnRetry={{ label: 'Retry', onClick: () => loadData(dispatch, apiUri) }}/>;
   } else if (state.fetching) {
-    ret = <LinearLoader loading/>
+    ret = <LinearLoader loading/>;
   } else {
     ret = (
         <Card className={classes.root}>
-          <CardHeader title="Select Category"/>
+          <CardHeader title={title}/>
           <CardContent>
-
-            <List className={classes.root}>
-              {(state.categories as Array<any>).map((value) => {
-                return (
-                    <ListItem key={value._id} button disableRipple onClick={() => navigate(value._id)}>
-                      <ListItemText>
+            {(state.categories as Array<any>).map((value) => (
+                    <ExpansionPanel key={value._id}>
+                      <ExpansionPanelSummary
+                          expandIcon={<ExpandMore/>}
+                      >
                         <Typography variant="h6">{value.title}</Typography>
-                      </ListItemText>
-                    </ListItem>
-                );
-              })}
-            </List>
+                      </ExpansionPanelSummary>
+                      <ExpansionPanelDetails>
+                        <List className={classes.list} key={value._id}>
+                          {(value.quizzes as Array<any>).map(quiz => {
+                            return (
+                                <ListItem key={quiz._id} button disableRipple onClick={()=> navigate(quiz._id)}>
+                                  <ListItemText>
+                                    <Typography variant="body1">{quiz.title}</Typography>
+                                  </ListItemText>
+                                </ListItem>
+                            );
+                          })}
+                        </List>
+                      </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                ),
+            )
+            }
           </CardContent>
 
         </Card>
