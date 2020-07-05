@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 const EditQuizOutlet = () => {
   return (
-      <div>
+      <div id="quiz_editor">
         <Outlet />
       </div>
   )
