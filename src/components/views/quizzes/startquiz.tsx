@@ -216,7 +216,7 @@ const StartQuiz = (props) => {
             </div>
           </CardContent>
           <CardActions>
-            <Button variant="outlined" size="medium" onClick={() => {
+            <Button variant="contained" size="medium" color="primary" onClick={() => {
               //getQuizSession();
               const data = {
                 randomize_questions: state.randomize_questions,
