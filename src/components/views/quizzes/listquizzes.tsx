@@ -1,13 +1,14 @@
 import React, { useEffect, useReducer } from 'react';
-import ICategory, { ICategoryWithQuizzes } from '../../../interfaces/ICategory';
+import { ICategoryWithQuizzes } from '../../../interfaces/ICategory';
 import HttpClient from '../../../httpclient/client';
 import {
-  Button,
-  ButtonGroup,
   CardContent,
   CardHeader,
-  Container, ExpansionPanelDetails, ExpansionPanelSummary, List,
-  ListItem, ListItemSecondaryAction,
+  Container,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  List,
+  ListItem,
   ListItemText,
   makeStyles,
 } from '@material-ui/core';
@@ -16,7 +17,7 @@ import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import ErrorTile from '../../errortile';
 import { useNavigate } from 'react-router-dom';
-import { Delete, Edit, ExpandMore } from '@material-ui/icons';
+import { ExpandMore } from '@material-ui/icons';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 
 
@@ -163,7 +164,7 @@ const ListQuizzes = (props: IListCategoriesProps) => {
                         <List className={classes.list} key={value._id}>
                           {(value.quizzes as Array<any>).map(quiz => {
                             return (
-                                <ListItem key={quiz._id} button disableRipple onClick={()=> navigate(quiz._id)}>
+                                <ListItem key={quiz._id} button disableRipple onClick={() => navigate(quiz._id)}>
                                   <ListItemText>
                                     <Typography variant="body1">{quiz.title}</Typography>
                                   </ListItemText>
