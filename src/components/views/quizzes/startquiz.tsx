@@ -3,14 +3,11 @@ import HttpClient from '../../../httpclient/client';
 import { useParams, useNavigate } from 'react-router';
 import { IQuiz } from '../../../interfaces/IQuiz';
 import ErrorTile from '../../errortile';
-import LinearLoader from '../../loadingbar';
 import Card from '@material-ui/core/Card';
 import { Button, CardContent, CardHeader, Container, makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import { Add } from '@material-ui/icons';
 import CardActions from '@material-ui/core/CardActions';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -23,6 +20,9 @@ export type ActionType =
     | 'START_FETCHING'
     | 'RANDOMIZE_QUESTIONS'
     | 'RANDOMIZE_ANSWERS'
+    | 'FETCH_SESSION_ERROR'
+
+
 const TAG = 'START_QUIZ';
 
 
@@ -55,10 +55,17 @@ export interface IAction {
   payload?: any
 }
 
+export interface IQuizSessionOptions {
+  quiz_id: string
+  num_questions?: number
+  randomize_questions: boolean
+  randomize_answers: boolean
+}
+
 export interface IStartQuizState {
   quiz_data?: IQuiz
   error?: Error
-  quiz_sess_error?: Error
+  quiz_session_error?: Error
   fetching: boolean
   randomize_questions?: boolean
   randomize_answers?: boolean
@@ -101,6 +108,13 @@ const CreateError = (error: Error): IAction => {
   };
 };
 
+const CreateSessionFetchError = (error: Error): IAction => {
+  return {
+    type: 'FETCH_SESSION_ERROR',
+    payload: error,
+  };
+};
+
 const CreateFetching = (): IAction => {
   return {
     type: 'START_FETCHING',
@@ -109,24 +123,38 @@ const CreateFetching = (): IAction => {
 
 /**
  * Initially need data about the quiz.
- * @param options
- * @param dispatch
+ * @param dispatch Function
+ * @param quiz_id string
  */
 const loadData = (dispatch: Function, quiz_id: string) => {
   dispatch(CreateFetching());
   HttpClient.get(`/quizzes/${quiz_id}`)
       .then(response => {
-            if (response.status!==200) {
-              throw new Error(`Bad response from api. status=${response.status}`);
-            }
-
             console.log(TAG, 'Got data', response.data);
             dispatch(CreateQuizData(response.data));
           },
       ).catch(err => {
     console.log(TAG, 'fetch categories error', err);
-    dispatch(CreateError(new Error('Failed to Create new Quiz Session')));
+    dispatch(CreateError(new Error(`Failed to Create new Quiz Session. ${err.message}`)));
   });
+};
+
+
+const getQuizSession = (options: IQuizSessionOptions, dispatch: Function, navigate: Function) => {
+  return HttpClient.post('/quizsession/new', options)
+      .then(response => {
+        if (response.data?.session_id) {
+          console.log(TAG, `redirecting to quiz session ${response.data.session_id}`);
+          navigate(`/quiz/${response.data.session_id}`);
+        } else {
+          console.log(TAG, `Invalid response from quiz session`);
+          dispatch(CreateSessionFetchError(new Error(`Unable to create quiz session. Please try again`)));
+        }
+      })
+      .catch(e => {
+        console.log(TAG, 'get quiz_session error', e);
+        dispatch(CreateSessionFetchError(new Error(`Unable to create quiz session. ${e.message}`)));
+      });
 };
 
 
@@ -134,37 +162,32 @@ const reducer = (state: IStartQuizState, action: { type: ActionType, payload?: a
 
   switch (action.type) {
     case 'START_FETCHING':
-      return { ...initialState };
-      break;
+      return { ...state, fetching: true, error: undefined, quiz_session_error: undefined };
 
     case 'FETCH_ERROR':
-      return { quiz_data: undefined, fetching: false, error: action.payload };
-      break;
+      return { quiz_data: undefined, fetching: false, error: action.payload, quiz_session_error: undefined };
 
     case 'FETCH_SUCCESS':
-      return { quiz_data: action.payload, fetching: false, error: undefined };
+      return { quiz_data: action.payload, fetching: false, error: undefined, quiz_session_error: undefined };
 
     case 'RANDOMIZE_ANSWERS':
       return { ...state, randomize_answers: action.payload };
 
     case 'RANDOMIZE_QUESTIONS':
       return { ...state, randomize_questions: action.payload };
+
+    case 'FETCH_SESSION_ERROR':
+      return { ...state, quiz_session_error: action.payload, fetching: false };
   }
 };
 
 
-const getQuizSession = (options, navigate: Function) => {
-
-};
-
-
-const StartQuiz = (props) => {
+const StartQuiz = () => {
   const classes = useStyles();
   const params = useParams();
   const { id } = params;
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(reducer, { ...initialState });
-
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log('handleChange for ', event.target.name, 'val:', event.target.checked);
@@ -188,46 +211,44 @@ const StartQuiz = (props) => {
   if (state.error) {
     ret = <ErrorTile message={state.error.message} errorTitle="Error"
                      btnRetry={{ label: 'Retry', onClick: () => loadData(dispatch, id) }}/>;
-  } else if(state.quiz_data) {
+  } else if (state.quiz_data) {
     ret = (
         <Grid item xs={12}>
-        <Card className={classes.root}>
-          <CardHeader title={state.quiz_data.title}/>
-          <CardContent>
-            <Typography variant="h6">{state.quiz_data.description}</Typography>
-            <div style={{ display: 'block', marginTop: '10px' }}>
-              <Typography variant="subtitle1">Quiz Options</Typography>
-              <FormControl component="fieldset">
-                <FormGroup>
-                  <FormControlLabel
-                      control={<Switch color="primary" onChange={handleChange}
-                                       name="randomize_questions"/>}
-                      label="Randomize Questions"
-                  />
-                  <FormControlLabel
-                      control={<Switch color="primary" onChange={handleChange}
-                                       name="randomize_answers"/>}
-                      label="Randomize Answers"
-                  />
+          <Card className={classes.root}>
+            <CardHeader title={state.quiz_data.title}/>
+            <CardContent>
+              <Typography variant="h6">{state.quiz_data.description}</Typography>
+              <div style={{ display: 'block', marginTop: '10px' }}>
+                <Typography variant="subtitle1">Quiz Options</Typography>
+                <FormControl component="fieldset">
+                  <FormGroup>
+                    <FormControlLabel
+                        control={<Switch color="primary" onChange={handleChange}
+                                         name="randomize_questions"/>}
+                        label="Randomize Questions"
+                    />
+                    <FormControlLabel
+                        control={<Switch color="primary" onChange={handleChange}
+                                         name="randomize_answers"/>}
+                        label="Randomize Answers"
+                    />
 
-                </FormGroup>
+                  </FormGroup>
 
-              </FormControl>
-            </div>
-          </CardContent>
-          <CardActions>
-            <Button variant="contained" size="medium" color="primary" onClick={() => {
-              //getQuizSession();
-              const data = {
-                randomize_questions: state.randomize_questions,
-                randomize_answers: state.randomize_answers,
-                quiz_id: id,
-              };
-
-              alert(JSON.stringify(data));
-            }}>Start Quiz</Button>
-          </CardActions>
-        </Card>
+                </FormControl>
+              </div>
+            </CardContent>
+            <CardActions>
+              <Button variant="contained" size="medium" color="primary" onClick={() => {
+                const data = {
+                  randomize_questions: state.randomize_questions,
+                  randomize_answers: state.randomize_answers,
+                  quiz_id: id,
+                };
+                getQuizSession(data, dispatch, navigate);
+              }}>Start Quiz</Button>
+            </CardActions>
+          </Card>
         </Grid>
     );
   }
@@ -241,8 +262,8 @@ const StartQuiz = (props) => {
             alignItems="stretch"
             justify="center"
         >
-          <FormMessageBar loading={state.fetching} error={state.quiz_sess_error?.message} />
-            {ret}
+          <FormMessageBar loading={state.fetching} error={state.quiz_session_error?.message}/>
+          {ret}
         </Grid>
       </Container>
   );
