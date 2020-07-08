@@ -7,14 +7,15 @@ import EnsureLogin from './ensurelogin';
 import { connect } from 'react-redux';
 
 const makeElement = (o: IRouteParam) => {
+  const {props = {}} = o;
   if (o.requireUser) {
     return (
         <EnsureLogin isRequired={true}>
-          {createElement(views[o.elementId])}
+          {createElement(views[o.elementId], props)}
         </EnsureLogin>
     );
   } else {
-    return createElement(views[o.elementId]);
+    return createElement(views[o.elementId], props);
   }
 };
 
