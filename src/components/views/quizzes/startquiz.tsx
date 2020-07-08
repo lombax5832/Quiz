@@ -143,9 +143,9 @@ const loadData = (dispatch: Function, quiz_id: string) => {
 const getQuizSession = (options: IQuizSessionOptions, dispatch: Function, navigate: Function) => {
   return HttpClient.post('/quizsession/new', options)
       .then(response => {
-        if (response.data?.session_id) {
-          console.log(TAG, `redirecting to quiz session ${response.data.session_id}`);
-          navigate(`/quiz/${response.data.session_id}`);
+        if (response.data?.quiz_session) {
+          console.log(TAG, `redirecting to quiz session ${response.data.quiz_session}`);
+          navigate(`/quiz/${response.data.quiz_session}`);
         } else {
           console.log(TAG, `Invalid response from quiz session`);
           dispatch(CreateSessionFetchError(new Error(`Unable to create quiz session. Please try again`)));
