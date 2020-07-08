@@ -1,6 +1,5 @@
 import IProfile from '../interfaces/IProfile';
 import { IJourney } from '../interfaces/journeys';
-import { JOURNEY } from '../consts';
 import HttpClient from '../httpclient/client'
 
 export interface ISession {

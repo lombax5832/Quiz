@@ -2,7 +2,6 @@ import React, { useReducer, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { reduxForm } from 'redux-form';
 import { FORM_NAME } from '../../consts';
-import { ICategoryWithQuizzes } from '../../interfaces/ICategory';
 import HttpClient from '../../httpclient/client';
 import ErrorTile from '../errortile';
 import Form from './form';
@@ -196,20 +195,6 @@ let QuestionForm = (props: any) => {
 
 export default reduxForm({
   form: FORM_NAME,
-  initialValues: {
-    question: 'Can you answer this question?',
-    qtype: 'multi',
-    quiz_id: '5edae0418ead5c106c0357c5',
-    answers: [{
-      body: 'This is correct',
-      explanation: 'Explain 1',
-      isCorrect: true,
-    },
-      {
-        body: 'Answer 2',
-        explanation: 'Explain 2',
-      }],
-  },
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
 })(QuestionForm);
