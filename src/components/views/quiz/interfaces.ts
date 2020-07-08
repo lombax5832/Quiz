@@ -25,6 +25,8 @@ export interface IQuizSession {
 export interface IQuizSessionProps {
   dispatch: Function
   question: IQuestion
+  fetch_error?: Error
+  fetching: boolean
   session_id: string
   active_question: number
 }
