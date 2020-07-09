@@ -25,10 +25,13 @@ export interface IQuizSession {
 export interface IQuizSessionProps {
   dispatch: Function
   question: IQuestion
-  fetch_error?: Error
+  fetchError?: Error
+  quizError?: Error
   fetching: boolean
   sessionID: string
   currentQuestion: number
   questionsCount: number
-  quizID: string
+  quizID: string,
+  setActiveQuestion: (id: number) => void,
+  fetchQuiz: (id: string) => void
 }
