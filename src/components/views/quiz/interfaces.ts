@@ -27,6 +27,8 @@ export interface IQuizSessionProps {
   question: IQuestion
   fetch_error?: Error
   fetching: boolean
-  session_id: string
-  active_question: number
+  sessionID: string
+  currentQuestion: number
+  questionsCount: number
+  quizID: string
 }

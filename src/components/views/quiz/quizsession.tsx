@@ -20,6 +20,24 @@ const fetchQuiz = (id: string) => {
   };
 };
 
+const mapStateToProps = (state, ownProps) => {
+
+  const currentQuestion = state.quiz_data?.active_question || -1
+  const questionsCount = state.quiz_data?.questions?.length || 0;
+  const question = currentQuestion > -1 ? state.quiz_data.questions[currentQuestion] : null
+  const quizID = state.quiz_session?.quiz_id;
+  const sessionID =  state.quiz_session?._id;
+
+  return {
+    sessionID,
+    quizID,
+    currentQuestion,
+    questionsCount,
+    question,
+    fetching: !!state.quiz_session?.fetching,
+    fetch_error: state.quiz_session?.fetch_error,
+  }
+}
 
 const QuizSession = (props: IQuizSessionProps) => {
   const params = useParams();
@@ -51,4 +69,4 @@ const QuizSession = (props: IQuizSessionProps) => {
 };
 
 
-export default connect()(QuizSession);
+export default connect(mapStateToProps)(QuizSession);
