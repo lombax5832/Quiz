@@ -1,7 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { IQuizSessionProps } from './interfaces';
 import HttpClient from '../../../httpclient/client';
+import RestoreIcon from '@material-ui/icons/Restore';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+
 import {
   CreateQuizDataFetched,
   CreateSetActiveQuestion,
@@ -17,9 +21,22 @@ import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
 import Icon from '@material-ui/core/Icon';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
 
 
 const useStyles = makeStyles({
+  bottomBar: {
+    display: 'block',
+    width: '100%',
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    zIndex: 1202,
+    padding: '5px',
+  },
   root: {
     minWidth: 275,
   },
@@ -104,54 +121,70 @@ const QuizSession = (props: IQuizSessionProps) => {
     fetchQuiz(session_id);
   }, [session_id]);
 
-  let ret: React.ReactElement = <p>Under Construction</p>;
+  let ret: React.ReactElement;
 
   if (props.fetchError) {
     ret = <ErrorTile message={props.fetchError.message} errorTitle="Error"
                      btnRetry={{ label: 'Retry', onClick: () => fetchQuiz(session_id) }}/>;
   } else if (props.question) {
     const cardHeader = `Question ${currentQuestion + 1} of ${questionsCount}`;
-    ret = <Grid item xs={12}>
-      <Card className={classes.root}>
-        <CardHeader title={cardHeader}/>
-        <CardContent>
-          <Typography variant="h6">{props.question.question}</Typography>
-          <div style={{ display: 'block', marginTop: '10px' }}>
-            {JSON.stringify(props.question.answers)}
-          </div>
-        </CardContent>
-        <CardActions>
-          <Button variant="contained"
-                  size="medium"
-                  startIcon={<Icon>navigate_before</Icon>}
-                  disabled={currentQuestion < 1}
-                  onClick={() => {
-                    setActiveQuestion(currentQuestion - 1);
-                  }}>Previous</Button>
-          <Button variant="contained"
-                  size="medium"
-                  endIcon={<Icon>navigate_next</Icon>}
-                  disabled={(props.currentQuestion + 1) >= props.questionsCount} onClick={() => {
-            setActiveQuestion(currentQuestion + 1);
-          }}>Next</Button>
-        </CardActions>
-      </Card>
-    </Grid>;
+    ret = (
+        <Grid item xs={12} style={{ marginBottom: '30px' }}>
+          <Card className={classes.root}>
+            <CardHeader title={cardHeader}/>
+            <CardContent>
+              <Typography variant="h6">{props.question.question}</Typography>
+              <div style={{ display: 'block', marginTop: '10px' }}>
+                {JSON.stringify(props.question.answers)}
+              </div>
+            </CardContent>
+          </Card>
+          <Paper className={classes.bottomBar}>
+            <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+                spacing={2}
+            >
+              <Grid item>
+                <Button variant="contained"
+                        size="medium"
+                        startIcon={<Icon>navigate_before</Icon>}
+                        disabled={currentQuestion < 1}
+                        onClick={() => {
+                          setActiveQuestion(currentQuestion - 1);
+                        }}>Previous</Button>
+              </Grid>
+              <Grid item>
+                <Button variant="contained"
+                        size="medium"
+                        endIcon={<Icon>navigate_next</Icon>}
+                        disabled={(props.currentQuestion + 1) >= props.questionsCount} onClick={() => {
+                  setActiveQuestion(currentQuestion + 1);
+                }}>Next</Button>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+    );
   }
 
 
   return (
+
       <Container maxWidth="md">
         <Grid
             container
             spacing={0}
             direction="column"
             alignItems="stretch"
-            justify="center"
+            justify="space-between"
         >
           <FormMessageBar loading={!!props.fetching} error={props.quizError?.message}/>
           {ret}
         </Grid>
+
       </Container>
   );
 

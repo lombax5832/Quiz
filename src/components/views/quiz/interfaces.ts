@@ -23,6 +23,7 @@ export interface IQuizSession {
 }
 
 export interface IQuizSessionProps {
+
   dispatch: Function
   question: IQuestion
   fetchError?: Error
