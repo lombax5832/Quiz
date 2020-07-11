@@ -25,6 +25,7 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
+import { ClearAppBarTitle, CreateAppBarTitle } from '../../../store/actions/appbar';
 
 
 const useStyles = makeStyles({
@@ -97,11 +98,14 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch: Function, ownProps) => {
 
   return {
+    dispatch,
     setActiveQuestion: (id: number) => dispatch(CreateSetActiveQuestion(id)),
+    setAppBarTitle: (title: string) => dispatch(CreateAppBarTitle(title)),
     fetchQuiz: (id: string) => {
       dispatch(CreateQuizFetching());
       HttpClient.get(`/quizsession/${id}`).then(response => {
         dispatch(CreateQuizDataFetched(response.data));
+        dispatch(CreateAppBarTitle('Practice Quiz'));
       }).catch(e => {
         dispatch(CreateQuizDataFetchError(e));
       });
@@ -114,11 +118,12 @@ const QuizSession = (props: IQuizSessionProps) => {
   const classes = useStyles();
   const params = useParams();
   const { session_id } = params;
-  const { fetchQuiz, setActiveQuestion, currentQuestion, questionsCount } = props;
+  const { fetchQuiz, setActiveQuestion, currentQuestion, questionsCount, dispatch, setAppBarTitle } = props;
   console.log('entered QuizSession with sessionID', session_id);
 
   useEffect(() => {
     fetchQuiz(session_id);
+    return () => dispatch(ClearAppBarTitle());
   }, [session_id]);
 
   let ret: React.ReactElement;
@@ -128,6 +133,7 @@ const QuizSession = (props: IQuizSessionProps) => {
                      btnRetry={{ label: 'Retry', onClick: () => fetchQuiz(session_id) }}/>;
   } else if (props.question) {
     const cardHeader = `Question ${currentQuestion + 1} of ${questionsCount}`;
+    setAppBarTitle(cardHeader);
     ret = (
         <Grid item xs={12} style={{ marginBottom: '30px' }}>
           <Card className={classes.root}>
@@ -162,7 +168,7 @@ const QuizSession = (props: IQuizSessionProps) => {
                         endIcon={<Icon>navigate_next</Icon>}
                         disabled={(props.currentQuestion + 1) >= props.questionsCount} onClick={() => {
                   setActiveQuestion(currentQuestion + 1);
-                }}>Next</Button>
+                }}><u>N</u>ext</Button>
               </Grid>
             </Grid>
           </Paper>

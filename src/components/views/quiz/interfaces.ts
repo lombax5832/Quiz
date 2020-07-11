@@ -34,5 +34,6 @@ export interface IQuizSessionProps {
   questionsCount: number
   quizID: string,
   setActiveQuestion: (id: number) => void,
+  setAppBarTitle: (title: string) => void,
   fetchQuiz: (id: string) => void
 }
