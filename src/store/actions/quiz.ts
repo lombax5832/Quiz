@@ -2,32 +2,41 @@ export enum QuizAction {
   QUIZ_DATA_FETCHING = 'QUIZ_DATA_FETCHING',
   QUIZ_DATA_FETCH_SUCCESS = 'QUIZ_DATA_SUCCESS',
   QUIZ_DATA_FETCH_ERROR = 'QUIZ_DATA_FETCH_ERROR',
-  SET_ACTIVE_QUESTION = 'SET_ACTIVE_QUESTION'
+  SET_ACTIVE_QUESTION = 'SET_ACTIVE_QUESTION',
+  SET_USER_ANSWERS = 'SET_USER_ANSWERS'
 }
 
 export function CreateQuizFetching() {
   return {
-    type: QuizAction.QUIZ_DATA_FETCHING
-  }
+    type: QuizAction.QUIZ_DATA_FETCHING,
+  };
 }
 
 export function CreateQuizDataFetched(data: any) {
   return {
     type: QuizAction.QUIZ_DATA_FETCH_SUCCESS,
-    payload: data
-  }
+    payload: data,
+  };
 }
 
 export function CreateQuizDataFetchError(e: Error) {
   return {
     type: QuizAction.QUIZ_DATA_FETCH_ERROR,
-    payload: e
-  }
+    payload: e,
+  };
 }
 
 export function CreateSetActiveQuestion(id: number) {
   return {
     type: QuizAction.SET_ACTIVE_QUESTION,
-    payload: id
-  }
+    payload: id,
+  };
+}
+
+export function CreateUserAnswers(userAnswers: number[], currentQuestion: number) {
+  console.log('Entered CreateUserAnswers action creator with currentQuestion=', currentQuestion, 'userAnswers=', userAnswers)
+  return {
+    type: QuizAction.SET_USER_ANSWERS,
+    payload: { userAnswers, currentQuestion },
+  };
 }

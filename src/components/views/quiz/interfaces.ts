@@ -23,17 +23,24 @@ export interface IQuizSession {
 }
 
 export interface IQuizSessionProps {
-
+  sessionID: string
   dispatch: Function
   question: IQuestion
   fetchError?: Error
   quizError?: Error
   fetching: boolean
-  sessionID: string
   currentQuestion: number
   questionsCount: number
   quizID: string,
   setActiveQuestion: (id: number) => void,
   setAppBarTitle: (title: string) => void,
+  setUserAnswers: (selected: number[]) => void,
   fetchQuiz: (id: string) => void
+}
+
+
+export interface IQuestionViewProps {
+  question: IQuestion
+  currentQuestion: number
+  setUserAnswers: (selected: number[], currentQuestion: number) => void
 }

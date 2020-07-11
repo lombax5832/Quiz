@@ -10,7 +10,7 @@ import {
   CreateQuizDataFetched,
   CreateSetActiveQuestion,
   CreateQuizDataFetchError,
-  CreateQuizFetching,
+  CreateQuizFetching, CreateUserAnswers,
 } from '../../../store/actions/quiz';
 import { connect } from 'react-redux';
 import { Button, CardContent, CardHeader, Container, makeStyles } from '@material-ui/core';
@@ -26,6 +26,7 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import { ClearAppBarTitle, CreateAppBarTitle } from '../../../store/actions/appbar';
+import QuestionView from './question/question';
 
 
 const useStyles = makeStyles({
@@ -95,11 +96,12 @@ const mapStateToProps = (state, ownProps) => {
 
 };
 
-const mapDispatchToProps = (dispatch: Function, ownProps) => {
+const mapDispatchToProps = (dispatch: Function, ownProps: IQuizSessionProps) => {
 
   return {
     dispatch,
     setActiveQuestion: (id: number) => dispatch(CreateSetActiveQuestion(id)),
+    setUserAnswers: (userAnswers: number[], currentQuestion: number) => dispatch(CreateUserAnswers(userAnswers, currentQuestion)),
     setAppBarTitle: (title: string) => dispatch(CreateAppBarTitle(title)),
     fetchQuiz: (id: string) => {
       dispatch(CreateQuizFetching());
@@ -139,9 +141,8 @@ const QuizSession = (props: IQuizSessionProps) => {
           <Card className={classes.root}>
             <CardHeader title={cardHeader}/>
             <CardContent>
-              <Typography variant="h6">{props.question.question}</Typography>
               <div style={{ display: 'block', marginTop: '10px' }}>
-                {JSON.stringify(props.question.answers)}
+                <QuestionView {...props}/>
               </div>
             </CardContent>
           </Card>
