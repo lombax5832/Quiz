@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { IQuizSessionProps } from './interfaces';
 import HttpClient from '../../../httpclient/client';
-import RestoreIcon from '@material-ui/icons/Restore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 import {
   CreateQuizDataFetched,
@@ -18,13 +15,8 @@ import Grid from '@material-ui/core/Grid';
 import FormMessageBar from '../../formloadingerrorbar';
 import ErrorTile from '../../errortile';
 import Card from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
-import CardActions from '@material-ui/core/CardActions';
 import Icon from '@material-ui/core/Icon';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import { ClearAppBarTitle, CreateAppBarTitle } from '../../../store/actions/appbar';
 import QuestionView from './question/question';
 
@@ -62,19 +54,7 @@ const useStyles = makeStyles({
 });
 
 
-const fetchQuiz = (id: string) => {
-
-  return dispatch => {
-    dispatch(CreateQuizFetching());
-    HttpClient.get(`/quizsession/${id}`).then(response => {
-      dispatch(CreateQuizDataFetched(response.data));
-    }).catch(e => {
-      dispatch(CreateQuizDataFetchError(e));
-    });
-  };
-};
-
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
 
   const currentQuestion = state.quiz_session?.quiz_data?.active_question;
   const questionsCount = state.quiz_session?.quiz_data?.questions?.length || 0;
@@ -96,7 +76,7 @@ const mapStateToProps = (state, ownProps) => {
 
 };
 
-const mapDispatchToProps = (dispatch: Function, ownProps: IQuizSessionProps) => {
+const mapDispatchToProps = (dispatch: Function) => {
 
   return {
     dispatch,
