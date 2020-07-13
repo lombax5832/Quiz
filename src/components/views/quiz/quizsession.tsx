@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { IQuizSessionProps } from './interfaces';
 import HttpClient from '../../../httpclient/client';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import {
   CreateQuizDataFetched,
@@ -19,6 +20,9 @@ import Icon from '@material-ui/core/Icon';
 import Paper from '@material-ui/core/Paper';
 import { ClearAppBarTitle, CreateAppBarTitle } from '../../../store/actions/appbar';
 import QuestionView from './question/question';
+import IconButton from '@material-ui/core/IconButton';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 
 const useStyles = makeStyles({
@@ -119,7 +123,20 @@ const QuizSession = (props: IQuizSessionProps) => {
     ret = (
         <Grid item xs={12} style={{ marginBottom: '30px' }}>
           <Card className={classes.root}>
-            <CardHeader title={cardHeader}/>
+            <CardHeader title={cardHeader}
+                        style={{ textAlign: 'center' }}
+                        action={
+                          <FormControlLabel
+                              value="start"
+                              control={<Checkbox
+                                  disableRipple
+                                  style={{background:'transparent'}}
+                                  color="default"
+                              />}
+                              label="Mark"
+                              labelPlacement="start"
+                          />
+                        }/>
             <CardContent>
               <div style={{ display: 'block', marginTop: '10px' }}>
                 <QuestionView {...props}/>
