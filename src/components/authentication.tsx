@@ -1,13 +1,10 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import IAuth from '../interfaces/IAuth';
-import { initialized, signIn, signOut } from '../store/actions/auth';
-import { setJourney } from '../store/actions/journey';
-import { JOURNEY } from '../consts';
+import { initialized, signOut } from '../store/actions/auth';
 import IProfile from '../interfaces/IProfile';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import getSession from '../services/session';
 import { getSessionObject } from '../store/actions/getsessionobject';
 const TAG = 'Authentication';
 

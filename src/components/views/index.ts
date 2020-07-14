@@ -10,3 +10,4 @@ export * from './editquestion';
 export { default as quizzesoutlet } from './quizzes/outlet';
 export { default as listquizzes } from './quizzes/listquizzes';
 export { default as startquiz } from './quizzes/startquiz';
+export { default as quizsession } from './quiz/quizsession';

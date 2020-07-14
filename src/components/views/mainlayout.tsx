@@ -12,12 +12,19 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MenuIcon from '@material-ui/icons/Menu';
 import clsx from 'clsx';
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import UserButton from '../userButton';
 import { DRAWER_WIDTH, JOURNEY } from '../../consts';
 import NavMenu from '../navmenu';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import RestoreIcon from '@material-ui/icons/Restore';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import Grid from '@material-ui/core/Grid';
 
+const TAG = 'MainLayout';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -81,11 +88,19 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const TAG = 'MainLayout';
 
-export default function MainLayout() {
+export interface IMainLayoutProps {
+  title: string
+}
+
+
+
+export default function MainLayout(props: IMainLayoutProps) {
 
   console.log(TAG, 'Entered MainLayout');
+  const [value, setValue] = useState();
+  const loc = useLocation();
+  console.log(TAG, 'location', loc);
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -101,66 +116,69 @@ export default function MainLayout() {
   };
 
   return (
-      <div className={classes.root}>
-        <CssBaseline/>
-        <ClickAwayListener onClickAway={
-          () => {
-            console.log(TAG, 'onClickAway event');
-            handleDrawerClose()
-          }
-        }>
-          <div>
-            <AppBar
-                position="fixed"
-                className={clsx(classes.appBar, {
-                  [classes.appBarShift]: open,
-                })}
-            >
-              <Toolbar>
-                <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={handleDrawerOpen}
-                    edge="start"
-                    className={clsx(classes.menuButton, open && classes.hide)}
-                >
-                  <MenuIcon/>
-                </IconButton>
-                <Typography className={classes.title} variant="h6" noWrap>
-                  Quiz
-                </Typography>
-                <UserButton/>
-              </Toolbar>
-            </AppBar>
-            <Drawer
-                className={classes.drawer}
-                variant="persistent"
-                anchor="left"
-                open={open}
-                classes={{
-                  paper: classes.drawerPaper,
-                }}
-            >
-              <div className={classes.drawerHeader}>
-                <IconButton onClick={handleDrawerClose}>
-                  <ChevronLeftIcon/>
-                </IconButton>
-              </div>
-              <Divider/>
-              <NavMenu />
-            </Drawer>
-          </div>
-        </ClickAwayListener>
-        <main
-            className={clsx(classes.content, {
-              [classes.contentShift]: open,
-            })}
-        >
-          <div className={classes.drawerHeader}/>
-          <Container>
-            <Outlet/>
-          </Container>
-        </main>
-      </div>
+      <>
+        <div className={classes.root}>
+          <CssBaseline/>
+          <ClickAwayListener onClickAway={
+            () => {
+              console.log(TAG, 'onClickAway event');
+              handleDrawerClose();
+            }
+          }>
+            <div>
+              <AppBar
+                  position="fixed"
+                  className={clsx(classes.appBar, {
+                    [classes.appBarShift]: open,
+                  })}
+              >
+                <Toolbar>
+                  <IconButton
+                      color="inherit"
+                      aria-label="open drawer"
+                      onClick={handleDrawerOpen}
+                      edge="start"
+                      className={clsx(classes.menuButton, open && classes.hide)}
+                  >
+                    <MenuIcon/>
+                  </IconButton>
+                  <Typography className={classes.title} variant="h6" noWrap>
+                    Quiz?
+                  </Typography>
+                  <UserButton/>
+                </Toolbar>
+              </AppBar>
+              <Drawer
+                  className={classes.drawer}
+                  variant="persistent"
+                  anchor="left"
+                  open={open}
+                  classes={{
+                    paper: classes.drawerPaper,
+                  }}
+              >
+                <div className={classes.drawerHeader}>
+                  <IconButton onClick={handleDrawerClose}>
+                    <ChevronLeftIcon/>
+                  </IconButton>
+                </div>
+                <Divider/>
+                <NavMenu/>
+              </Drawer>
+            </div>
+          </ClickAwayListener>
+          <main
+              className={clsx(classes.content, {
+                [classes.contentShift]: open,
+              })}
+          >
+            <div className={classes.drawerHeader}/>
+            <Container>
+              <Outlet/>
+            </Container>
+          </main>
+
+        </div>
+      </>
   );
 }
