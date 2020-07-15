@@ -18,6 +18,7 @@ export interface IQuestion {
   question: string
   answers: Array<IAnswer>
   userAnswers?: number[]
+  isMarked?: boolean | string
 }
 
 export interface IQuizSession {
@@ -38,10 +39,12 @@ export interface IQuizSessionProps {
   currentQuestion: number
   questionsCount: number
   quizID: string,
+  isMarked?: boolean | string,
   setActiveQuestion: (id: number) => void,
   setAppBarTitle: (title: string) => void,
   setUserAnswers: ISetUserAnswer,
-  fetchQuiz: (id: string) => void
+  fetchQuiz: (id: string) => void,
+  toggleMarked: (currentQuestion: number) => void
 }
 
 

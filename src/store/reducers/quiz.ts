@@ -21,6 +21,14 @@ const updateUserAnswers = (currentQuestion: number, questions: IQuestion[] = [],
   return ret;
 };
 
+const updateMarked = (currentQuestion: number, questions: IQuestion[] = []) => {
+  const ret = [...questions]
+
+  ret[currentQuestion].isMarked = !ret[currentQuestion].isMarked
+
+  return ret
+}
+
 const quizReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case QuizAction.QUIZ_DATA_FETCHING:
@@ -40,12 +48,21 @@ const quizReducer = (state = INITIAL_STATE, action) => {
         ...state,
         quiz_data: {
           ...state.quiz_data, questions: updateUserAnswers(
-              state.quiz_data.active_question,
-              state.quiz_data.questions,
-              action.payload.userAnswers,
+            state.quiz_data.active_question,
+            state.quiz_data.questions,
+            action.payload.userAnswers,
           ),
         },
       };
+
+    case QuizAction.TOGGLE_MARKED:
+      return {
+        ...state,
+        quiz_data: {
+          ...state.quiz_data,
+          questions: updateMarked(action.payload, state.quiz_data.questions)
+        }
+      }
 
     default:
       return state;

@@ -3,7 +3,8 @@ export enum QuizAction {
   QUIZ_DATA_FETCH_SUCCESS = 'QUIZ_DATA_SUCCESS',
   QUIZ_DATA_FETCH_ERROR = 'QUIZ_DATA_FETCH_ERROR',
   SET_ACTIVE_QUESTION = 'SET_ACTIVE_QUESTION',
-  SET_USER_ANSWERS = 'SET_USER_ANSWERS'
+  SET_USER_ANSWERS = 'SET_USER_ANSWERS',
+  TOGGLE_MARKED = 'TOGGLE_MARKED'
 }
 
 export function CreateQuizFetching() {
@@ -38,5 +39,12 @@ export function CreateUserAnswers(userAnswers: number[], currentQuestion: number
   return {
     type: QuizAction.SET_USER_ANSWERS,
     payload: { userAnswers, currentQuestion },
+  };
+}
+
+export function CreateToggleMarked(currentQuestion: number) {
+  return {
+    type: QuizAction.TOGGLE_MARKED,
+    payload: currentQuestion
   };
 }
