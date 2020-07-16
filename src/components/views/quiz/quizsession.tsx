@@ -1,17 +1,28 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { IQuizSessionProps } from './interfaces';
+import { IQuizSessionProps, IQuizView } from './interfaces';
 import HttpClient from '../../../httpclient/client';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+
 
 import {
+  CreateCalculateScore,
   CreateQuizDataFetched,
-  CreateSetActiveQuestion,
   CreateQuizDataFetchError,
-  CreateQuizFetching, CreateUserAnswers, CreateToggleMarked,
+  CreateQuizFetching,
+  CreateQuizView,
+  CreateSetActiveQuestion,
+  CreateToggleMarked,
+  CreateUserAnswers,
 } from '../../../store/actions/quiz';
 import { connect } from 'react-redux';
-import { Button, CardContent, CardHeader, Container, makeStyles, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  CardContent,
+  CardHeader,
+  Container,
+  makeStyles,
+} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import FormMessageBar from '../../formloadingerrorbar';
 import ErrorTile from '../../errortile';
@@ -20,7 +31,6 @@ import Icon from '@material-ui/core/Icon';
 import Paper from '@material-ui/core/Paper';
 import { ClearAppBarTitle, CreateAppBarTitle } from '../../../store/actions/appbar';
 import QuestionView from './question/question';
-import IconButton from '@material-ui/core/IconButton';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
@@ -65,12 +75,13 @@ const mapStateToProps = (state) => {
 
   const currentQuestion = state.quiz_session?.quiz_data?.active_question;
   const questionsCount = state.quiz_session?.quiz_data?.questions?.length || 0;
-  const question = currentQuestion !== undefined ? state.quiz_session?.quiz_data.questions[currentQuestion] : null;
+  const question = currentQuestion!==undefined ? state.quiz_session?.quiz_data?.questions?.[currentQuestion]:null;
   const quizID = state.quiz_session?.quiz_session?.quiz_id;
   const sessionID = state.quiz_session?.quiz_session?._id;
   const fetchError = state.quiz_session?.fetch_error;
   const fetching = !!state.quiz_session?.fetching;
-  const isMarked = question?.isMarked || ''
+  //const isMarked = question?.isMarked || ''
+  const viewID = state.quiz_session?.quiz_data?.quiz_view || IQuizView.QUIZ;
 
   return {
     sessionID,
@@ -80,7 +91,7 @@ const mapStateToProps = (state) => {
     question,
     fetching,
     fetchError,
-    isMarked
+    viewID,
   };
 
 };
@@ -93,7 +104,13 @@ const mapDispatchToProps = (dispatch: Function) => {
     setUserAnswers: (userAnswers: number[], currentQuestion: number) => dispatch(CreateUserAnswers(userAnswers, currentQuestion)),
     setAppBarTitle: (title: string) => dispatch(CreateAppBarTitle(title)),
     toggleMarked: (currentQuestion: number) => {
-      dispatch(CreateToggleMarked(currentQuestion))
+      dispatch(CreateToggleMarked(currentQuestion));
+    },
+    gradeQuiz: (sessID: string) => {
+      dispatch(CreateCalculateScore(sessID));
+    },
+    setQuizView: (viewID: IQuizView) => {
+      dispatch(CreateQuizView(viewID));
     },
     fetchQuiz: (id: string) => {
       dispatch(CreateQuizFetching());
@@ -112,7 +129,19 @@ const QuizSession = (props: IQuizSessionProps) => {
   const classes = useStyles();
   const params = useParams();
   const { session_id } = params;
-  const { fetchQuiz, setActiveQuestion, currentQuestion, questionsCount, dispatch, setAppBarTitle, toggleMarked, question, isMarked } = props;
+  const {
+    sessionID,
+    fetchQuiz,
+    setActiveQuestion,
+    currentQuestion,
+    questionsCount,
+    dispatch,
+    setAppBarTitle,
+    toggleMarked,
+    question,
+    gradeQuiz,
+    setQuizView,
+  } = props;
   console.log('entered QuizSession with sessionID', session_id);
 
   useEffect(() => {
@@ -123,13 +152,21 @@ const QuizSession = (props: IQuizSessionProps) => {
   let ret: React.ReactElement;
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
-    console.log("Handle change value: ", newValue)
+    console.log('Handle change value: ', newValue);
     switch (newValue) {
       case 'previous':
-        setActiveQuestion(currentQuestion - 1)
+        setActiveQuestion(currentQuestion - 1);
         break;
       case 'next':
-        setActiveQuestion(currentQuestion + 1)
+        setActiveQuestion(currentQuestion + 1);
+        break;
+
+      case 'end':
+        gradeQuiz(sessionID);
+        break;
+
+      case 'review':
+        setQuizView(IQuizView.REVIEW);
         break;
       default:
         break;
@@ -138,73 +175,75 @@ const QuizSession = (props: IQuizSessionProps) => {
 
   if (props.fetchError) {
     ret = <ErrorTile message={props.fetchError.message} errorTitle="Error"
-      btnRetry={{ label: 'Retry', onClick: () => fetchQuiz(session_id) }} />;
+                     btnRetry={{ label: 'Retry', onClick: () => fetchQuiz(session_id) }}/>;
   } else if (props.question) {
     const cardHeader = `Question ${currentQuestion + 1} of ${questionsCount}`;
     setAppBarTitle(cardHeader);
     ret = (
-      <Grid item xs={12} style={{ marginBottom: '30px' }}>
-        <Card className={classes.root}>
-          <CardHeader title={cardHeader}
-            style={{ textAlign: 'center' }}
-            action={
-              <FormControlLabel
-                value="start"
-                control={<Checkbox
-                  disableRipple
-                  checked={!!isMarked}
-                  onChange={(event) => toggleMarked(currentQuestion)}
-                  style={{ background: 'transparent' }}
-                  color="default"
-                />}
-                label="Mark"
-                labelPlacement="start"
-              />
-            } />
-          <CardContent>
-            <div style={{ display: 'block', marginTop: '10px' }}>
-              <QuestionView {...props} />
-            </div>
-          </CardContent>
-        </Card>
-        <Paper className={classes.bottomBar}>
-          <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="center"
-            spacing={2}
-          >
-            <Grid item>
-              <BottomNavigation onChange={handleChange} showLabels>
-                <BottomNavigationAction label="Previous" value="previous" disabled={currentQuestion < 1} icon={<Icon>navigate_before</Icon>} />
-                <BottomNavigationAction label="Next" value="next" disabled={currentQuestion + 1 >= questionsCount} icon={<Icon>navigate_next</Icon>} />
-                <BottomNavigationAction label="Review" value="review" icon={<Icon>table_chart</Icon>} />
-                <BottomNavigationAction label="End" value="end" icon={<Icon>stop</Icon>} />
-              </BottomNavigation>
+        <Grid item xs={12} style={{ marginBottom: '30px' }}>
+          <Card className={classes.root}>
+            <CardHeader title={cardHeader}
+                        style={{ textAlign: 'center' }}
+                        action={
+                          <FormControlLabel
+                              value="start"
+                              control={<Checkbox
+                                  disableRipple
+                                  checked={!!question.isMarked}
+                                  onChange={(event) => toggleMarked(currentQuestion)}
+                                  style={{ background: 'transparent' }}
+                                  color="default"
+                              />}
+                              label="Mark"
+                              labelPlacement="start"
+                          />
+                        }/>
+            <CardContent>
+              <div style={{ display: 'block', marginTop: '10px' }}>
+                <QuestionView {...props} />
+              </div>
+            </CardContent>
+          </Card>
+          <Paper className={classes.bottomBar}>
+            <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+                spacing={2}
+            >
+              <Grid item>
+                <BottomNavigation onChange={handleChange} showLabels>
+                  <BottomNavigationAction label="Previous" value="previous" disabled={currentQuestion < 1}
+                                          icon={<Icon>navigate_before</Icon>}/>
+                  <BottomNavigationAction label={<span><u>N</u>ext</span>} value="next" disabled={currentQuestion + 1 >= questionsCount}
+                                          icon={<Icon>navigate_next</Icon>}/>
+                  <BottomNavigationAction label={<span><u>R</u>eview</span>} value="review" icon={<Icon>table_chart</Icon>}/>
+                  <BottomNavigationAction label="End" value="end" icon={<Icon>grading</Icon>}/>
+                </BottomNavigation>
+              </Grid>
             </Grid>
-          </Grid>
-        </Paper>
-      </Grid>
+          </Paper>
+        </Grid>
     );
   }
 
 
   return (
 
-    <Container maxWidth="md">
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="stretch"
-        justify="space-between"
-      >
-        <FormMessageBar loading={!!props.fetching} error={props.quizError?.message} />
-        {ret}
-      </Grid>
+      <Container maxWidth="md">
+        <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="stretch"
+            justify="space-between"
+        >
+          <FormMessageBar loading={!!props.fetching} error={props.quizError?.message}/>
+          {ret}
+        </Grid>
 
-    </Container>
+      </Container>
   );
 
 };
