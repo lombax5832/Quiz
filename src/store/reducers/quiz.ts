@@ -28,6 +28,29 @@ const updateUserAnswers = (currentQuestion: number, questions: IQuestion[] = [],
   return ret;
 };
 
+const toggleShowAnswer = (quizData: IQuizSession): Array<IQuestion> => {
+
+  console.log('entered toggleShowAnswer with quizData', quizData, 'active_question', quizData.active_question);
+
+  if (quizData.quiz_type==='practice' &&
+      quizData.questions &&
+      quizData.questions.length > 0 &&
+      quizData.active_question!==undefined
+  ) {
+
+    const { questions } = quizData;
+    const updatedQuestion = { ...questions[quizData.active_question] };
+
+    updatedQuestion.showAnswer = !updatedQuestion.showAnswer;
+
+    questions.splice(quizData.active_question, 1, updatedQuestion);
+
+    return questions;
+  } else {
+    return quizData.questions;
+  }
+};
+
 const updateMarked = (currentQuestion: number, questions: IQuestion[] = []) => {
   const ret = [...questions];
 
@@ -117,6 +140,15 @@ const quizReducer = (state = INITIAL_STATE, action) => {
           quiz_view: IQuizView.RESULT,
           finish_time: state.quiz_data.finish_time || Date.now(),
           elapsed_time: (state.quiz_data.finish_time) ? state.quiz_data.elapsed_time:(Date.now() - state.quiz_data.start_time),
+        },
+      };
+
+    case QuizAction.QUIZ_TOGGLE_SHOW_ANSWER:
+      return {
+        ...state,
+        quiz_data: {
+          ...state.quiz_data,
+          questions: toggleShowAnswer(state.quiz_data),
         },
       };
 

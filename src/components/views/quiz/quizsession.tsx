@@ -11,7 +11,7 @@ import {
   CreateQuizFetching,
   CreateQuizView,
   CreateSetActiveQuestion,
-  CreateToggleMarked,
+  CreateToggleMarked, CreateToggleShowAnswer,
   CreateUserAnswers,
 } from '../../../store/actions/quiz';
 import { connect } from 'react-redux';
@@ -33,6 +33,7 @@ import { ClearAppBarTitle, CreateAppBarTitle } from '../../../store/actions/appb
 import QuestionView from './question/question';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import { IQuizData } from '../../../store/reducers/quiz';
 
 
 const useStyles = makeStyles({
@@ -76,11 +77,11 @@ const mapStateToProps = (state) => {
   const currentQuestion = state.quiz_session?.quiz_data?.active_question;
   const questionsCount = state.quiz_session?.quiz_data?.questions?.length || 0;
   const question = currentQuestion!==undefined ? state.quiz_session?.quiz_data?.questions?.[currentQuestion]:null;
-  const quizID = state.quiz_session?.quiz_session?.quiz_id;
-  const sessionID = state.quiz_session?.quiz_session?._id;
+  const quizID = state.quiz_session?.quiz_data?.quiz_id;
+  const sessionID = state.quiz_session?.quiz_data?._id;
   const fetchError = state.quiz_session?.fetch_error;
+  const quizType = state.quiz_session?.quiz_data?.quiz_type;
   const fetching = !!state.quiz_session?.fetching;
-  //const isMarked = question?.isMarked || ''
   const viewID = state.quiz_session?.quiz_data?.quiz_view || IQuizView.QUIZ;
 
   return {
@@ -92,6 +93,7 @@ const mapStateToProps = (state) => {
     fetching,
     fetchError,
     viewID,
+    quizType,
   };
 
 };
@@ -103,6 +105,7 @@ const mapDispatchToProps = (dispatch: Function) => {
     setActiveQuestion: (id: number) => dispatch(CreateSetActiveQuestion(id)),
     setUserAnswers: (userAnswers: number[], currentQuestion: number) => dispatch(CreateUserAnswers(userAnswers, currentQuestion)),
     setAppBarTitle: (title: string) => dispatch(CreateAppBarTitle(title)),
+    toggleShowAnswer: () => dispatch(CreateToggleShowAnswer()),
     toggleMarked: (currentQuestion: number) => {
       dispatch(CreateToggleMarked(currentQuestion));
     },
@@ -138,6 +141,7 @@ const QuizSession = (props: IQuizSessionProps) => {
     dispatch,
     setAppBarTitle,
     toggleMarked,
+    toggleShowAnswer,
     question,
     gradeQuiz,
     setQuizView,
@@ -163,6 +167,10 @@ const QuizSession = (props: IQuizSessionProps) => {
 
       case 'end':
         gradeQuiz(sessionID);
+        break;
+
+      case 'show_answer':
+        toggleShowAnswer();
         break;
 
       case 'review':
@@ -213,12 +221,17 @@ const QuizSession = (props: IQuizSessionProps) => {
                 spacing={2}
             >
               <Grid item>
-                <BottomNavigation onChange={handleChange} showLabels>
+                <BottomNavigation onChange={handleChange} showLabels
+                                  value={props.question?.showAnswer ? 'show_answer':''}>
                   <BottomNavigationAction label="Previous" value="previous" disabled={currentQuestion < 1}
                                           icon={<Icon>navigate_before</Icon>}/>
-                  <BottomNavigationAction label={<span><u>N</u>ext</span>} value="next" disabled={currentQuestion + 1 >= questionsCount}
+                  <BottomNavigationAction label={<span><u>N</u>ext</span>} value="next"
+                                          disabled={currentQuestion + 1 >= questionsCount}
                                           icon={<Icon>navigate_next</Icon>}/>
-                  <BottomNavigationAction label={<span><u>R</u>eview</span>} value="review" icon={<Icon>table_chart</Icon>}/>
+                  {props.quizType==='practice' && <BottomNavigationAction label={<span>Check</span>} value="show_answer"
+                                                                          icon={<Icon>assignment_turned_in</Icon>}/>}
+                  <BottomNavigationAction label={<span><u>R</u>eview</span>} value="review"
+                                          icon={<Icon>table_chart</Icon>}/>
                   <BottomNavigationAction label="End" value="end" icon={<Icon>grading</Icon>}/>
                 </BottomNavigation>
               </Grid>

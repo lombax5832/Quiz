@@ -23,6 +23,7 @@ export interface IQuestion {
   answers: Array<IAnswer>
   userAnswers?: number[]
   isMarked?: boolean | string
+  showAnswer?: boolean
 }
 
 export interface IQuizSession {
@@ -46,6 +47,7 @@ export interface IQuizSessionProps {
   question: IQuestion
   fetchError?: Error
   quizError?: Error
+  quizType?: IQuizType
   fetching: boolean
   currentQuestion: number
   questionsCount: number
@@ -56,6 +58,7 @@ export interface IQuizSessionProps {
   setUserAnswers: ISetUserAnswer,
   fetchQuiz: (id: string) => void,
   toggleMarked: (currentQuestion: number) => void,
+  toggleShowAnswer: () => void,
   setQuizView: (viewID: IQuizView) => void,
   gradeQuiz: (sessID: string) => void
 }
