@@ -77,10 +77,12 @@ function calculateScore(quiz_data: IQuizSession, sessID?: string): number {
     return 0;
   }
 
-  return quiz_data.questions.reduce((numCorrect, question) => {
+  const countCorrectAnwers = quiz_data.questions.reduce((numCorrect, question) => {
 
     return checkAnswer(question) + numCorrect;
   }, 0);
+
+  return Math.floor((countCorrectAnwers / quiz_data.questions.length) * 100 );
 }
 
 const quizReducer = (state = INITIAL_STATE, action) => {

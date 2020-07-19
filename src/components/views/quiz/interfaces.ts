@@ -1,10 +1,10 @@
-
 export type IQuestionType = 'multi' | 'single';
 export type IQuizType = 'practice' | 'exam';
+
 export enum IQuizView {
-  QUIZ ='QUIZ',
-  RESULT='RESULT',
-  REVIEW='REVIEW'
+  QUIZ = 'QUIZ',
+  RESULT = 'RESULT',
+  REVIEW = 'REVIEW'
 }
 
 export type ISetUserAnswer = (selected: number[], currentQuestion: number) => void
@@ -51,15 +51,17 @@ export interface IQuizSessionProps {
   fetching: boolean
   currentQuestion: number
   questionsCount: number
-  quizID: string,
-  isMarked?: boolean | string,
-  setActiveQuestion: (id: number) => void,
-  setAppBarTitle: (title: string) => void,
-  setUserAnswers: ISetUserAnswer,
-  fetchQuiz: (id: string) => void,
-  toggleMarked: (currentQuestion: number) => void,
-  toggleShowAnswer: () => void,
-  setQuizView: (viewID: IQuizView) => void,
+  quizID: string
+  userScore: number
+  passingScore: number
+  isMarked?: boolean | string
+  setActiveQuestion: (id: number) => void
+  setAppBarTitle: (title: string) => void
+  setUserAnswers: ISetUserAnswer
+  fetchQuiz: (id: string) => void
+  toggleMarked: (currentQuestion: number) => void
+  toggleShowAnswer: () => void
+  setQuizView: (viewID: IQuizView) => void
   gradeQuiz: (sessID: string) => void
 }
 

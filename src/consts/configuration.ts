@@ -1,0 +1,4 @@
+const DEFAULT_PASSING_SCORE = 80;
+
+
+export { DEFAULT_PASSING_SCORE };

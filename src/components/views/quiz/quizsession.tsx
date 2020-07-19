@@ -34,6 +34,8 @@ import QuestionView from './question/question';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { IQuizData } from '../../../store/reducers/quiz';
+import QuizBottomBar from './quizbottombar';
+import { DEFAULT_PASSING_SCORE } from '../../../consts/configuration';
 
 
 const useStyles = makeStyles({
@@ -83,6 +85,8 @@ const mapStateToProps = (state) => {
   const quizType = state.quiz_session?.quiz_data?.quiz_type;
   const fetching = !!state.quiz_session?.fetching;
   const viewID = state.quiz_session?.quiz_data?.quiz_view || IQuizView.QUIZ;
+  const userScore = state.quiz_session?.quiz_data?.user_score;
+  const passingScore = state.quiz_session?.quiz_data?.passing_score || DEFAULT_PASSING_SCORE;
 
   return {
     sessionID,
@@ -133,18 +137,13 @@ const QuizSession = (props: IQuizSessionProps) => {
   const params = useParams();
   const { session_id } = params;
   const {
-    sessionID,
     fetchQuiz,
-    setActiveQuestion,
     currentQuestion,
     questionsCount,
     dispatch,
     setAppBarTitle,
     toggleMarked,
-    toggleShowAnswer,
     question,
-    gradeQuiz,
-    setQuizView,
   } = props;
   console.log('entered QuizSession with sessionID', session_id);
 
@@ -154,32 +153,6 @@ const QuizSession = (props: IQuizSessionProps) => {
   }, [session_id]);
 
   let ret: React.ReactElement;
-
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
-    console.log('Handle change value: ', newValue);
-    switch (newValue) {
-      case 'previous':
-        setActiveQuestion(currentQuestion - 1);
-        break;
-      case 'next':
-        setActiveQuestion(currentQuestion + 1);
-        break;
-
-      case 'end':
-        gradeQuiz(sessionID);
-        break;
-
-      case 'show_answer':
-        toggleShowAnswer();
-        break;
-
-      case 'review':
-        setQuizView(IQuizView.REVIEW);
-        break;
-      default:
-        break;
-    }
-  };
 
   if (props.fetchError) {
     ret = <ErrorTile message={props.fetchError.message} errorTitle="Error"
@@ -221,19 +194,7 @@ const QuizSession = (props: IQuizSessionProps) => {
                 spacing={2}
             >
               <Grid item>
-                <BottomNavigation onChange={handleChange} showLabels
-                                  value={props.question?.showAnswer ? 'show_answer':''}>
-                  <BottomNavigationAction label="Previous" value="previous" disabled={currentQuestion < 1}
-                                          icon={<Icon>navigate_before</Icon>}/>
-                  <BottomNavigationAction label={<span><u>N</u>ext</span>} value="next"
-                                          disabled={currentQuestion + 1 >= questionsCount}
-                                          icon={<Icon>navigate_next</Icon>}/>
-                  {props.quizType==='practice' && <BottomNavigationAction label={<span>Check</span>} value="show_answer"
-                                                                          icon={<Icon>assignment_turned_in</Icon>}/>}
-                  <BottomNavigationAction label={<span><u>R</u>eview</span>} value="review"
-                                          icon={<Icon>table_chart</Icon>}/>
-                  <BottomNavigationAction label="End" value="end" icon={<Icon>grading</Icon>}/>
-                </BottomNavigation>
+                <QuizBottomBar {...props} />
               </Grid>
             </Grid>
           </Paper>
