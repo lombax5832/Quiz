@@ -11,6 +11,7 @@ import Grid from '@material-ui/core/Grid';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import PercentageBar from './score/percentagebar';
 import Typography from '@material-ui/core/Typography';
+import { DEFAULT_PASSING_SCORE } from '../../../consts/configuration';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,8 +30,10 @@ const QuizScore = (props: IQuizSessionProps) => {
 
   const classes = useStyles();
 
-  const result = props.userScore >= props.passingScore ? 'Passed' : 'Failed';
-  const resultBarColor = result === 'Passed' ? 'green' : 'red';
+  const result = props.userScore >= props.passingScore ? 'Passed':'Failed';
+  const resultBarColor = result==='Passed' ? 'green':'red';
+
+  const { passingScore = DEFAULT_PASSING_SCORE, userScore } = props;
 
   return (
       <Box mt={1}>
@@ -43,16 +46,16 @@ const QuizScore = (props: IQuizSessionProps) => {
                   alignItems="stretch"
                   spacing={1}>
               <Grid item>
-                <PercentageBar val={props.passingScore} showLabel/>
+                <PercentageBar val={passingScore} showLabel/>
               </Grid>
               <Grid item>
-                Passing Score: {props.passingScore}
+                Passing Score: {`${passingScore}%`}
               </Grid>
               <Grid item>
-                <PercentageBar val={props.userScore} fgColor={resultBarColor} showLabel/>
+                <PercentageBar val={userScore} fgColor={resultBarColor} showLabel/>
               </Grid>
               <Grid item>
-                Your Score: {props.userScore}
+                Your Score: {`${userScore}%`}
               </Grid>
               <Grid item>
                 <Typography variant="h5">Grade: {result}</Typography>
