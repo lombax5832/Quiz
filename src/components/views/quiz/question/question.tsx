@@ -2,6 +2,7 @@ import React from 'react';
 import { IQuestionViewProps } from '../interfaces';
 import { Grid } from '@material-ui/core';
 import AnswersView from './anwers';
+import ReactMarkdown from 'react-markdown';
 
 const QuestionView = (props: IQuestionViewProps) => {
 
@@ -15,7 +16,9 @@ const QuestionView = (props: IQuestionViewProps) => {
           alignItems="stretch"
       >
         <Grid item>
-          {qBody}
+          <ReactMarkdown>
+            {qBody}
+          </ReactMarkdown>
         </Grid>
         <Grid item>
           <AnswersView {...props}/>

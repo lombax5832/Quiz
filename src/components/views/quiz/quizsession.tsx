@@ -161,7 +161,7 @@ const QuizSession = (props: IQuizSessionProps) => {
     const cardHeader = `Question ${currentQuestion + 1} of ${questionsCount}`;
     setAppBarTitle(cardHeader);
     ret = (
-        <Grid item xs={12} style={{ marginBottom: '30px' }}>
+        <Grid item xs={12} style={{ paddingBottom: '60px' }}>
           <Card className={classes.root}>
             <CardHeader title={cardHeader}
                         style={{ textAlign: 'center' }}
