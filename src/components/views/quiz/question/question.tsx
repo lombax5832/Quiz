@@ -1,7 +1,7 @@
 import React from 'react';
 import { IQuestionViewProps } from '../interfaces';
 import { Grid } from '@material-ui/core';
-import AnswersView from './anwers';
+import AnswersView from './answers';
 import ReactMarkdown from 'react-markdown';
 
 const QuestionView = (props: IQuestionViewProps) => {

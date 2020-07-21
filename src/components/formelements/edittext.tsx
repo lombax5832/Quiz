@@ -11,11 +11,13 @@ export interface IEditTextProps {
   autocomplete?: string
   name: string
   label: string
+  type?: 'text' | 'number'
+  error?: boolean
 }
 
 const Edittext = (props: IEditTextProps) => {
 
-  const {autocomplete, required, name, label} = props
+  const {autocomplete, required, name, label, type, error} = props
 
   return (
       <Box mb={1}>
@@ -30,6 +32,8 @@ const Edittext = (props: IEditTextProps) => {
                 component={renderTextField}
                 label={label}
                 style={{minWidth: 275}}
+                type={type}
+                error={error}
             />
           </CardContent>
         </Card>

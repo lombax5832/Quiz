@@ -25,6 +25,7 @@ const Form = ({ categories, title, loaded, handleSubmit, reset, error, submittin
               <Edittext name="title" label="Category Title" required autocomplete="off"/>
               <Edittext name="slug" label="URI slug" required autocomplete="off"/>
               <Edittext name="quiz_id" label="Quiz ID" autocomplete="off"/>
+              <Edittext type="number" name="passing_grade" label="Passing Grade" required autocomplete="off"/>
               <Edittextarea name="description" label="Quiz Description"/>
               <SubmitReset reset={reset}/>
               <div>
