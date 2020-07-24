@@ -9,6 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { createStyles, Theme } from '@material-ui/core';
 import AnswerSelector from './AnswerSelector';
+import ReactMarkdown from 'react-markdown';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -82,7 +83,7 @@ const AnswersView = (props: IQuestionViewProps) => {
   return (
       <List className={classes.root}>
         {answers.map((value, ansID) => {
-          const labelId = `checkbox-list-label-${value}`;
+          const labelId = `checkbox-list-label-${ansID}`;
 
           return (
               <ListItem key={`ans${ansID}`} role={undefined} dense button
@@ -98,7 +99,11 @@ const AnswersView = (props: IQuestionViewProps) => {
                       label={`${LETTERS[ansID]}.`}
                   />
                 </ListItemIcon>
-                <ListItemText id={labelId} primary={value.body}/>
+                <ListItemText id={labelId} disableTypography>
+                  <ReactMarkdown>
+                    {value.body}
+                  </ReactMarkdown>
+                </ListItemText>
               </ListItem>
           );
         })}

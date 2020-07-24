@@ -16,8 +16,6 @@ import {
 } from '../../../store/actions/quiz';
 import { connect } from 'react-redux';
 import {
-  BottomNavigation,
-  BottomNavigationAction,
   CardContent,
   CardHeader,
   Container,
@@ -27,7 +25,6 @@ import Grid from '@material-ui/core/Grid';
 import FormMessageBar from '../../formloadingerrorbar';
 import ErrorTile from '../../errortile';
 import Card from '@material-ui/core/Card';
-import Icon from '@material-ui/core/Icon';
 import Paper from '@material-ui/core/Paper';
 import { ClearAppBarTitle, CreateAppBarTitle } from '../../../store/actions/appbar';
 import QuestionView from './question/question';
