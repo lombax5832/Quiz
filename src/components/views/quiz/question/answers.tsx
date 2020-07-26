@@ -16,6 +16,13 @@ const useStyles = makeStyles((theme: Theme) =>
       root: {
         width: '100%',
         backgroundColor: theme.palette.background.paper,
+        '&$disabled': {
+          color: theme.palette.text.primary,
+        },
+      },
+      disabled: {opacity: 1, color: theme.palette.text.primary},
+      answer: {
+        color: theme.palette.text.primary,
       },
     }),
 );
@@ -86,7 +93,14 @@ const AnswersView = (props: IQuestionViewProps) => {
           const labelId = `checkbox-list-label-${ansID}`;
 
           return (
-              <ListItem key={`ans${ansID}`} role={undefined} dense button
+              <ListItem key={`ans${ansID}`}
+                        role={undefined}
+                        dense
+                        button
+                        classes={{
+                          root: classes.root, // class name, e.g. `root-x`
+                          disabled: classes.disabled, // class name, e.g. `disabled-x`
+                        }}
                         onClick={handleToggle(ansID, currentQuestion, userAnswers)}>
                 <ListItemIcon style={{}}>
                   <FormControlLabel
@@ -94,12 +108,16 @@ const AnswersView = (props: IQuestionViewProps) => {
                           qtype={qtype}
                           ansID={ansID}
                           labelId={labelId}
+                          disabled
                           userAnswers={userAnswers}
                       />}
                       label={`${LETTERS[ansID]}.`}
                   />
                 </ListItemIcon>
-                <ListItemText id={labelId} disableTypography>
+                <ListItemText
+                    id={labelId}
+                    disableTypography
+                    className={classes.answer}>
                   <ReactMarkdown>
                     {value.body}
                   </ReactMarkdown>

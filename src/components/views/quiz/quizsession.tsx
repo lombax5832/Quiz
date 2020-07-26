@@ -83,7 +83,7 @@ const mapStateToProps = (state) => {
   const fetching = !!state.quiz_session?.fetching;
   const viewID = state.quiz_session?.quiz_data?.quiz_view || IQuizView.QUIZ;
   const userScore = state.quiz_session?.quiz_data?.user_score;
-  const passingScore = state.quiz_session?.quiz_data?.passing_score || DEFAULT_PASSING_SCORE;
+  const passingScore = state.quiz_session?.quiz_data?.passing_grade || DEFAULT_PASSING_SCORE;
 
   return {
     sessionID,

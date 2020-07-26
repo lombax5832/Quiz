@@ -35,7 +35,7 @@ export interface IQuizSession {
   start_time?: number
   elapsed_time?: number
   finish_time?: number
-  passing_score?: number
+  passing_grade?: number
   user_score?: number
   questions?: Array<IQuestion>
   active_question: number

@@ -8,6 +8,7 @@ export interface IAnswerSelectorProps {
   labelId: string
   userAnswers: number[]
   ansID: number
+  disabled?: boolean
 
 }
 
@@ -22,6 +23,7 @@ const AnswerSelector = (props: IAnswerSelectorProps) => {
           color="default"
           checked={userAnswers.indexOf(ansID)!== -1}
           tabIndex={-1}
+          disabled={!!props.disabled}
           disableRipple
           disableFocusRipple
           disableTouchRipple
@@ -36,6 +38,7 @@ const AnswerSelector = (props: IAnswerSelectorProps) => {
               color="default"
               checked={userAnswers.indexOf(ansID)!== -1}
               tabIndex={-1}
+              disabled={!!props.disabled}
               disableRipple
               disableFocusRipple
               disableTouchRipple

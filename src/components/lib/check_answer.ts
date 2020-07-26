@@ -1,27 +1,40 @@
 import { IQuestion } from '../views/quiz/interfaces';
 
+const TAG = 'CHECK_ANSWER';
+
 const checkAnswer = (question: IQuestion): number => {
 
   const { userAnswers = [], answers } = question;
 
-  console.log('entered checkAnswer with userAnswers=', userAnswers, 'answers=', answers);
+  console.log(TAG, 'entered checkAnswer with userAnswers=', userAnswers, 'answers=', answers);
   let ret = 0;
 
   if (answers.filter(a => a.isCorrect).length!==userAnswers.length) {
-    console.log('checkAnswer userAnswers count mismatch', userAnswers.length, answers.length)
+    console.log(TAG, 'checkAnswer userAnswers count mismatch', userAnswers.length, answers.length)
     return ret;
   }
 
-  answers.forEach((answer, index) => {
+  const correctMatch: number = answers.reduce( (acc, cur, index) => {
 
-        if (answer.isCorrect && userAnswers.findIndex(ansKey => ansKey===index) < 0) {
-          console.log('checkAnswer no user answer for index', index, 'answers:', answer, 'userAnswers:', userAnswers)
-          return 0;
-        }
-      },
-  );
+    if(acc === 0) return 0;
 
-  return 1;
+    if(cur.isCorrect && -1 === userAnswers.findIndex(ansKey => ansKey === index)){
+
+      console.log(TAG, `choice ${index} isCorrect but not selected in userAnswers`, userAnswers);
+
+      return 0;
+    } else if(!cur.isCorrect && -1 < userAnswers.findIndex(ansKey => ansKey === index)){
+
+      console.log(TAG, `choice ${index} NOT correct but selected in userAnswers`, userAnswers);
+
+      return 0;
+    }
+
+    else return 1;
+
+  }, 1)
+
+  return correctMatch;
 };
 
 export default checkAnswer;

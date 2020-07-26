@@ -49,13 +49,13 @@ const QuizScore = (props: IQuizSessionProps) => {
                 <PercentageBar val={passingScore} showLabel/>
               </Grid>
               <Grid item>
-                Passing Score: {`${passingScore}%`}
+                Passing Score: {`${passingScore}`}
               </Grid>
               <Grid item>
                 <PercentageBar val={userScore} fgColor={resultBarColor} showLabel/>
               </Grid>
               <Grid item>
-                Your Score: {`${userScore}%`}
+                Your Score: {`${userScore}`}
               </Grid>
               <Grid item>
                 <Typography variant="h5">Grade: {result}</Typography>
