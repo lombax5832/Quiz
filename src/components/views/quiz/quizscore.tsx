@@ -4,7 +4,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Box from '@material-ui/core/Box';
-import { IQuizSessionProps } from './interfaces';
+import { IQuizSessionProps, IQuizView } from './interfaces';
 import ListIcon from '@material-ui/icons/List';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -12,6 +12,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import PercentageBar from './score/percentagebar';
 import Typography from '@material-ui/core/Typography';
 import { DEFAULT_PASSING_SCORE } from '../../../consts/configuration';
+
+const TAG = 'QuizScore';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,12 +30,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const QuizScore = (props: IQuizSessionProps) => {
 
+  console.log(TAG, 'entered with props', props);
+
   const classes = useStyles();
 
   const result = props.userScore >= props.passingScore ? 'Passed':'Failed';
   const resultBarColor = result==='Passed' ? 'green':'red';
 
-  const { passingScore = DEFAULT_PASSING_SCORE, userScore } = props;
+  const { passingScore = DEFAULT_PASSING_SCORE, userScore, setQuizView } = props;
 
   return (
       <Box mt={1}>
@@ -67,7 +71,7 @@ const QuizScore = (props: IQuizSessionProps) => {
                 variant="outlined"
                 color="default"
                 size="medium"
-                onClick={() => console.log('Review Clicked')}
+                onClick={() => setQuizView(IQuizView.REVIEW)}
                 startIcon={<ListIcon/>}>
               Review
             </Button>

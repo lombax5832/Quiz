@@ -42,6 +42,7 @@ export interface IQuizSession {
 }
 
 export interface IQuizSessionProps {
+  viewID: IQuizView
   sessionID: string
   dispatch: Function
   question: IQuestion
