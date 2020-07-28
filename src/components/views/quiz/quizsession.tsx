@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { IQuizSessionProps, IQuizView } from './interfaces';
 import HttpClient from '../../../httpclient/client';
 
-
 import {
   CreateCalculateScore,
   CreateQuizDataFetched,
@@ -20,13 +19,7 @@ import { CardContent, CardHeader, Container, makeStyles } from '@material-ui/cor
 import Grid from '@material-ui/core/Grid';
 import FormMessageBar from '../../formloadingerrorbar';
 import ErrorTile from '../../errortile';
-import Card from '@material-ui/core/Card';
-import Paper from '@material-ui/core/Paper';
 import { ClearAppBarTitle, CreateAppBarTitle } from '../../../store/actions/appbar';
-import QuestionView from './question/question';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import QuizBottomBar from './quizbottombar';
 import { DEFAULT_PASSING_SCORE } from '../../../consts/configuration';
 import QuizScore from './quizscore';
 import QuizView from './quizview';
@@ -81,8 +74,14 @@ const mapStateToProps = (state) => {
   const viewID = state.quiz_session?.quiz_data?.quiz_view || IQuizView.QUIZ;
   const userScore = state.quiz_session?.quiz_data?.user_score;
   const passingScore = state.quiz_session?.quiz_data?.passing_grade || DEFAULT_PASSING_SCORE;
+  const finishTime = state.quiz_session?.quiz_data?.finish_time;
+  const elapsedTime = state.quiz_session?.quiz_data?.elapsed_time;
+  const questions = state.quiz_session?.quiz_data?.questions;
 
   return {
+    finishTime,
+    elapsedTime,
+    questions,
     sessionID,
     quizID,
     currentQuestion,
@@ -189,6 +188,5 @@ const QuizSession = (props: IQuizSessionProps) => {
   );
 
 };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuizSession);

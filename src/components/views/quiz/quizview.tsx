@@ -49,7 +49,7 @@ const useStyles = makeStyles({
 const QuizView = (props: IQuizSessionProps) => {
   const classes = useStyles();
 
-  const { question, toggleMarked, currentQuestion, questionsCount, setAppBarTitle } = props;
+  const { question, toggleMarked, currentQuestion, questionsCount, setAppBarTitle, finishTime } = props;
 
   const cardHeader = `Question ${currentQuestion + 1} of ${questionsCount}`;
   setAppBarTitle(cardHeader);
@@ -61,7 +61,7 @@ const QuizView = (props: IQuizSessionProps) => {
         <Card className={classes.root}>
           <CardHeader title={cardHeader}
                       style={{ textAlign: 'center' }}
-                      action={
+                      action={ !finishTime &&
                         <FormControlLabel
                             value="start"
                             control={<Checkbox

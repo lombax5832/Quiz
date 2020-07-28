@@ -46,6 +46,7 @@ export interface IQuizSessionProps {
   sessionID: string
   dispatch: Function
   question: IQuestion
+  questions: Array<IQuestion>
   fetchError?: Error
   quizError?: Error
   quizType?: IQuizType
@@ -55,6 +56,8 @@ export interface IQuizSessionProps {
   quizID: string
   userScore: number
   passingScore: number
+  finishTime?: number
+  elapsedTime?: number
   isMarked?: boolean | string
   setActiveQuestion: (id: number) => void
   setAppBarTitle: (title: string) => void
@@ -71,4 +74,5 @@ export interface IQuestionViewProps {
   question: IQuestion
   currentQuestion: number
   setUserAnswers: ISetUserAnswer
+  finishTime?: number
 }
