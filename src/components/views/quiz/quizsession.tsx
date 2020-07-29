@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { IQuizSessionProps, IQuizView } from './interfaces';
 import HttpClient from '../../../httpclient/client';
 
-
 import {
   CreateCalculateScore,
   CreateQuizDataFetched,
@@ -11,31 +10,19 @@ import {
   CreateQuizFetching,
   CreateQuizView,
   CreateSetActiveQuestion,
-  CreateToggleMarked, CreateToggleShowAnswer,
+  CreateToggleMarked,
+  CreateToggleShowAnswer,
   CreateUserAnswers,
 } from '../../../store/actions/quiz';
 import { connect } from 'react-redux';
-import {
-  BottomNavigation,
-  BottomNavigationAction,
-  CardContent,
-  CardHeader,
-  Container,
-  makeStyles,
-} from '@material-ui/core';
+import { CardContent, CardHeader, Container, makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import FormMessageBar from '../../formloadingerrorbar';
 import ErrorTile from '../../errortile';
-import Card from '@material-ui/core/Card';
-import Icon from '@material-ui/core/Icon';
-import Paper from '@material-ui/core/Paper';
 import { ClearAppBarTitle, CreateAppBarTitle } from '../../../store/actions/appbar';
-import QuestionView from './question/question';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import { IQuizData } from '../../../store/reducers/quiz';
-import QuizBottomBar from './quizbottombar';
 import { DEFAULT_PASSING_SCORE } from '../../../consts/configuration';
+import QuizScore from './quizscore';
+import QuizView from './quizview';
 
 
 const useStyles = makeStyles({
@@ -86,9 +73,15 @@ const mapStateToProps = (state) => {
   const fetching = !!state.quiz_session?.fetching;
   const viewID = state.quiz_session?.quiz_data?.quiz_view || IQuizView.QUIZ;
   const userScore = state.quiz_session?.quiz_data?.user_score;
-  const passingScore = state.quiz_session?.quiz_data?.passing_score || DEFAULT_PASSING_SCORE;
+  const passingScore = state.quiz_session?.quiz_data?.passing_grade || DEFAULT_PASSING_SCORE;
+  const finishTime = state.quiz_session?.quiz_data?.finish_time;
+  const elapsedTime = state.quiz_session?.quiz_data?.elapsed_time;
+  const questions = state.quiz_session?.quiz_data?.questions;
 
   return {
+    finishTime,
+    elapsedTime,
+    questions,
     sessionID,
     quizID,
     currentQuestion,
@@ -98,6 +91,8 @@ const mapStateToProps = (state) => {
     fetchError,
     viewID,
     quizType,
+    userScore,
+    passingScore
   };
 
 };
@@ -137,6 +132,7 @@ const QuizSession = (props: IQuizSessionProps) => {
   const params = useParams();
   const { session_id } = params;
   const {
+    viewID,
     fetchQuiz,
     currentQuestion,
     questionsCount,
@@ -157,49 +153,20 @@ const QuizSession = (props: IQuizSessionProps) => {
   if (props.fetchError) {
     ret = <ErrorTile message={props.fetchError.message} errorTitle="Error"
                      btnRetry={{ label: 'Retry', onClick: () => fetchQuiz(session_id) }}/>;
-  } else if (props.question) {
-    const cardHeader = `Question ${currentQuestion + 1} of ${questionsCount}`;
-    setAppBarTitle(cardHeader);
-    ret = (
-        <Grid item xs={12} style={{ paddingBottom: '60px' }}>
-          <Card className={classes.root}>
-            <CardHeader title={cardHeader}
-                        style={{ textAlign: 'center' }}
-                        action={
-                          <FormControlLabel
-                              value="start"
-                              control={<Checkbox
-                                  disableRipple
-                                  checked={!!question.isMarked}
-                                  onChange={(event) => toggleMarked(currentQuestion)}
-                                  style={{ background: 'transparent' }}
-                                  color="default"
-                              />}
-                              label="Mark"
-                              labelPlacement="start"
-                          />
-                        }/>
-            <CardContent>
-              <div style={{ display: 'block', marginTop: '10px' }}>
-                <QuestionView {...props} />
-              </div>
-            </CardContent>
-          </Card>
-          <Paper className={classes.bottomBar}>
-            <Grid
-                container
-                direction="row"
-                justify="center"
-                alignItems="center"
-                spacing={2}
-            >
-              <Grid item>
-                <QuizBottomBar {...props} />
-              </Grid>
-            </Grid>
-          </Paper>
-        </Grid>
-    );
+  } else {
+    switch (viewID) {
+      case IQuizView.RESULT:
+        ret = <QuizScore {...props}/>
+        break;
+
+      case IQuizView.QUIZ:
+        ret = <QuizView {...props}/>
+        break;
+
+      case IQuizView.REVIEW:
+        return <div>Review not implemented yet</div>;
+        break;
+    }
   }
 
 
@@ -221,6 +188,5 @@ const QuizSession = (props: IQuizSessionProps) => {
   );
 
 };
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuizSession);

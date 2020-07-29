@@ -21,6 +21,8 @@ const PercentageBar = (props: IPercentageBar) => {
     labelColor = 'white',
   } = props;
 
+  const percentage = Math.floor(val / 10);
+
   return (
       <Grid
           container
@@ -31,7 +33,7 @@ const PercentageBar = (props: IPercentageBar) => {
       >
         <Grid item style={
           {
-            flexBasis: `${val}%`,
+            flexBasis: `${percentage}%`,
             minHeight: height,
             background: fgColor,
             verticalAlign: 'middle',
@@ -39,7 +41,7 @@ const PercentageBar = (props: IPercentageBar) => {
             padding: '10px',
 
           }
-        }>{showLabel && <span style={{ color: labelColor }}>{`${props.val}%`}</span>}</Grid>
+        }>{showLabel && <span style={{ color: labelColor }}>{`${props.val}`}</span>}</Grid>
       </Grid>
   );
 };

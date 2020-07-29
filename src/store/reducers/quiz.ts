@@ -82,7 +82,11 @@ function calculateScore(quiz_data: IQuizSession, sessID?: string): number {
     return checkAnswer(question) + numCorrect;
   }, 0);
 
-  return Math.floor((countCorrectAnwers / quiz_data.questions.length) * 100 );
+  const ret = Math.floor((countCorrectAnwers / quiz_data.questions.length) * 1000 );
+
+  console.log(`calculateScore countCollrectAnswers=${countCorrectAnwers} totalquestions=${quiz_data.questions.length} returning ${ret}`);
+
+  return ret;
 }
 
 const quizReducer = (state = INITIAL_STATE, action) => {

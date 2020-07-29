@@ -29,6 +29,7 @@ const QuizBottomBar = (props: IQuizSessionProps) => {
     questionsCount,
     toggleShowAnswer,
     gradeQuiz,
+    finishTime,
     setQuizView,
   } = props;
 
@@ -69,7 +70,7 @@ const QuizBottomBar = (props: IQuizSessionProps) => {
                                 disabled={currentQuestion + 1 >= questionsCount}
                                 className={classes.root}
                                 icon={<Icon>navigate_next</Icon>}/>
-        {props.quizType==='practice' && <BottomNavigationAction label={<span>Check</span>} value="show_answer"
+        {props.quizType==='practice' && !finishTime && <BottomNavigationAction label={<span>Check</span>} value="show_answer"
                                                                 icon={<Icon>assignment_turned_in</Icon>}/>}
         <BottomNavigationAction label={<span><u>R</u>eview</span>} value="review"
                                 icon={<Icon>list</Icon>}/>
