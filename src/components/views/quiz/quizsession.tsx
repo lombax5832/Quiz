@@ -23,6 +23,7 @@ import { ClearAppBarTitle, CreateAppBarTitle } from '../../../store/actions/appb
 import { DEFAULT_PASSING_SCORE } from '../../../consts/configuration';
 import QuizScore from './quizscore';
 import QuizView from './quizview';
+import QuestionTable from './questiontable';
 
 
 const useStyles = makeStyles({
@@ -164,7 +165,7 @@ const QuizSession = (props: IQuizSessionProps) => {
         break;
 
       case IQuizView.REVIEW:
-        return <div>Review not implemented yet</div>;
+        return <QuestionTable {...props}/>;
         break;
     }
   }
