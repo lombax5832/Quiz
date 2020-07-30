@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader, Grid, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Card, CardContent, CardHeader, Grid, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from '@material-ui/core';
 import React from 'react';
 import { LETTERS } from '../../../consts/letters';
-import { IQuizSessionProps, IQuizView } from './interfaces';
+import { IQuizSessionProps, IQuizView, IQuestion } from './interfaces';
 
 const useStyles = makeStyles({
     bottomBar: {
@@ -41,10 +41,52 @@ const useStyles = makeStyles({
     }
 });
 
+type Order = 'asc' | 'desc';
+
+interface HeadCell {
+    disablePadding: boolean;
+    id: keyof IQuestion;
+    label: string;
+    align: 'left' | 'right';
+}
+
+const headCells: HeadCell[] = [
+    { id: 'question', align: "left", disablePadding: false, label: 'Question' },
+    { id: 'userAnswers', align: "right", disablePadding: false, label: 'Choices' },
+    { id: 'isMarked', align: "right", disablePadding: false, label: 'Marked' }
+];
+
+const sortQuestions = (a: IQuestion, b: IQuestion, orderBy: keyof IQuestion, order: Order) => {
+    const orderMult = order === 'asc' ? 1 : -1
+    switch (orderBy) {
+        case 'question':
+            if (a.question < b.question) return -orderMult;
+            if (a.question > b.question) return orderMult;
+            return 0
+        case 'userAnswers':
+            if (a.question < b.question) return -orderMult;
+            if (a.question > b.question) return orderMult;
+            return 0
+        case 'isMarked':
+            if (!a.isMarked && b.isMarked) return -orderMult;
+            if (a.isMarked && !b.isMarked) return orderMult;
+            return 0
+        default:
+            if (a.question < b.question) return -orderMult;
+            if (a.question > b.question) return orderMult;
+            return 0
+    }
+}
+
 const QuestionTable = (props: IQuizSessionProps) => {
     const classes = useStyles();
 
     const { questions, setActiveQuestion, setQuizView } = props;
+
+    const [order, setOrder] = React.useState<Order>('asc');
+    const [orderBy, setOrderBy] = React.useState<keyof IQuestion>('_id');
+
+    const questionsToSort = questions.map((val, index) => { return { ...val, index } })
 
     const handleClick = (event, index) => {
         setActiveQuestion(index)
@@ -61,14 +103,20 @@ const QuestionTable = (props: IQuizSessionProps) => {
                         <Table size="small" aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Question</TableCell>
-                                    <TableCell align="right">Choices</TableCell>
-                                    <TableCell align="right">Marked</TableCell>
+                                    {headCells.map((headCell) => (
+                                        <TableCell key={headCell.id} align={headCell.align} padding={headCell.disablePadding ? 'none' : 'default'} sortDirection={orderBy === headCell.id ? order : false}>
+                                            <TableSortLabel active={orderBy === headCell.id} direction={orderBy === headCell.id ? order : 'asc'} onClick={(event) => {
+                                                const isAsc = orderBy === headCell.id && order === 'asc';
+                                                setOrderBy(headCell.id)
+                                                setOrder(isAsc ? 'desc' : 'asc');
+                                            }}>{headCell.label}</TableSortLabel>
+                                        </TableCell>
+                                    ))}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {questions.map((row, i) => (
-                                    <TableRow className={classes.tablerow} hover onClick={(event)=>handleClick(event, i)} key={row._id}>
+                                {questionsToSort.sort((a, b) => sortQuestions(a, b, orderBy, order)).map((row, i) => (
+                                    <TableRow className={classes.tablerow} hover onClick={(event) => handleClick(event, row.index)} key={row._id}>
                                         <TableCell component="th" scope="row">
                                             {row.question.substring(0, 60)}
                                         </TableCell>
