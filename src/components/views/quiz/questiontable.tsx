@@ -1,7 +1,8 @@
-import { Card, CardContent, CardHeader, Grid, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from '@material-ui/core';
+import { Box, Card, CardContent, CardHeader, Collapse, Grid, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from '@material-ui/core';
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 import { LETTERS } from '../../../consts/letters';
-import { IQuizSessionProps, IQuizView, IQuestion } from './interfaces';
+import { IQuestion, IQuizSessionProps, IQuizView } from './interfaces';
 
 const useStyles = makeStyles({
     bottomBar: {
@@ -85,6 +86,8 @@ const QuestionTable = (props: IQuizSessionProps) => {
 
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof IQuestion>('_id');
+    const [open, setOpen] = React.useState<IQuestion>(null);
+
 
     const questionsToSort = questions.map((val, index) => { return { ...val, index } })
 
@@ -116,13 +119,24 @@ const QuestionTable = (props: IQuizSessionProps) => {
                             </TableHead>
                             <TableBody>
                                 {questionsToSort.sort((a, b) => sortQuestions(a, b, orderBy, order)).map((row, i) => (
-                                    <TableRow className={classes.tablerow} hover onClick={(event) => handleClick(event, row.index)} key={row._id}>
-                                        <TableCell component="th" scope="row">
-                                            {row.question.substring(0, 60)}
-                                        </TableCell>
-                                        <TableCell align="right">{row.userAnswers?.sort((a, b) => a - b).map((val) => LETTERS[val]).join(', ')}</TableCell>
-                                        <TableCell align="right">{row.isMarked ? "Y" : "N"}</TableCell>
-                                    </TableRow>
+                                    <>
+                                        <TableRow className={classes.tablerow} hover onClick={(event) => setOpen(open?._id !== row._id ? row : null)} key={row._id}>
+                                            <TableCell component="th" scope="row">
+                                                {row.question.substring(0, 60)}
+                                            </TableCell>
+                                            <TableCell align="right">{row.userAnswers?.sort((a, b) => a - b).map((val) => LETTERS[val]).join(', ')}</TableCell>
+                                            <TableCell align="right">{row.isMarked ? "Y" : "N"}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
+                                                <Collapse in={open?._id === row._id} timeout="auto" unmountOnExit>
+                                                    <ReactMarkdown>
+                                                        {row.question}
+                                                    </ReactMarkdown>
+                                                </Collapse>
+                                            </TableCell>
+                                        </TableRow>
+                                    </>
                                 ))}
                             </TableBody>
                         </Table>
