@@ -16,7 +16,7 @@
     "@types/react-redux": "^7.1.8",
     "@types/redux-form": "^8.2.5",
     "@types/redux-thunk": "^2.1.0",
-    "axios": "^0.21.1",
+    "axios": "^1.6.0",
     "fg-loadcss": "^3.1.0",
     "path-browserify": "^1.0.1",
     "react": "^16.13.1",
